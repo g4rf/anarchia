@@ -1,0 +1,6 @@
+/node_modules/
+package-lock.json
+/nbproject/
+/material/
+/animation/textures/heinrichplatz.*
+/animation/textures/city-horizon.*
