@@ -1,6 +1,6 @@
 /* global BABYLON */
 
-export default {
+export const Anarchia = {
     /**
      * frame rate
      * @type Number
@@ -56,12 +56,6 @@ export default {
      * @type BABYLON.Scene
      */
     scene: null,
-    
-    /**
-     * The animation group that will hold all animations.
-     * @type BABYLON.AnimationGroup
-     */
-    animations: null,
 
     /**
      * Generates random number between min (inclusive) and max (inclusive).
@@ -81,10 +75,10 @@ export default {
      * @param {Number} endSecond
      */
     duration: function(startSecond, endSecond) {
-        this.START_SECOND = startSecond;
-        this.END_SECOND = endSecond;
-        this.START_FRAME = startSecond * this.FRAME_RATE;
-        this.END_FRAME = endSecond * this.FRAME_RATE;
+        Anarchia.START_SECOND = startSecond;
+        Anarchia.END_SECOND = endSecond;
+        Anarchia.START_FRAME = startSecond * Anarchia.FRAME_RATE;
+        Anarchia.END_FRAME = endSecond * Anarchia.FRAME_RATE;
     },
     
     /**
@@ -100,15 +94,13 @@ export default {
      *          rotationX = 0
      *          rotationY = 0
      *          rotationZ = 0
-     *          uScale = 1
-     *          uOffset = 0
-     *          vScale = 1
-     *          vOffset = 0
      * @returns {BABYLON.Mesh} The plane
      */
     createPlane: function(config) {
         const param = {
             name: "",
+            texture: "",
+            alpha: true,
             
             width: 0,
             height: 0,
@@ -120,13 +112,6 @@ export default {
             rotationX: 0,
             rotationY: 0,
             rotationZ: 0,
-            
-            texture: "",
-            alpha: true,
-            uScale: 1,
-            uOffset: 0,
-            vScale: 1,
-            vOffset: 0,
         };
         
         if(typeof config == "undefined") config = {};
@@ -150,67 +135,6 @@ export default {
         const material = new BABYLON.StandardMaterial(param.name + "-material");
         material.diffuseTexture = new BABYLON.Texture(param.texture);
         material.diffuseTexture.hasAlpha = param.alpha;
-        material.diffuseTexture.uScale = param.uScale;
-        material.diffuseTexture.uOffset = param.uOffset;
-        material.diffuseTexture.vScale = param.vScale;
-        material.diffuseTexture.vOffset = param.vOffset;
-        
         mesh.material = material;
-        
-        return mesh;
-    },
-    
-    /**
-     * Creates an animation
-     * @param {type} config
-     * @param {type} keys
-     * @param {type} events
-     * @param {type} easing
-     * @returns {undefined}
-     */
-    createAnimation: function(mesh, config, keys, easing, events) {
-        const param = {
-            name: "",
-            property: "",
-            type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-            loop: BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT,
-        };
-        
-        // properties
-        if(! config) config = {};
-        for(const property in config) {
-            param[property] = config[property];
-        }
-        
-        // create
-        const animation = new BABYLON.Animation(
-            param.name,
-            param.property,
-            this.FRAME_RATE,
-            param.type,
-            param.loop
-        );
-        
-        // keys
-        if(! keys) keys = [];
-        animation.setKeys(keys);
-        
-        // easing
-        if(easing != false) {
-            const ease = easing.type;
-            ease.setEasingMode(easing.mode);
-            animation.setEasingFunction(ease);
-        }
-        
-        // events
-        if(! events) events = [];
-        events.forEach(function(event) {
-            animation.addEvent(new BABYLON.AnimationEvent(
-                event.second * this.FRAME_RATE, event.callback, true
-            ));
-        }, this);
-        
-        // add animation
-        this.animations.addTargetedAnimation(animation, mesh);
     }
-}
+};

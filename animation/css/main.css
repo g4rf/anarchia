@@ -11,9 +11,16 @@ body {
   height: 720px;
   background-color: #333;
 }
-#bar {
+#bar,
+#loading {
   padding: 5px;
 }
-#bar button {
+#bar button,
+#loading button {
   padding: 3px;
+}
+/** helper classes **/
+.hidden {
+  display: none;
+  visibility: hidden;
 }

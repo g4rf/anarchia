@@ -1,6 +1,7 @@
 {
-  "dependencies": {
-    "live-server": "^1.2.1",
-    "live-server-https": "^0.0.2"
-  }
+    "type": "module",
+    "dependencies": {
+        "live-server": "^1.2.1",
+        "live-server-https": "^0.0.2"
+    }
 }
