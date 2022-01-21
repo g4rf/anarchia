@@ -3,13 +3,23 @@
 <head>
     <title>Anarchia</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="css/main.css">
 </head><body>
+    <div id="bar">
+        <button id="play">&#9654;&#65039;</button>
+        <button id="stop">&#9209;&#65039;</button>
+        &nbsp;
+        <button id="record">&#128721;</button>
+        &nbsp;|&nbsp;
+        <button id="inspector">&#9881;&#65039;</button>
+    </div>
     <canvas id="render"></canvas>
 
-    <script src="babylon/babylon.js"></script>
-    
-    <script src="js/config.js"></script>
-    <script src="js/helper.js"></script>
-    <script src="Js/main.js"></script>
+    <script src="js/babylon/babylon.js"></script>
+    <script src="js/babylon/babylon.inspector.bundle.js"></script>
+        
+    <script src="js/anarchia.js"></script>
+    <script src="js/config.js"></script>    
+    <script src="js/main.js"></script>    
+    <script src="js/events.js"></script>
 </body></html>
