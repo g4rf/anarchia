@@ -46,10 +46,12 @@ export default {
     engine: null,
     
     /**
-     * The song, that will be played.
-     * @type BABYLON.Sound
+     * The sound library.
+     * @type object with BABYLON.Sound objects
      */
-    music: null,
+    sounds: {
+        song: null
+    },
     
     /**
      * The scene, that will be looped.
@@ -166,7 +168,7 @@ export default {
      * @param {type} keys
      * @param {type} events
      * @param {type} easing
-     * @returns {undefined}
+     * @returns {BABYLON.Animation}
      */
     createAnimation: function(mesh, config, keys, easing, events) {
         const param = {
@@ -212,5 +214,7 @@ export default {
         
         // add animation
         this.animations.addTargetedAnimation(animation, mesh);
+        
+        return animation;
     }
 }

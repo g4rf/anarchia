@@ -11,7 +11,7 @@ export function bind() {
     // play
     document.getElementById("play").addEventListener("click", function() {
         // music on
-        Anarchia.music.play();
+        Anarchia.sounds.song.play();
         
         // animations on
         Anarchia.animations.play();
@@ -21,7 +21,9 @@ export function bind() {
     document.getElementById("stop").addEventListener("click", function() {
         Anarchia.animations.stop();
         Anarchia.animations.reset();
-        Anarchia.music.stop();
+        for(let sound in Anarchia.sounds) {
+            Anarchia.sounds[sound].stop();
+        }
     });
 
     // record
