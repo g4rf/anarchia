@@ -11,7 +11,7 @@ export function bind() {
     // play
     document.getElementById("play").addEventListener("click", function() {
         // music on
-        Anarchia.sounds.song.play();
+        if(Anarchia.sounds.song) Anarchia.sounds.song.play();
         
         // animations on
         Anarchia.animations.play();
@@ -22,7 +22,7 @@ export function bind() {
         Anarchia.animations.stop();
         Anarchia.animations.reset();
         for(let sound in Anarchia.sounds) {
-            Anarchia.sounds[sound].stop();
+            if(Anarchia.sounds[sound]) Anarchia.sounds[sound].stop();
         }
     });
 

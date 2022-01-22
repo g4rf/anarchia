@@ -149,15 +149,17 @@ export default {
         mesh.rotation.y = param.rotationY;
         mesh.rotation.z = param.rotationZ;
         
-        const material = new BABYLON.StandardMaterial(param.name + "-material");
-        material.diffuseTexture = new BABYLON.Texture(param.texture);
-        material.diffuseTexture.hasAlpha = param.alpha;
-        material.diffuseTexture.uScale = param.uScale;
-        material.diffuseTexture.uOffset = param.uOffset;
-        material.diffuseTexture.vScale = param.vScale;
-        material.diffuseTexture.vOffset = param.vOffset;
-        
-        mesh.material = material;
+        if(param.texture != false) {
+            const material = new BABYLON.StandardMaterial(param.name + "-material");
+            material.diffuseTexture = new BABYLON.Texture(param.texture);
+            material.diffuseTexture.hasAlpha = param.alpha;
+            material.diffuseTexture.uScale = param.uScale;
+            material.diffuseTexture.uOffset = param.uOffset;
+            material.diffuseTexture.vScale = param.vScale;
+            material.diffuseTexture.vOffset = param.vOffset;
+
+            mesh.material = material;
+        }
         
         return mesh;
     },
@@ -166,11 +168,17 @@ export default {
      * Creates an animation
      * @param {type} config
      * @param {type} keys
-     * @param {type} events
      * @param {type} easing
+     * @param {type} events
      * @returns {BABYLON.Animation}
      */
     createAnimation: function(mesh, config, keys, easing, events) {
+        if(typeof mesh == "undefined") return;
+        if(typeof keys == "undefined") return;
+        if(typeof config == "undefined") config = {};
+        if(typeof easing == "undefined") easing = null;
+        if(typeof events == "undefined") events = [];
+        
         const param = {
             name: "",
             property: "",
@@ -198,7 +206,7 @@ export default {
         animation.setKeys(keys);
         
         // easing
-        if(easing != false) {
+        if(easing) {
             const ease = easing.type;
             ease.setEasingMode(easing.mode);
             animation.setEasingFunction(ease);
