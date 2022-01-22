@@ -59,16 +59,10 @@ export function ufoFly() {
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
-    });
-    
-    // put landed ufo behind background
-    // ! do it as animation to use `duration` feature
-    Anarchia.createAnimation(ufo, {
-        property: "position.z"
-    },[ // keys
-        { frame:  0 * Anarchia.FRAME_RATE, value: ufo.position.z },
-        { frame: 11 * Anarchia.FRAME_RATE, value: ufo.position.z },
-        { frame: 11.1 * Anarchia.FRAME_RATE, value: 100 }
+    },[
+        { second: 11.1, callback: function() {
+            ufo.isVisible = false;
+        }}
     ]);
     
     return ufo;
@@ -145,4 +139,96 @@ export function ufoLand() {
     ], easing);
     
     return bottom;
+}
+
+/**
+ * Creates the aliens.
+ * @returns {Array}  Array of alien meshes.
+ */
+export function aliens() {
+    const ufo = Anarchia.scene.getMeshById("ufoLand");
+    
+    const alien = Anarchia.createPlane({
+        name: "alien_1",
+        texture: "textures/alien_1.png",
+        height: 0.45,
+        width: 0.45,
+        positionX: ufo.position.x,
+        positionY: ufo.position.y + 0.12,
+        positionZ: ufo.position.z + 0.02
+    });
+    alien.setParent(ufo);
+    
+    // jump animation    
+    const posX = Anarchia.createAnimation(alien, {
+        property: "position.x"
+    },[ // keys
+        { frame: 0 * Anarchia.FRAME_RATE, value: alien.position.x },
+        { frame: 20 * Anarchia.FRAME_RATE, value: alien.position.x },
+        { frame: 21 * Anarchia.FRAME_RATE, value: alien.position.x + 2 }
+    ], false, [
+        { second: 19, callback: function() {
+                
+            const posYup = Anarchia.createAnimation(alien, {
+                property: "position.y"
+            },[ // keys
+                { frame: 0 * Anarchia.FRAME_RATE, value: alien.position.y },
+                { frame: 1 * Anarchia.FRAME_RATE, value: alien.position.y },
+                { frame: 1.3 * Anarchia.FRAME_RATE, value: alien.position.y + 1 }
+            ],{ // easing
+                type: new BABYLON.CircleEase(),
+                mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
+            });
+ 
+            const posYdown = Anarchia.createAnimation(alien, {
+                property: "position.y"
+            },[ // keys
+                { frame: 1.3 * Anarchia.FRAME_RATE, value: alien.position.y + 1 },
+                { frame: 2 * Anarchia.FRAME_RATE, value: alien.position.y - 0.5 }
+            ],{ // easing
+                type: new BABYLON.BounceEase(1, 5),
+                mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
+            });
+
+            const scaleX = Anarchia.createAnimation(alien, {
+                property: "scaling.x",
+                loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
+            },[ // keys
+                { frame: 0 * Anarchia.FRAME_RATE, value: 1 },
+                { frame: 0.9 * Anarchia.FRAME_RATE, value: 1 },
+                { frame: 1.0 * Anarchia.FRAME_RATE, value: 1.6 },
+                { frame: 1.1 * Anarchia.FRAME_RATE, value: 1 },
+                { frame: 1.8 * Anarchia.FRAME_RATE, value: 1 },
+                { frame: 1.9 * Anarchia.FRAME_RATE, value: 1.6 },
+                { frame: 2 * Anarchia.FRAME_RATE, value: 1 }
+            ]);
+
+            const scaleY = Anarchia.createAnimation(alien, {
+                property: "scaling.y",
+                loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
+            },[ // keys
+                { frame: 0 * Anarchia.FRAME_RATE, value: 1 },
+                { frame: 0.9 * Anarchia.FRAME_RATE, value: 1 },
+                { frame: 1.0 * Anarchia.FRAME_RATE, value: 0.6 },
+                { frame: 1.1 * Anarchia.FRAME_RATE, value: 1 },
+                { frame: 1.8 * Anarchia.FRAME_RATE, value: 1 },
+                { frame: 1.9 * Anarchia.FRAME_RATE, value: 0.6 },
+                { frame: 2 * Anarchia.FRAME_RATE, value: 1 }
+            ]);
+            
+            const speed = 1;
+            Anarchia.scene.beginDirectAnimation(alien, [scaleY, scaleX],
+                0, 2 * Anarchia.FRAME_RATE, false, speed);
+            Anarchia.scene.beginDirectAnimation(alien, [posYup],
+                0, 2 * Anarchia.FRAME_RATE, false, speed, function() {
+                Anarchia.scene.beginDirectAnimation(alien, [posYdown],
+                    0, 2 * Anarchia.FRAME_RATE, false, speed);
+            });
+            
+        }}
+    ]);
+    
+    
+    
+    return [alien];
 }

@@ -18,7 +18,7 @@ Anarchia.animations = new BABYLON.AnimationGroup("animations");
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; ! won't work perfectly
-Anarchia.duration(15, 20);
+Anarchia.duration(0, 25);
 
 
 /** light **/
@@ -39,9 +39,10 @@ Landscape.signCredentials();
 
 
 /** performer **/
+Performer.camera();
 Performer.ufoFly();
 Performer.ufoLand();
-Performer.camera();
+Performer.aliens();
 
 
 /** animations **/
