@@ -14,7 +14,10 @@ export function bind() {
         if(Anarchia.sounds.song) Anarchia.sounds.song.play();
         
         // animations on
-        Anarchia.animations.play();
+        Anarchia.animations.forEach(function(mesh) {
+            Anarchia.scene.beginAnimation(mesh,
+                    Anarchia.START_FRAME, Anarchia.END_FRAME, true);
+        });
     });
 
     // stop
@@ -22,8 +25,7 @@ export function bind() {
         window.location.reload();
         
         // that would be great but won't work with Animation events:
-        /*Anarchia.animations.stop();
-        Anarchia.animations.reset();
+        /* // stop and reset all animations
         for(let sound in Anarchia.sounds) {
             if(Anarchia.sounds[sound]) Anarchia.sounds[sound].stop();
         }*/

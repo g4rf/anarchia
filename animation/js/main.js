@@ -12,7 +12,6 @@ import * as Events from "./events.js";
 Anarchia.canvas = document.getElementById("render");
 Anarchia.engine = new BABYLON.Engine(Anarchia.canvas, true);
 Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
-Anarchia.animations = new BABYLON.AnimationGroup("animations");
 
 
 /** settings **/
@@ -43,10 +42,6 @@ Performer.camera();
 //Performer.ufoFly();
 Performer.ufoLand();
 Performer.aliens();
-
-
-/** animations **/
-Anarchia.animations.normalize(Anarchia.START_FRAME, Anarchia.END_FRAME);
 
 
 /** screen on **/
