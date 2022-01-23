@@ -306,106 +306,32 @@ export default {
         });
     },
     
-    addJittery: function(mesh, jitter) {
-        if(typeof jitter == "undefined") jitter = {};
+    addJittery: function(mesh, property, beginValue, changeValue, 
+            duration, pause, easeType, easeMode) {
         
-        const param = {
-            scaleX: { span: 0, duration: 0 },
-            scaleY: { span: 0, duration: 0 },
-            rotateZ: { span: 0, duration: 0 },
-            moveX: { span: 0, duration: 0 },
-            moveY: { span: 0, duration: 0 }
-        };
+        if(typeof property == "undefined") property = "position.x";
+        if(typeof beginValue == "undefined") beginValue = 0;
+        if(typeof changeValue == "undefined") changeValue = 1;
+        if(typeof duration == "undefined") duration = 1;
+        if(typeof pause == "undefined") pause = 0;
+        if(typeof easeType == "undefined") easeType = new BABYLON.CircleEase();
+        if(typeof easeMode == "undefined") 
+            easeMode = BABYLON.EasingFunction.EASINGMODE_EASEINOUT;
         
-        // properties
-        for(const property in jitter) {
-            param[property] = jitter[property];
-        }
-        
-        // scaleX
-        if(param.scaleX.span > 0) {
-            let span = param.scaleX.span;
-            let duration = param.scaleX.duration;
-            
-            const scaleX = this.createAnimation(mesh, {
-                property: "scaling.x",
-                loop: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
-            },[ // keys
-                { frame: span * 0.0 * this.FRAME_RATE, value: 1 },
-                { frame: span * 0.5 * this.FRAME_RATE,
-                    value: 0.9 + this.getRandomInt(0,9) * 0.01 },
-                { frame: span * 1.0 * this.FRAME_RATE, value: 1 },
-                { frame: duration * this.FRAME_RATE, value: 1 }
-            ],{ // easing
-                type: new BABYLON.CircleEase(),
-                mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
-            });
-            
-            scaleX.enableBlending = true;
-            mesh.animations.push(scaleX);
-        }
-        
-        // scaleY
-        if(param.scaleY.span > 0) {
-            let span = param.scaleY.span;
-            let duration = param.scaleY.duration;
-            
-            const scaleY = this.createAnimation(mesh, {
-                property: "scaling.y",
-                loop: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
-            },[ // keys
-                { frame: span * 0.0 * this.FRAME_RATE, value: 1 },
-                { frame: span * 0.5 * this.FRAME_RATE, value: 0.9 },
-                { frame: span * 1.0 * this.FRAME_RATE, value: 1 },
-                { frame: duration * this.FRAME_RATE, value: 1 }
-            ],{ // easing
-                type: new BABYLON.CircleEase(),
-                mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
-            });
-            
-            scaleY.enableBlending = true;
-            mesh.animations.push(scaleY);
-        }
-        
-        // rotateZ
-        if(param.rotateZ.span > 0) {
-            let span = param.rotateZ.span;
-            let duration = param.rotateZ.duration;
-            
-            const rotateZ = this.createAnimation(mesh, {
-                property: "rotation.z",
-                loop: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
-            },[ // keys
-                { frame: span * 0.0 * this.FRAME_RATE, value:  0.0 * Math.PI },
-                { frame: span * 0.5 * this.FRAME_RATE, value:  0.05 * Math.PI },
-                { frame: span * 1.0 * this.FRAME_RATE, value:  0.0 * Math.PI },
-                { frame: duration * this.FRAME_RATE, value: 0 * Math.PI }
-            ],{ // easing
-                type: new BABYLON.BounceEase(1, 5),
-                mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
-            });
-            
-            rotateZ.enableBlending = true;
-            mesh.animations.push(rotateZ);
-        }
-        
-        // moveX
-        if(param.moveX.span > 0) {
-            let span = param.moveX.span;
-            let duration = param.moveX.duration;
-            
-            const moveX = this.createAnimation(mesh, {
-                property: "position.x",
-                loop: BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-            },[ // keys
-                { frame: span * 0.0 * this.FRAME_RATE, value: 0 },
-                { frame: span * 0.5 * this.FRAME_RATE, value: 1 },
-                { frame: span * 1.0 * this.FRAME_RATE, value: 0 },
-                { frame: duration * this.FRAME_RATE, value: 0 }
-            ]);
-            
-            moveX.enableBlending = true;
-            mesh.animations.push(moveX);
-        }
+        const jitter = this.createAnimation(mesh, {
+            property: property,
+            loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
+        },[ // keys
+            { frame: duration * 0.0 * this.FRAME_RATE, value: beginValue },
+            { frame: duration * 0.5 * this.FRAME_RATE, value: changeValue },
+            { frame: duration * 1.0 * this.FRAME_RATE, value: beginValue },
+            { frame: (duration + pause) * this.FRAME_RATE, value: beginValue }
+        ],{ // easing
+            type: easeType,
+            mode: easeMode
+        });
+
+        jitter.enableBlending = true;
+        mesh.animations.push(jitter);
     }
 }

@@ -174,12 +174,10 @@ export function aliens() {
     });
     alien.setParent(ufo);
     
-    Anarchia.addJittery(alien, {
-        scaleX: { span: 0.5, duration: 0.75 },
-        rotateZ: { span: 0.8, duration: 1.4}
-        //moveX: { span: 1, duration: 1 }
-    });
-    
+    Anarchia.addJittery(alien, "scaling.x", 1, 0.9, 1, 3);
+    Anarchia.addJittery(alien, "scaling.y", 1, 0.8, 2, 4);
+    Anarchia.addJittery(alien, "rotation.z", 0, 0.1 * Math.PI, 1, 5.1);
+        
     // jump animation    
     const posX = Anarchia.createAnimation(alien, {
         property: "position.x"
@@ -191,7 +189,10 @@ export function aliens() {
         { frame: Anarchia.END_FRAME, value: alien.position.x + 2 }
     ], false, [
         { second: 20, callback: function() {
-            Anarchia.jump(alien, 1, -0.5, 1);
+            Anarchia.jump(alien, 1, -0.5);
+        }},
+        { second: 22, callback: function() {
+            Anarchia.jump(alien, 0.3);
         }}
     ]);    
     
