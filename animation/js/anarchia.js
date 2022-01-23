@@ -224,5 +224,73 @@ export default {
         this.animations.addTargetedAnimation(animation, mesh);
         
         return animation;
+    },
+    
+    jump: function(mesh, height, end, speed, bounces, bounciness) {        
+        if(typeof height == "undefined") height = 1;
+        if(typeof end == "undefined") end = 0;
+        if(typeof speed == "undefined") speed = 1;
+        if(typeof bounces == "undefined") bounces = 1;
+        if(typeof bounciness == "undefined") bounciness = 5;
+        
+        const ratio = height / (height + height - end);
+        const posYup = this.createAnimation(mesh, {
+            property: "position.y"
+        },[ // keys
+            { frame: 0 * this.FRAME_RATE, value: mesh.position.y },
+            { frame: 1 * this.FRAME_RATE, value: mesh.position.y },
+            { frame: (1 + ratio) * this.FRAME_RATE, value: mesh.position.y + height }
+        ],{ // easing
+            type: new BABYLON.CircleEase(),
+            mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
+        });
+
+        const posYdown = this.createAnimation(mesh, {
+            property: "position.y"
+        },[ // keys
+            { frame: (1 + ratio) * this.FRAME_RATE, value: mesh.position.y + height },
+            { frame: 2 * this.FRAME_RATE, value: mesh.position.y + end }
+        ],{ // easing
+            type: new BABYLON.BounceEase(bounces, bounciness),
+            mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
+        });
+
+        const scaleX = this.createAnimation(mesh, {
+            property: "scaling.x",
+            loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
+        },[ // keys
+            { frame: 0 * this.FRAME_RATE, value: 1 },
+            { frame: 0.9 * this.FRAME_RATE, value: 1 },
+            { frame: 1.0 * this.FRAME_RATE, value: 1.6 },
+            { frame: 1.1 * this.FRAME_RATE, value: 1 },
+            { frame: 1.8 * this.FRAME_RATE, value: 1 },
+            { frame: 1.9 * this.FRAME_RATE, value: 1.6 },
+            { frame: 2 * this.FRAME_RATE, value: 1 }
+        ]);
+
+        const scaleY = this.createAnimation(mesh, {
+            property: "scaling.y",
+            loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
+        },[ // keys
+            { frame: 0 * this.FRAME_RATE, value: 1 },
+            { frame: 0.9 * this.FRAME_RATE, value: 1 },
+            { frame: 1.0 * this.FRAME_RATE, value: 0.6 },
+            { frame: 1.1 * this.FRAME_RATE, value: 1 },
+            { frame: 1.8 * this.FRAME_RATE, value: 1 },
+            { frame: 1.9 * this.FRAME_RATE, value: 0.6 },
+            { frame: 2 * this.FRAME_RATE, value: 1 }
+        ]);
+
+        // squeeze
+        this.scene.beginDirectAnimation(mesh, [scaleY, scaleX],
+            0, 2 * this.FRAME_RATE, false, speed);
+        
+        // jump
+        const self = this;
+        this.scene.beginDirectAnimation(mesh, [posYup],
+            0, 2 * this.FRAME_RATE, false, speed, function() {
+                self.scene.beginDirectAnimation(mesh, [posYdown],
+                    0, 2 * self.FRAME_RATE, false, speed);
+        });
     }
 }

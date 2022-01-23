@@ -19,11 +19,14 @@ export function bind() {
 
     // stop
     document.getElementById("stop").addEventListener("click", function() {
-        Anarchia.animations.stop();
+        window.location.reload();
+        
+        // that would be great but won't work with Animation events:
+        /*Anarchia.animations.stop();
         Anarchia.animations.reset();
         for(let sound in Anarchia.sounds) {
             if(Anarchia.sounds[sound]) Anarchia.sounds[sound].stop();
-        }
+        }*/
     });
 
     // record

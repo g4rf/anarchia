@@ -150,7 +150,7 @@ export function aliens() {
     
     const alien = Anarchia.createPlane({
         name: "alien_1",
-        texture: "textures/alien_1.png",
+        texture: "textures/aliens/alien_1.png",
         height: 0.45,
         width: 0.45,
         positionX: ufo.position.x,
@@ -168,63 +168,7 @@ export function aliens() {
         { frame: 21 * Anarchia.FRAME_RATE, value: alien.position.x + 2 }
     ], false, [
         { second: 19, callback: function() {
-                
-            const posYup = Anarchia.createAnimation(alien, {
-                property: "position.y"
-            },[ // keys
-                { frame: 0 * Anarchia.FRAME_RATE, value: alien.position.y },
-                { frame: 1 * Anarchia.FRAME_RATE, value: alien.position.y },
-                { frame: 1.3 * Anarchia.FRAME_RATE, value: alien.position.y + 1 }
-            ],{ // easing
-                type: new BABYLON.CircleEase(),
-                mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
-            });
- 
-            const posYdown = Anarchia.createAnimation(alien, {
-                property: "position.y"
-            },[ // keys
-                { frame: 1.3 * Anarchia.FRAME_RATE, value: alien.position.y + 1 },
-                { frame: 2 * Anarchia.FRAME_RATE, value: alien.position.y - 0.5 }
-            ],{ // easing
-                type: new BABYLON.BounceEase(1, 5),
-                mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
-            });
-
-            const scaleX = Anarchia.createAnimation(alien, {
-                property: "scaling.x",
-                loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
-            },[ // keys
-                { frame: 0 * Anarchia.FRAME_RATE, value: 1 },
-                { frame: 0.9 * Anarchia.FRAME_RATE, value: 1 },
-                { frame: 1.0 * Anarchia.FRAME_RATE, value: 1.6 },
-                { frame: 1.1 * Anarchia.FRAME_RATE, value: 1 },
-                { frame: 1.8 * Anarchia.FRAME_RATE, value: 1 },
-                { frame: 1.9 * Anarchia.FRAME_RATE, value: 1.6 },
-                { frame: 2 * Anarchia.FRAME_RATE, value: 1 }
-            ]);
-
-            const scaleY = Anarchia.createAnimation(alien, {
-                property: "scaling.y",
-                loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
-            },[ // keys
-                { frame: 0 * Anarchia.FRAME_RATE, value: 1 },
-                { frame: 0.9 * Anarchia.FRAME_RATE, value: 1 },
-                { frame: 1.0 * Anarchia.FRAME_RATE, value: 0.6 },
-                { frame: 1.1 * Anarchia.FRAME_RATE, value: 1 },
-                { frame: 1.8 * Anarchia.FRAME_RATE, value: 1 },
-                { frame: 1.9 * Anarchia.FRAME_RATE, value: 0.6 },
-                { frame: 2 * Anarchia.FRAME_RATE, value: 1 }
-            ]);
-            
-            const speed = 1;
-            Anarchia.scene.beginDirectAnimation(alien, [scaleY, scaleX],
-                0, 2 * Anarchia.FRAME_RATE, false, speed);
-            Anarchia.scene.beginDirectAnimation(alien, [posYup],
-                0, 2 * Anarchia.FRAME_RATE, false, speed, function() {
-                Anarchia.scene.beginDirectAnimation(alien, [posYdown],
-                    0, 2 * Anarchia.FRAME_RATE, false, speed);
-            });
-            
+            Anarchia.jump(alien, 3, -1, 1);
         }}
     ]);
     

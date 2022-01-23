@@ -1,4 +1,49 @@
 {
+    "name": "@jankosyk/animation_anarchia",
+    "version": "0.0.1",
+    "description": "A musical animation short film called »Anarchia« by Jan Kosyk.",
+    "homepage": "https://github.com/g4rf/anarchia",
+    "bugs": {
+        "url": "https://github.com/g4rf/anarchia/issues",
+        "email": "post@klavierpunk.de"
+    },
+    "repository": {
+        "type" : "git",
+        "url" : "https://github.com/g4rf/anarchia.git"
+    },
+    "license": "SEE LICENSE IN LICENSE.md",
+    "author": {
+        "name": "Jan Kosyk",
+        "email": "post@klavierpunk.de",
+        "url": "https://klavierpunk.de"
+    },
+    "contributors": [
+        {
+            "name": "Alina Milkina (drawings)",
+            "email": "alina.milkina.sh@gmail.com",
+            "url": "https://alinamilkina.carbonmade.com"
+        },
+        { "name": "Andreas »Atze« Rudolf  (guitar, banjo, backvocals" },
+        { "name": "Hendrik »Henk« Teichmann (bass, double bass)" },
+        { "name": "Joachim Jurenz (drums, backvocals)" },
+        { "name": "Omani Frei (visual advices)" },
+        { "name": "Brad Hock (text check)" },
+        { 
+            "name": "Virtuous Vibes Tonstudio (recordings)",
+            "email": "info@virtuose-vibes.de",
+            "url": "https://virtuose-vibes.de"
+        }
+    ],
+    "funding": [
+        {
+            "type" : "PayPal",
+            "url" : "https://paypal.me/g4rf"
+        },
+        {
+            "type" : "Etsy",
+            "url" : "https://www.etsy.com/shop/NeustadtArtKollektiv"
+        }
+    ],
     "type": "module",
     "dependencies": {
         "live-server": "^1.2.1",
