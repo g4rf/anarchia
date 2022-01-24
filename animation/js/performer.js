@@ -150,7 +150,7 @@ export function ufoLand() {
         { frame: Anarchia.END_FRAME, value: 0.465 }
     ], easing);
     
-    //top.isVisible = false;
+    top.isVisible = false;
     //bottom.isVisible = false;
     
     return bottom;
@@ -174,10 +174,25 @@ export function aliens() {
     });
     alien.setParent(ufo);
     
-    Anarchia.addJittery(alien, "scaling.x", 1, 0.9, 1, 3);
-    Anarchia.addJittery(alien, "scaling.y", 1, 0.8, 2, 4);
-    Anarchia.addJittery(alien, "rotation.z", 0, 0.1 * Math.PI, 1, 5.1);
-        
+    Anarchia.addJitter(alien, {
+        property: "rotation.z",
+        beginValue: 0,
+        maxValue: 0.5 * Math.PI,
+        minDuration: 1,
+        maxDuration: 3,
+        minPause: 0.5,
+        maxPause: 4
+    });
+    Anarchia.addJitter(alien, {
+        property: "rotation.z",
+        beginValue: 0,
+        maxValue: -0.5 * Math.PI,
+        minDuration: 1,
+        maxDuration: 3,
+        minPause: 0.6,
+        maxPause: 1.3
+    });
+    
     // jump animation    
     const posX = Anarchia.createAnimation(alien, {
         property: "position.x"
@@ -189,10 +204,19 @@ export function aliens() {
         { frame: Anarchia.END_FRAME, value: alien.position.x + 2 }
     ], false, [
         { second: 20, callback: function() {
-            Anarchia.jump(alien, 1, -0.5);
+            Anarchia.jump(alien, { height: 1, end: -0.5 });
         }},
         { second: 22, callback: function() {
-            Anarchia.jump(alien, 0.3);
+            Anarchia.randomJumping(alien, {
+                minHeight: 0.1,
+                maxHeight: 0.3,
+                minPause: 1,
+                maxPause: 2
+            });
+        }},
+        { second: 30, callback: function() {
+            Anarchia.stopJumping(alien);
+            Anarchia.stopJitters(alien);
         }}
     ]);    
     

@@ -66,15 +66,18 @@ export default {
     animations: [],
 
     /**
-     * Generates random number between min (inclusive) and max (inclusive).
-     * @param {Number} min inclusive minimum number
-     * @param {Number} max inclusive maximum number
-     * @returns {Number} A random number.
+     * Generates random float between min (inclusive) and max (inclusive).
+     * @param {Float} min inclusive minimum number
+     * @param {Float} max inclusive maximum number
+     * @param {Integer} [decimals] round to decimal places
+     * @returns {Float} The random float number.
      */
-    getRandomInt: function(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max) + 1;
-        return Math.floor(Math.random() * (max - min) + min);
+    random: function(min, max, decimals) {
+        const float = Math.random() * (max - min) + min;
+        if(typeof decimals != "undefined") {
+            return parseFloat(float.toFixed(decimals));
+        }
+        return parseFloat(float);
     },
     
     /**
@@ -109,6 +112,8 @@ export default {
      * @returns {BABYLON.Mesh} The plane
      */
     createPlane: function(config) {
+        if(typeof config == "undefined") config = {};
+        
         const param = {
             name: "",
             
@@ -128,10 +133,8 @@ export default {
             uScale: 1,
             uOffset: 0,
             vScale: 1,
-            vOffset: 0,
+            vOffset: 0
         };
-        
-        if(typeof config == "undefined") config = {};
         for(const property in config) {
             param[property] = config[property];
         }
@@ -166,7 +169,11 @@ export default {
     
     /**
      * Creates an animation
-     * @param {type} config
+     * @param {type} [config]
+     *          [name=""]
+     *          [property=""]
+     *          [type=BABYLON.Animation.ANIMATIONTYPE_FLOAT]
+     *          [loop=BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT]
      * @param {type} keys
      * @param {type} easing
      * @param {type} events
@@ -179,15 +186,13 @@ export default {
         if(typeof easing == "undefined") easing = null;
         if(typeof events == "undefined") events = [];
         
+        // config
         const param = {
             name: "",
             property: "",
             type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
             loop: BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT,
         };
-        
-        // properties
-        if(! config) config = {};
         for(const property in config) {
             param[property] = config[property];
         }
@@ -234,26 +239,35 @@ export default {
     /**
      * Do a mesh jump.
      * @param {BABYLON.Mesh} mesh
-     * @param {Number} [height=1] The height on y axis relativ to current position.
-     * @param {Number} [end=0] The end position on y axis relativ to current position.
-     * @param {Number} [speed=1] The animation speed factor.
-     * @param {Number} [bounces=1] The bounces at animation end, see BABYLON.BounceEase.
-     * @param {Number} [bounciness=5] The bounciness, see BABYLON.BounceEase.
+     * @param {Object} [config] The parameters of the jump:
+     *      [height=1] The height of the jump.
+     *      [end=0] The end position on y axis relativ to current position.
+     *      [speed=1] The animation speed factor.
+     *      [bounces=1] The bounces at animation end, see BABYLON.BounceEase.
+     *      [bounciness=5] The bounciness, see BABYLON.BounceEase.
      */
-    jump: function(mesh, height, end, speed, bounces, bounciness) {        
-        if(typeof height == "undefined") height = 1;
-        if(typeof end == "undefined") end = 0;
-        if(typeof speed == "undefined") speed = 1;
-        if(typeof bounces == "undefined") bounces = 1;
-        if(typeof bounciness == "undefined") bounciness = 5;
+    jump: function(mesh, config) {
+        if(typeof config == "undefined") config = {};
         
-        const ratio = height / (height + height - end);
+        const param = {
+            height: 1,
+            end: 0,
+            speed: 1,
+            bounces: 1,
+            bounciness: 5
+        };        
+        for(const property in config) {
+            param[property] = config[property];
+        }
+        
+        const ratio = param.height / (param.height + param.height - param.end);
         const posYup = this.createAnimation(mesh, {
             property: "position.y"
         },[ // keys
             { frame: 0 * this.FRAME_RATE, value: mesh.position.y },
             { frame: 0.2 * this.FRAME_RATE, value: mesh.position.y },
-            { frame: (0.8 * ratio) * this.FRAME_RATE, value: mesh.position.y + height }
+            { frame: (0.8 * ratio) * this.FRAME_RATE, 
+                    value: mesh.position.y + param.height }
         ],{ // easing
             type: new BABYLON.CircleEase(),
             mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
@@ -262,16 +276,17 @@ export default {
         const posYdown = this.createAnimation(mesh, {
             property: "position.y"
         },[ // keys
-            { frame: (0.8 * ratio) * this.FRAME_RATE, value: mesh.position.y + height },
-            { frame: this.FRAME_RATE, value: mesh.position.y + end }
+            { frame: (0.8 * ratio) * this.FRAME_RATE, 
+                    value: mesh.position.y + param.height },
+            { frame: this.FRAME_RATE, value: mesh.position.y + param.end }
         ],{ // easing
-            type: new BABYLON.BounceEase(bounces, bounciness),
+            type: new BABYLON.BounceEase(param.bounces, param.bounciness),
             mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
         });
 
         const scaleX = this.createAnimation(mesh, {
             property: "scaling.x",
-            loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
+            //loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
         },[ // keys
             { frame: 0.00 * this.FRAME_RATE, value: 1 },
             { frame: 0.10 * this.FRAME_RATE, value: 1.6 },
@@ -283,7 +298,7 @@ export default {
 
         const scaleY = this.createAnimation(mesh, {
             property: "scaling.y",
-            loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
+            //loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
         },[ // keys
             { frame: 0.00 * this.FRAME_RATE, value: 1 },
             { frame: 0.10 * this.FRAME_RATE, value: 0.6 },
@@ -292,46 +307,178 @@ export default {
             { frame: 0.87 * this.FRAME_RATE, value: 0.6 },
             { frame: 0.97 * this.FRAME_RATE, value: 1 }
         ]);
+        
+        // blending
+        scaleX.enableBlending = true;
+        scaleY.enableBlending = true;
 
         // squeeze
         this.scene.beginDirectAnimation(mesh, [scaleY, scaleX],
-            0, this.FRAME_RATE, false, speed);
+            0, this.FRAME_RATE, false, param.speed);
         
         // jump
         const self = this;
         this.scene.beginDirectAnimation(mesh, [posYup],
-            0, this.FRAME_RATE, false, speed, function() {
+            0, this.FRAME_RATE, false, param.speed, function() {
                 self.scene.beginDirectAnimation(mesh, [posYdown],
-                    0, self.FRAME_RATE, false, speed);
+                    0, self.FRAME_RATE, false, param.speed);
         });
     },
     
-    addJittery: function(mesh, property, beginValue, changeValue, 
-            duration, pause, easeType, easeMode) {
+    /**
+     * Adds random jumping to a mesh.
+     * @param {BABYLON.Mesh} mesh
+     * @param {Object} [config] Parameters for random jumping:
+     *      [minHeight=0.1] The min height for a jump.
+     *      [maxHeight=1] The max height for a jump.
+     *      [minPause=0] The minimal break between two jumps.
+     *      [maxPause=5] The maximal break between two jumps.
+     */
+    randomJumping: function(mesh, config) {
+        if(typeof config == "undefined") config = {};
+       
+        const param = {
+            minHeight: 0.1,
+            maxHeight: 1,
+            minPause: 0,
+            maxPause: 5
+        };        
+        for(const property in config) {
+            param[property] = config[property];
+        }
         
-        if(typeof property == "undefined") property = "position.x";
-        if(typeof beginValue == "undefined") beginValue = 0;
-        if(typeof changeValue == "undefined") changeValue = 1;
-        if(typeof duration == "undefined") duration = 1;
-        if(typeof pause == "undefined") pause = 0;
-        if(typeof easeType == "undefined") easeType = new BABYLON.CircleEase();
-        if(typeof easeMode == "undefined") 
-            easeMode = BABYLON.EasingFunction.EASINGMODE_EASEINOUT;
+        // convert sec to msec
+        param.minPause *= 1000;
+        param.maxPause *= 1000;
         
-        const jitter = this.createAnimation(mesh, {
-            property: property,
-            loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
-        },[ // keys
-            { frame: duration * 0.0 * this.FRAME_RATE, value: beginValue },
-            { frame: duration * 0.5 * this.FRAME_RATE, value: changeValue },
-            { frame: duration * 1.0 * this.FRAME_RATE, value: beginValue },
-            { frame: (duration + pause) * this.FRAME_RATE, value: beginValue }
-        ],{ // easing
-            type: easeType,
-            mode: easeMode
+        // do jumping & save timer
+        mesh.randomJumpTimers = mesh.randomJumpTimers || [];
+        const self = this;
+        const jumpInterval = function() {
+            
+            self.jump(mesh, {
+                height: self.random(param.minHeight, param.maxHeight)
+            });
+            
+            mesh.randomJumpTimers.push(
+                window.setTimeout(jumpInterval, 
+                    param.minPause
+                    + self.random(0, param.maxPause - param.minPause, 0)
+                )
+            );
+            // TODO: clear old timeout saved in array to save memory
+        };
+        mesh.randomJumpTimers.push(
+            window.setTimeout(jumpInterval, 
+                param.minPause
+                + self.random(0, param.maxPause - param.minPause, 0)
+            )
+        );
+    },
+    
+    /**
+     * Stops the random jumps.
+     * @param {BABYLON.Mesh} mesh
+     */
+    stopJumping: function(mesh) {
+        if(typeof mesh.randomJumpTimers == "undefined") return;
+        
+        // TODO: remove old timers from array to save memory
+        mesh.randomJumpTimers.forEach(function(timer) {
+            window.clearTimeout(timer);
         });
-
-        jitter.enableBlending = true;
-        mesh.animations.push(jitter);
-    }
+    },
+    
+    /**
+     * Adds jitter animations to a mesh.
+     * ! BEWARE: Don't use "position.{x,y,z}" as property, as this will break
+     * other animations.
+     * @param {BABYLON.Mesh} mesh
+     * @param {Object} [config] The config:
+     *          [property="scaling.x"]
+     *          [beginValue=0]
+     *          [maxValue=1]
+     *          [minDuration=1]
+     *          [maxDuration=1]
+     *          [minPause=0]
+     *          [maxPause=0]
+     *          [easeType=new BABYLON.CircleEase()]
+     *          [easeMode=BABYLON.EasingFunction.EASINGMODE_EASEINOUT]
+     */
+    addJitter: function(mesh, config) {
+        if(typeof config == "undefined") config = {};
+       
+        const param = {
+            property: "scaling.x",
+            beginValue: 1,
+            maxValue: 1.3,
+            minDuration: 1,
+            maxDuration: 1,
+            minPause: 0,
+            maxPause: 0,
+            easeType: new BABYLON.CircleEase(),
+            easeMode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
+        };        
+        for(const property in config) {
+            param[property] = config[property];
+        }
+        
+        // convert sec to msec
+        param.minPause *= 1000;
+        param.maxPause *= 1000;
+        
+        mesh.randomJitterTimers = mesh.randomJitterTimers || [];
+        const self = this;
+        
+        const jitterInterval = function() {
+            const duration = self.random(param.minDuration, param.maxDuration);
+            const changeValue = self.random(0, 1) * param.maxValue;
+            
+            const jitter = self.createAnimation(mesh, {
+                property: param.property,
+                loop: BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+            },[ // keys
+                { frame: duration * 0.0 * self.FRAME_RATE, 
+                    value: param.beginValue },
+                { frame: duration * 0.5 * self.FRAME_RATE, 
+                    value: changeValue },
+                { frame: duration * 1.0 * self.FRAME_RATE, 
+                    value: param.beginValue }
+            ],{ // easing
+                type: param.easeType,
+                mode: param.easeMode
+            });
+            jitter.enableBlending = true;
+            
+            self.scene.beginDirectAnimation(mesh, [jitter], 
+                    0, duration * self.FRAME_RATE, false);
+                        
+            mesh.randomJitterTimers.push(
+                window.setTimeout(jitterInterval, 
+                    param.minPause 
+                    + self.random(0, param.maxPause - param.minPause, 0)
+                )
+            );
+            // TODO: clear old timeout saved in array to save memory
+        };
+        mesh.randomJitterTimers.push(
+            window.setTimeout(jitterInterval, 
+                param.minPause
+                + self.random(0, param.maxPause - param.minPause, 0)
+            )
+        );
+    },
+    
+    /**
+     * Stops the random jitters.
+     * @param {BABYLON.Mesh} mesh
+     */
+    stopJitters: function(mesh) {
+        if(typeof mesh.randomJitterTimers == "undefined") return;
+        
+        // TODO: remove old timers from array to save memory
+        mesh.randomJitterTimers.forEach(function(timer) {
+            window.clearTimeout(timer);
+        });
+    },
 }
