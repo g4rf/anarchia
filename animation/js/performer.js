@@ -1,6 +1,7 @@
 /* global BABYLON */
 
 import Anarchia from "./anarchia.js";
+import Timeline from "./timeline.js";
 
 /**
  * Creates the camera and its movements.
@@ -19,9 +20,9 @@ export function camera() {
         property: "position",
         type: BABYLON.Animation.ANIMATIONTYPE_VECTOR3
     },[ // keys
-        { frame:  0 * Anarchia.FRAME_RATE, value: cameraVectors[0] },
-        { frame:  9 * Anarchia.FRAME_RATE, value: cameraVectors[0] },
-        { frame: 14 * Anarchia.FRAME_RATE, value: cameraVectors[1] },
+        { frame: Timeline.filmStart, value: cameraVectors[0] },
+        { frame: Timeline.cameraPositionStart, value: cameraVectors[0] },
+        { frame: Timeline.cameraPositionHeinrichplatz, value: cameraVectors[1] },
         
         { frame: Anarchia.END_FRAME, value: cameraVectors[1] }
     ],{ // easing
@@ -55,16 +56,16 @@ export function ufoFly() {
         name: "moveUfoDown",
         property: "position.y"
     },[ // keys
-        { frame:  0 * Anarchia.FRAME_RATE, value: startY },
-        { frame:  6 * Anarchia.FRAME_RATE, value: startY },
-        { frame: 11 * Anarchia.FRAME_RATE, value: 0 },
+        { frame: Timeline.filmStart, value: startY },
+        { frame: Timeline.ufoflyPositionStart, value: startY },
+        { frame: Timeline.ufoflyPositionLanded, value: 0 },
         
         { frame: Anarchia.END_FRAME, value: 0 }
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
     },[
-        { second: 11.1, callback: function() {
+        { frame: Timeline.ufoflyPositionLanded + 0.01, callback: function() {
             ufo.isVisible = false;
         }}
     ]);
@@ -94,9 +95,9 @@ export function ufoLand() {
     Anarchia.createAnimation(bottom, {
         property: "position.y"
     },[ // keys
-        { frame:  0 * Anarchia.FRAME_RATE, value: startY },
-        { frame: 11 * Anarchia.FRAME_RATE, value: startY },
-        { frame: 16 * Anarchia.FRAME_RATE, value: 4.7 },
+        { frame: Timeline.filmStart, value: startY },
+        { frame: Timeline.ufolandedPositionStart, value: startY },
+        { frame: Timeline.ufolandedPositionLanded, value: 4.7 },
         
         { frame: Anarchia.END_FRAME, value: 4.7 }
     ],{ // easing
@@ -116,8 +117,8 @@ export function ufoLand() {
     top.setParent(bottom);
         
     // open top
-    const start = 16;
-    const end = 20;
+    const start = Timeline.ufolandedOpenTop;
+    const end = Timeline.ufolandedTopOpened;
     const easing = {
         type: new BABYLON.ExponentialEase(10),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
@@ -125,33 +126,30 @@ export function ufoLand() {
     Anarchia.createAnimation(top, {
         property: "rotation.z"
     },[ // keys
-        { frame: 0 * Anarchia.FRAME_RATE, value: 0 * Math.PI },
-        { frame: start * Anarchia.FRAME_RATE, value: 0 * Math.PI },
-        { frame: end * Anarchia.FRAME_RATE, value: 0.5 * Math.PI },
+        { frame: 0, value: 0 * Math.PI },
+        { frame: start, value: 0 * Math.PI },
+        { frame: end, value: 0.5 * Math.PI },
         
         { frame: Anarchia.END_FRAME, value: 0.5 * Math.PI }
     ], easing);
     Anarchia.createAnimation(top, {
         property: "position.x"
     },[ // keys
-        { frame:  0 * Anarchia.FRAME_RATE, value: 0 },
-        { frame: start * Anarchia.FRAME_RATE, value: 0 },
-        { frame: end * Anarchia.FRAME_RATE, value: -0.113 },
+        { frame: 0, value: 0 },
+        { frame: start, value: 0 },
+        { frame: end, value: -0.113 },
         
         { frame: Anarchia.END_FRAME, value: -0.113 }
     ], easing);
     Anarchia.createAnimation(top, {
         property: "position.y"
     },[ // keys
-        { frame: 0 * Anarchia.FRAME_RATE, value: 0 },
-        { frame: start * Anarchia.FRAME_RATE, value: 0 },
-        { frame: end * Anarchia.FRAME_RATE, value: 0.465 },
+        { frame: 0, value: 0 },
+        { frame: start, value: 0 },
+        { frame: end, value: 0.465 },
         
         { frame: Anarchia.END_FRAME, value: 0.465 }
     ], easing);
-    
-    top.isVisible = false;
-    //bottom.isVisible = false;
     
     return bottom;
 }
@@ -197,16 +195,18 @@ export function aliens() {
     const posX = Anarchia.createAnimation(alien, {
         property: "position.x"
     },[ // keys
-        { frame: 0 * Anarchia.FRAME_RATE, value: alien.position.x },
-        { frame: 20.2 * Anarchia.FRAME_RATE, value: alien.position.x },
-        { frame: 21 * Anarchia.FRAME_RATE, value: alien.position.x + 2 },
+        { frame: Timeline.filmStart, value: alien.position.x },
+        { frame: Timeline.alien1JumpOut + 0.2 * Anarchia.FRAME_RATE,
+            value: alien.position.x },
+        { frame: Timeline.alien1JumpOut + 1 * Anarchia.FRAME_RATE,
+            value: alien.position.x + 2 },
         
         { frame: Anarchia.END_FRAME, value: alien.position.x + 2 }
     ], false, [
-        { second: 20, callback: function() {
+        { frame: Timeline.alien1JumpOut, callback: function() {
             Anarchia.jump(alien, { height: 1, end: -0.5 });
         }},
-        { second: 22, callback: function() {
+        { frame: Timeline.alien1RandomJumps, callback: function() {
             Anarchia.randomJumping(alien, {
                 minHeight: 0.1,
                 maxHeight: 0.3,
@@ -214,9 +214,9 @@ export function aliens() {
                 maxPause: 2
             });
         }},
-        { second: 30, callback: function() {
+        { frame: Timeline.alien1StopRandomJumps, callback: function() {
             Anarchia.stopJumping(alien);
-            Anarchia.stopJitters(alien);
+            //Anarchia.stopJitters(alien);
         }}
     ]);    
     

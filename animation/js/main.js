@@ -23,6 +23,7 @@ Anarchia.duration(19, 31);
 /** light **/
 const light = new BABYLON.HemisphericLight("light", 
     new BABYLON.Vector3(0, 1, 0));
+// as we don't have real 3d objects/lights, set it all to pure white
 light.diffuse = new BABYLON.Color3(1, 1, 1);
 light.specular = new BABYLON.Color3(1, 1, 1);
 light.groundColor = new BABYLON.Color3(1, 1, 1);

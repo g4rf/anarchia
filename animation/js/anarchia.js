@@ -221,7 +221,7 @@ export default {
         if(! events) events = [];
         events.forEach(function(event) {
             animation.addEvent(new BABYLON.AnimationEvent(
-                event.second * this.FRAME_RATE, event.callback, true
+                event.frame, event.callback, true
             ));
         }, this);
         
@@ -391,8 +391,8 @@ export default {
     
     /**
      * Adds jitter animations to a mesh.
-     * ! BEWARE: Don't use "position.{x,y,z}" as property, as this will break
-     * other animations.
+     * ! BEWARE: Use "position.{x,y,z}" very carefully as property, as this will
+     * interact with and maybe break other moving animations.
      * @param {BABYLON.Mesh} mesh
      * @param {Object} [config] The config:
      *          [property="scaling.x"]
