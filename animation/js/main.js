@@ -17,7 +17,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; ! won't work perfectly
-Anarchia.duration(19, 31);
+Anarchia.duration(0, 31);
 
 
 /** light **/
@@ -30,17 +30,17 @@ light.groundColor = new BABYLON.Color3(1, 1, 1);
 
 
 /** landscape **/
-//Landscape.background();
-//Landscape.tvtower();
-//Landscape.heinrichplatz();
-//Landscape.houses();
-//Landscape.headline();
-//Landscape.signCredentials();
+Landscape.background();
+Landscape.tvtower();
+Landscape.heinrichplatz();
+Landscape.houses();
+Landscape.headline();
+Landscape.signCredentials();
 
 
 /** performer **/
 Performer.camera();
-//Performer.ufoFly();
+Performer.ufoFly();
 Performer.ufoLand();
 Performer.aliens();
 
@@ -52,12 +52,12 @@ Anarchia.engine.runRenderLoop(function () {
 
 
 /** music **/
-//Sounds.song(function() { // music ready
+Sounds.song(function() { // music ready
     // hide loading
     document.getElementById("loading").classList.add("hidden");
     // show button bar
     document.getElementById("bar").classList.remove("hidden");
-//});
+});
 
 
 /** gui events **/
