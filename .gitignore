@@ -2,5 +2,10 @@
 package-lock.json
 /nbproject/
 /material/
+
+# tmp files
+.~*
+
+# copyright infringements
 /animation/textures/heinrichplatz.*
 /animation/textures/city-horizon.*
