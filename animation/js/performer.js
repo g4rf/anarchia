@@ -163,8 +163,8 @@ export function aliens() {
     const aliens = [];
     
     const parameters = [
-        { endX: 1.3, endY: -0.50 },
-        { endX: 1.6, endY: -0.40 },
+        { endX: 1.4, endY: -0.50 },
+        { endX: 1.7, endY: -0.40 },
         { endX: 2.2, endY: -0.35 },
         { endX: 2.5, endY: -0.30 },
         { endX: 2.0, endY: -0.20 },
@@ -172,9 +172,9 @@ export function aliens() {
         { endX: 1.5, endY: -0.10 }
     ];
     
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < parameters.length; i++) {
         
-        let size = Anarchia.random(0.3, 0.5);
+        const size = Anarchia.random(0.3, 0.5);
         let alien = Anarchia.createPlane({
             name: "alien_" + i,
             texture: "textures/aliens/alien_" + i + ".png",
@@ -247,4 +247,69 @@ export function aliens() {
     }
     
     return aliens;
+}
+
+/**
+ * Creates the humans.
+ * @returns {Array} Array of human meshes.
+ */
+export function humans() {
+    const humans = [];
+    
+    // human 0
+    const parameters = [
+        { size: 1.10, x:  3.00, y: 1.60, z: 12.9, 
+                                    rotationStart: -0.3, rotationEnd:  -0.05 },
+        { size: 1.15, x: -7.80, y: 0.80, z: 12.9,
+                                    rotationStart: -0.1, rotationEnd: 0.1 },
+        { size: 0.80, x:  1.00, y: 4.38, z: 12.9,
+                                    rotationStart: -0.1, rotationEnd: 0.05 },
+        { size: 0.70, x:  1.35, y: 4.25, z: 12.89, 
+                                    rotationStart: -0.1, rotationEnd: 0.05 }
+    ];
+    
+    for (let i = 0; i < parameters.length; i++) {
+        
+        let human = Anarchia.createPlane({
+            name: "human_" + i,
+            texture: "textures/humans/human_" + i + ".png",
+            height: parameters[i].size,
+            width: parameters[i].size,
+            positionX: parameters[i].x,
+            positionY: parameters[i].y,
+            positionZ: parameters[i].z
+        });
+
+        // rotate animation
+        Anarchia.createAnimation(human, {
+            property: "rotation.z"
+        },[ // keys
+            { frame: Timeline.filmStart, 
+                value: parameters[i].rotationStart * Math.PI },
+            { frame: Timeline.ufolandedPositionStart,
+                value: parameters[i].rotationStart * Math.PI },
+            { frame: Timeline.ufolandedPositionLanded,
+                value: parameters[i].rotationEnd * Math.PI },
+
+            { frame: Anarchia.END_FRAME, 
+                value: parameters[i].rotationEnd * Math.PI }
+        ], false, [
+            { frame: Timeline.humanJitterStart, callback: function() {
+                Anarchia.addJitter(human, {
+                    property: "rotation.z",
+                    beginValue: parameters[i].rotationEnd * Math.PI,
+                    maxValue: Math.PI * (parameters[i].rotationEnd + 0.1),
+                    minDuration: 1,
+                    maxDuration: 5,
+                    minPause: 0.1,
+                    maxPause: 5
+                });
+            }}
+        ]);
+        
+        // add to array
+        humans.push(human);
+    }
+    
+    return humans;
 }

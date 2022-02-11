@@ -17,7 +17,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; !!! won't work perfectly
-Anarchia.duration(16, 31);
+Anarchia.duration(10, 30);
 
 
 /** light **/
@@ -43,7 +43,13 @@ Performer.camera();
 Performer.ufoFly();
 Performer.ufoLand();
 Performer.aliens();
+Performer.humans();
 
+// ToDo
+// - add ballon as plane
+// - add dynamic texture to plane material
+// - add images by time
+//
 
 /** screen on **/
 Anarchia.engine.runRenderLoop(function () {

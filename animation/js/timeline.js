@@ -7,16 +7,21 @@ export default {
     filmStart:
             0 * Anarchia.FRAME_RATE,
     
-    ufoflyPositionStart:
-            6 * Anarchia.FRAME_RATE,    
+    // camera
     cameraPositionStart:
             9 * Anarchia.FRAME_RATE,
-    ufoflyPositionLanded:
-            11 * Anarchia.FRAME_RATE,
-    ufolandedPositionStart:
-            11 * Anarchia.FRAME_RATE,
     cameraPositionHeinrichplatz:
             14 * Anarchia.FRAME_RATE,
+    
+    // ufo fly
+    ufoflyPositionStart:
+            6 * Anarchia.FRAME_RATE,    
+    ufoflyPositionLanded:
+            11 * Anarchia.FRAME_RATE,
+    
+    // ufo landed
+    ufolandedPositionStart:
+            11 * Anarchia.FRAME_RATE,
     ufolandedPositionLanded:
             16 * Anarchia.FRAME_RATE,
     ufolandedOpenTop:
@@ -80,4 +85,9 @@ export default {
             22.7 * Anarchia.FRAME_RATE,
     alien7StopRandomJumps:
             29.5 * Anarchia.FRAME_RATE,
+    
+    // humans
+    humanJitterStart:
+            16.1 * Anarchia.FRAME_RATE,
+    
 }
