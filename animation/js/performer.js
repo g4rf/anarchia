@@ -160,65 +160,91 @@ export function ufoLand() {
  */
 export function aliens() {
     const ufo = Anarchia.scene.getMeshById("ufoLand");
+    const aliens = [];
     
-    const alien = Anarchia.createPlane({
-        name: "alien_1",
-        texture: "textures/aliens/alien_1.png",
-        height: 0.45,
-        width: 0.45,
-        positionX: ufo.position.x,
-        positionY: ufo.position.y + 0.12,
-        positionZ: ufo.position.z + 0.02
-    });
-    alien.setParent(ufo);
+    const parameters = [
+        { endX: 1.3, endY: -0.50 },
+        { endX: 1.6, endY: -0.40 },
+        { endX: 2.2, endY: -0.35 },
+        { endX: 2.5, endY: -0.30 },
+        { endX: 2.0, endY: -0.20 },
+        { endX: 1.8, endY: -0.15 },
+        { endX: 1.5, endY: -0.10 }
+    ];
     
-    Anarchia.addJitter(alien, {
-        property: "rotation.z",
-        beginValue: 0,
-        maxValue: 0.5 * Math.PI,
-        minDuration: 1,
-        maxDuration: 3,
-        minPause: 0.5,
-        maxPause: 4
-    });
-    Anarchia.addJitter(alien, {
-        property: "rotation.z",
-        beginValue: 0,
-        maxValue: -0.5 * Math.PI,
-        minDuration: 1,
-        maxDuration: 3,
-        minPause: 0.6,
-        maxPause: 1.3
-    });
-    
-    // jump animation    
-    const posX = Anarchia.createAnimation(alien, {
-        property: "position.x"
-    },[ // keys
-        { frame: Timeline.filmStart, value: alien.position.x },
-        { frame: Timeline.alien1JumpOut + 0.2 * Anarchia.FRAME_RATE,
-            value: alien.position.x },
-        { frame: Timeline.alien1JumpOut + 1 * Anarchia.FRAME_RATE,
-            value: alien.position.x + 2 },
+    for (let i = 0; i < 7; i++) {
         
-        { frame: Anarchia.END_FRAME, value: alien.position.x + 2 }
-    ], false, [
-        { frame: Timeline.alien1JumpOut, callback: function() {
-            Anarchia.jump(alien, { height: 1, end: -0.5 });
-        }},
-        { frame: Timeline.alien1RandomJumps, callback: function() {
-            Anarchia.randomJumping(alien, {
-                minHeight: 0.1,
-                maxHeight: 0.3,
-                minPause: 1,
-                maxPause: 2
-            });
-        }},
-        { frame: Timeline.alien1StopRandomJumps, callback: function() {
-            Anarchia.stopJumping(alien);
-            //Anarchia.stopJitters(alien);
-        }}
-    ]);    
+        let size = Anarchia.random(0.3, 0.5);
+        let alien = Anarchia.createPlane({
+            name: "alien_" + i,
+            texture: "textures/aliens/alien_" + i + ".png",
+            height: size,
+            width: size,
+            positionX: ufo.position.x,
+            positionY: ufo.position.y + 0.12,
+            positionZ: ufo.position.z + 0.02 + (i * 0.01)
+        });
+        alien.setParent(ufo);
+
+        // random rotation clockwise
+        Anarchia.addJitter(alien, {
+            property: "rotation.z",
+            beginValue: 0,
+            maxValue: Anarchia.random(0.1, 0.5) * Math.PI,
+            minDuration: 0.1,
+            maxDuration: 3,
+            minPause: 0.1,
+            maxPause: 5
+        });
+        // random rotation counter clockwise
+        Anarchia.addJitter(alien, {
+            property: "rotation.z",
+            beginValue: 0,
+            maxValue: Anarchia.random(0.1, 0.5) * -Math.PI,
+            minDuration: 0.1,
+            maxDuration: 3,
+            minPause: 0.1,
+            maxPause: 5
+        });
+
+        // jump animation
+        Anarchia.createAnimation(alien, {
+            property: "position.x"
+        },[ // keys
+            { frame: Timeline.filmStart, value: alien.position.x },
+            { frame: Timeline["alien" + i + "JumpOut"] 
+                        + 0.2 * Anarchia.FRAME_RATE,
+                value: alien.position.x },
+            { frame: Timeline["alien" + i + "JumpOut"]
+                        + 1 * Anarchia.FRAME_RATE,
+                value: alien.position.x + parameters[i].endX },
+
+            { frame: Anarchia.END_FRAME, 
+                value: alien.position.x + parameters[i].endX }
+        ], false, [
+            { frame: Timeline["alien" + i + "JumpOut"], callback: function() {
+                Anarchia.jump(alien, { 
+                    height: Anarchia.random(0.5, 1.5),
+                    end: parameters[i].endY
+                });
+            }},
+            { frame: Timeline["alien" + i + "RandomJumps"], callback: function() {
+                Anarchia.randomJumping(alien, {
+                    minHeight: 0.1,
+                    maxHeight: 0.3,
+                    minPause: 1,
+                    maxPause: 2
+                });
+            }},
+            { frame: Timeline["alien" + i + "StopRandomJumps"], callback: function() {
+                Anarchia.stopJumping(alien);
+                
+            }}
+        ]);
+        
+        // add to array
+        aliens.push(alien);
+    }
     
-    return [alien];
+    return aliens;
 }
