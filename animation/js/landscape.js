@@ -53,7 +53,7 @@ export function heinrichplatz() {
 
 /**
  * Creates the city (houses).
- * @type Array Array of BABYLON.Mesh
+ * @return Array Array of BABYLON.Mesh
  */
 export function houses() {
     /** houses **/
@@ -64,7 +64,7 @@ export function houses() {
         { height: 18, x: -18, z: -3, offset:  4},
         { height: 15, x:  -6, z: -4, offset:  5},
         { height: 14, x:  -4, z: -6, offset:  6},
-        { height: 12, x:   1, z: -2, offset:  7},
+        { height: 12, x:  -2, z: -6.5, offset:  7},
         { height: 10, x:   4, z: -7, offset:  8},
         { height: 16, x:   4, z: -5, offset:  9},
         { height: 22, x:  15, z: -4, offset: 10},
@@ -91,6 +91,32 @@ export function houses() {
         );
     });
     return meshHouses;
+}
+
+/**
+ * Creates the toilet house the camera moves through at the beginning.
+ * @returns Mesh The house.
+ */
+export function toilet() {
+    const house = Anarchia.createPlane({
+        name: "toilethouse",
+        texture: "textures/toilethouse.png",
+        height: 10,
+        width: 5,
+        positionX: -0.9,
+        positionY: 7.45,
+        positionZ: -6
+    });
+    const toilet = Anarchia.createPlane({
+        name: "toilet",
+        texture: "textures/toilet.png",
+    });
+    toilet.setParent(house);
+    toilet.position.x = -0.65;
+    toilet.position.y = -1.6;
+    toilet.position.z = 3;
+    toilet.scaling.x = 6;
+    toilet.scaling.y = 4;
 }
 
 /**

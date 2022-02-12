@@ -7,8 +7,10 @@ export default {
     filmStart:                          0 * Anarchia.FRAME_RATE,
     
     // camera
-    cameraPositionStart:               10 * Anarchia.FRAME_RATE,
-    cameraPositionHeinrichplatz:       15 * Anarchia.FRAME_RATE,
+    cameraPositionStart:                8 * Anarchia.FRAME_RATE,
+    cameraPositionToiletStart:         11 * Anarchia.FRAME_RATE,
+    cameraPositionToiletEnd:           12 * Anarchia.FRAME_RATE,
+    cameraPositionHeinrichplatz:       13 * Anarchia.FRAME_RATE,
     
     // ufo fly
     ufoflyPositionStart:                7 * Anarchia.FRAME_RATE,    

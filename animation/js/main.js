@@ -17,7 +17,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; !!! won't work perfectly
-Anarchia.duration(10, 20);
+Anarchia.duration(0, 34);
 
 
 /** light **/
@@ -30,12 +30,13 @@ light.groundColor = new BABYLON.Color3(1, 1, 1);
 
 
 /** landscape **/
-//Landscape.background();
-//Landscape.tvtower();
+Landscape.background();
+Landscape.tvtower();
 Landscape.heinrichplatz();
-//Landscape.houses();
-//Landscape.headline();
-//Landscape.signCredentials();
+Landscape.houses();
+Landscape.toilet();
+Landscape.headline();
+Landscape.signCredentials();
 
 
 /** performer **/

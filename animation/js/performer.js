@@ -10,6 +10,8 @@ import Timeline from "./timeline.js";
 export function camera() {
     const cameraVectors = [
         new BABYLON.Vector3(0, 17, -55),
+        new BABYLON.Vector3(-0.86, 7.06, -7),
+        new BABYLON.Vector3(-0.86, 6.5, -4),
         new BABYLON.Vector3(-1, 5.5, 0)
     ];
     
@@ -21,13 +23,16 @@ export function camera() {
         type: BABYLON.Animation.ANIMATIONTYPE_VECTOR3
     },[ // keys
         { frame: Timeline.filmStart, value: cameraVectors[0] },
-        { frame: Timeline.cameraPositionStart, value: cameraVectors[0] },
-        { frame: Timeline.cameraPositionHeinrichplatz, value: cameraVectors[1] },
         
-        { frame: Anarchia.END_FRAME, value: cameraVectors[1] }
+        { frame: Timeline.cameraPositionStart, value: cameraVectors[0] },
+        { frame: Timeline.cameraPositionToiletStart, value: cameraVectors[1] },
+        { frame: Timeline.cameraPositionToiletEnd, value: cameraVectors[2] },
+        { frame: Timeline.cameraPositionHeinrichplatz, value: cameraVectors[3] },
+        
+        { frame: Anarchia.END_FRAME, value: cameraVectors[3] }
     ],{ // easing
-        type: new BABYLON.SineEase(),
-        mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
+        type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
+        mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
     },[ // events
     ]);
     
