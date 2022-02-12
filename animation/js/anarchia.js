@@ -109,6 +109,7 @@ export default {
      *          uOffset = 0
      *          vScale = 1
      *          vOffset = 0
+     *          visible = true
      * @returns {BABYLON.Mesh} The plane
      */
     createPlane: function(config) {
@@ -133,7 +134,9 @@ export default {
             uScale: 1,
             uOffset: 0,
             vScale: 1,
-            vOffset: 0
+            vOffset: 0,
+            
+            visible: true
         };
         for(const property in config) {
             param[property] = config[property];
@@ -143,6 +146,8 @@ export default {
             height: param.height,
             width: param.width
         });
+        
+        mesh.isVisible = param.visible;
         
         mesh.position.x = param.positionX;
         mesh.position.y = param.positionY;
