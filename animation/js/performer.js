@@ -279,71 +279,6 @@ export function aliens() {
 }
 
 /**
- * Creates the humans.
- * @returns {Array} Array of human meshes.
- */
-export function humans() {
-    const humans = [];
-    
-    // parameters for each human
-    const parameters = [
-        { size: 0.55, x:  0.60, y: 4.12, z: 4.8, 
-                                    rotationStart: -0.3, rotationEnd:  -0.05 },
-        { size: 0.53, x: -3.40, y: 3.85, z: 4.7,
-                                    rotationStart: -0.1, rotationEnd: 0.1 },
-        { size: 0.48, x:  0.00, y: 5.06, z: 5.9,
-                                    rotationStart: -0.1, rotationEnd: 0.05 },
-        { size: 0.40, x:  0.20, y: 4.95, z: 5.89, 
-                                    rotationStart: -0.1, rotationEnd: 0.05 }
-    ];
-    
-    for (let i = 0; i < parameters.length; i++) {
-        
-        let human = Anarchia.createPlane({
-            name: "human_" + i,
-            texture: "textures/humans/human_" + i + ".png",
-            height: parameters[i].size,
-            width: parameters[i].size,
-            positionX: parameters[i].x,
-            positionY: parameters[i].y,
-            positionZ: parameters[i].z
-        });
-
-        // rotate animation
-        Anarchia.createAnimation(human, {
-            property: "rotation.z"
-        },[ // keys
-            { frame: Timeline.filmStart, 
-                value: parameters[i].rotationStart * Math.PI },
-            { frame: Timeline.ufolandedPositionStart,
-                value: parameters[i].rotationStart * Math.PI },
-            { frame: Timeline.ufolandedPositionLanded,
-                value: parameters[i].rotationEnd * Math.PI },
-
-            { frame: Anarchia.END_FRAME, 
-                value: parameters[i].rotationEnd * Math.PI }
-        ], false, [
-            { frame: Timeline.humanJitterStart, callback: function() {
-                Anarchia.addJitter(human, {
-                    property: "rotation.z",
-                    beginValue: parameters[i].rotationEnd * Math.PI,
-                    maxValue: Math.PI * (parameters[i].rotationEnd + 0.1),
-                    minDuration: 1,
-                    maxDuration: 5,
-                    minPause: 0.1,
-                    maxPause: 5
-                });
-            }}
-        ]);
-        
-        // add to array
-        humans.push(human);
-    }
-    
-    return humans;
-}
-
-/**
  * Creates the punks.
  * @returns {Array} Array of punk meshes.
  */
@@ -389,6 +324,27 @@ export function punks() {
             positionX: parameters[i].x,
             positionY: parameters[i].y,
             positionZ: parameters[i].z,
+        });
+        
+        // rotation clockwise
+        Anarchia.addJitter(punk, {
+            property: "rotation.z",
+            beginValue: 0 * Math.PI,
+            maxValue: -0.1 * Math.PI,
+            minDuration: 1,
+            maxDuration: 2,
+            minPause: 1,
+            maxPause: 2
+        });
+        // rotation counter clockwise
+        Anarchia.addJitter(punk, {
+            property: "rotation.z",
+            beginValue: 0 * Math.PI,
+            maxValue: 0.1 * Math.PI,
+            minDuration: 1,
+            maxDuration: 2,
+            minPause: 1,
+            maxPause: 2
         });
 
         // jumping in
@@ -456,147 +412,237 @@ export function punks() {
 }
 
 /**
+ * Creates the humans.
+ * @returns {Array} Array of human meshes.
+ */
+export function humans() {
+    const humans = [];
+    
+    // parameters for each human
+    const parameters = [
+        { size: 0.55, x:  0.60, y: 4.12, z: 4.8, 
+                                    rotationStart: -0.3, rotationEnd:  -0.05 },
+        { size: 0.53, x: -3.40, y: 3.85, z: 4.7,
+                                    rotationStart: -0.1, rotationEnd: 0.1 },
+        { size: 0.48, x:  0.00, y: 5.06, z: 5.9,
+                                    rotationStart: -0.1, rotationEnd: 0.05 },
+        { size: 0.40, x:  0.20, y: 4.95, z: 5.89, 
+                                    rotationStart: -0.1, rotationEnd: 0.05 }
+    ];
+    
+    for (let i = 0; i < parameters.length; i++) {
+        
+        let human = Anarchia.createPlane({
+            name: "human_" + i,
+            texture: "textures/humans/human_" + i + ".png",
+            height: parameters[i].size,
+            width: parameters[i].size,
+            positionX: parameters[i].x,
+            positionY: parameters[i].y,
+            positionZ: parameters[i].z
+        });
+
+        // rotate animation
+        Anarchia.createAnimation(human, {
+            property: "rotation.z"
+        },[ // keys
+            { frame: Timeline.filmStart, 
+                value: parameters[i].rotationStart * Math.PI },
+            { frame: Timeline.ufolandedPositionStart,
+                value: parameters[i].rotationStart * Math.PI },
+            { frame: Timeline.ufolandedPositionLanded,
+                value: parameters[i].rotationEnd * Math.PI },
+
+            { frame: Anarchia.END_FRAME, 
+                value: parameters[i].rotationEnd * Math.PI }
+        ], false, [
+            { frame: Timeline.humanJitterStart, callback: function() {
+                Anarchia.addJitter(human, {
+                    property: "rotation.z",
+                    beginValue: parameters[i].rotationEnd * Math.PI,
+                    maxValue: Math.PI * (parameters[i].rotationEnd + 0.1),
+                    minDuration: 1,
+                    maxDuration: 5,
+                    minPause: 0.1,
+                    maxPause: 5
+                });
+            }}
+        ]);
+        
+        // add to array
+        humans.push(human);
+    }
+    
+    return humans;
+}
+
+/**
  * Creates the balloons.
  * @returns {Array} Array of balloon meshes.
  */
-export function balloon0() {
+export function balloons() {
+    const balloons = [];
     
-    let balloon = Anarchia.createPlane({
-        name: "balloon_0",
-        texture: "textures/balloon_0.png",
-        height: 0,
-        width: 0,
-        positionX: -1,
-        positionY: 6,
-        positionZ: 5
-    });
+    const parameters = [{
+        x: -1, y: 6, z: 5,
+        width: 4, height: 2
+    }];
+    
+    for(let i = 0; i < parameters.length; i++) {
+    
+        const p = parameters[i];
+        const t = Timeline.balloons[i];
+    
+        let balloon = Anarchia.createPlane({
+            name: "balloon_" + i,
+            texture: "textures/balloon.png",
+            height: 0,
+            width: 0,
+            positionX: p.x,
+            positionY: p.y,
+            positionZ: p.z
+        });
 
-    const ease = {
-        type: new BABYLON.SineEase(),
-        mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
-    };
-    const width = 4;
-    const height = 2;
-    
-    // scale height
-    Anarchia.createAnimation(balloon, {
-        property: "scaling.y"
-    },[ // keys
-        { frame: Timeline.filmStart, value: 0 },
+        const ease = {
+            type: new BABYLON.SineEase(),
+            mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
+        };
+        const width = p.width;
+        const height = p.height;
+
+        // scale height
+        Anarchia.createAnimation(balloon, {
+            property: "scaling.y"
+        },[ // keys
+            { frame: Timeline.filmStart, value: 0 },
+
+            { frame: t.show, value: 0 },
+            { frame: t.show + 0.2 * Anarchia.FRAME_RATE, value: height },
+
+            { frame: t.hide, value: height * 0.95 },
+            { frame: t.hide + 0.1 * Anarchia.FRAME_RATE, value: 0 },
+
+            { frame: Anarchia.END_FRAME, value: 0 }
+        ], ease, []);
+
+        // scale width
+        Anarchia.createAnimation(balloon, {
+            property: "scaling.x"
+        },[ // keys
+            { frame: Timeline.filmStart, value: 0 },
+
+            { frame: t.show, value: 0 },
+            { frame: t.show + 0.2 * Anarchia.FRAME_RATE, value: width },
+
+            { frame: t.hide, value: width * 1.1 },
+            { frame: t.hide + 0.1 * Anarchia.FRAME_RATE, value: 0 },
+
+            { frame: Anarchia.END_FRAME, value: 0 }
+        ], ease, []);
+
+        // fill with contents
+        balloonContents(i, balloon);
         
-        { frame: Timeline.balloon0Show, value: 0 },
-        { frame: Timeline.balloon0Show + 0.2 * Anarchia.FRAME_RATE,
-            value: height },
+        balloons.push(balloon);
+    }
+    
+    return balloons;
+}
+
+/**
+ * Fills balloons with contents.
+ * @param {Integer] i The index of the balloon.
+ * @param {BABYLON.Mesh} balloon The balloon.
+ */
+function balloonContents(i, balloon) {
+    const t = Timeline.balloons[i];
+    
+    if(i == 0) {
+        // star
+        let star = Anarchia.createPlane({
+            name: "balloon_0_star",
+            texture: "textures/balloon_0_star.png"
+        });
+        star.setParent(balloon);
+        star.position.x = -0.2;
+        star.position.y = 0.05;
+        star.position.z = 100;
+        star.scaling.x = 0.2;
+        star.scaling.y = 0.4;
+        Anarchia.createAnimation(star, { property: "position.z" },[ // keys
+            { frame: Timeline.filmStart, value: 100 },
+            { frame: t.star, value: -0.1 },        
+            { frame: Anarchia.END_FRAME, value: -0.1 }
+        ]);
+
+        // anarchy
+        let anarchy = Anarchia.createPlane({
+            name: "balloon_0_anarchy",
+            texture: "textures/anarchy.png"
+        });
+        anarchy.setParent(balloon);
+        anarchy.position.x = -0.08;
+        anarchy.position.y = 0.1;
+        anarchy.position.z = 100;
+        anarchy.scaling.x = 0.2;
+        anarchy.scaling.y = 0.4;
+        Anarchia.createAnimation(anarchy, { property: "position.z" },[ // keys
+            { frame: Timeline.filmStart, value: 100 },
+            { frame: t.anarchy, value: -0.1 },        
+            { frame: Anarchia.END_FRAME, value: -0.1 }
+        ]);
+
+        // tvtower
+        let tvtower = Anarchia.createPlane({
+            name: "balloon_0_tvtower",
+            texture: "textures/tvtower_plane.png"
+        });
+        tvtower.setParent(balloon);
+        tvtower.position.x = 0.07;
+        tvtower.position.y = 0.08;
+        tvtower.position.z = 100;
+        tvtower.scaling.x = 0.1;
+        tvtower.scaling.y = 0.55;
+        Anarchia.createAnimation(tvtower, { property: "position.z" },[ // keys
+            { frame: Timeline.filmStart, value: 100 },
+            { frame: t.tvtower, value: -0.1 },        
+            { frame: Anarchia.END_FRAME, value: -0.1 }
+        ]);
+
+        // cat
+        let cat = Anarchia.createPlane({
+            name: "balloon_0_cat",
+            texture: "textures/balloon_0_cat.png"
+        });
+        cat.setParent(balloon);
+        cat.position.x = 0.12;
+        cat.position.y = -0.05;
+        cat.position.z = 100;
+        cat.scaling.x = 0.13;
+        cat.scaling.y = 0.4;
+        Anarchia.createAnimation(cat, { property: "position.z" },[ // keys
+            { frame: Timeline.filmStart, value: 100 },
+            { frame: t.cat, value: -0.11 },
+            { frame: Anarchia.END_FRAME, value: -0.11 }
+        ]);
+
+        // flyback
+        let flyback = Anarchia.createPlane({
+            name: "balloon_0_flyback",
+            texture: "textures/balloon_0_flyback.png"
+        });
+        flyback.setParent(balloon);
+        flyback.position.x = 0.28;
+        flyback.position.y = -0.05;
+        flyback.position.z = 100;
+        flyback.scaling.x = 0.25;
+        flyback.scaling.y = 0.6;
+        Anarchia.createAnimation(flyback, { property: "position.z" },[ // keys
+            { frame: Timeline.filmStart, value: 100 },
+            { frame: t.flyback, value: -0.1 },        
+            { frame: Anarchia.END_FRAME, value: -0.1 }
+        ]);
         
-        { frame: Timeline.balloon0Hide, value: height * 0.95 },
-        { frame: Timeline.balloon0Hide + 0.1 * Anarchia.FRAME_RATE,
-            value: 0 },
-        
-        { frame: Anarchia.END_FRAME, value: 0 }
-    ], ease, []);
-    
-    // scale width
-    Anarchia.createAnimation(balloon, {
-        property: "scaling.x"
-    },[ // keys
-        { frame: Timeline.filmStart, value: 0 },
-        
-        { frame: Timeline.balloon0Show, value: 0 },
-        { frame: Timeline.balloon0Show + 0.2 * Anarchia.FRAME_RATE,
-            value: width },
-        
-        { frame: Timeline.balloon0Hide, value: width * 1.1 },
-        { frame: Timeline.balloon0Hide + 0.1 * Anarchia.FRAME_RATE,
-            value: 0 },
-        
-        { frame: Anarchia.END_FRAME, value: 0 }
-    ], ease, []);
-    
-    // star
-    let star = Anarchia.createPlane({
-        name: "balloon_0_star",
-        texture: "textures/balloon_0_star.png"
-    });
-    star.setParent(balloon);
-    star.position.x = -0.2;
-    star.position.y = 0.05;
-    star.position.z = 100;
-    star.scaling.x = 0.2;
-    star.scaling.y = 0.4;
-    Anarchia.createAnimation(star, { property: "position.z" },[ // keys
-        { frame: Timeline.filmStart, value: 100 },
-        { frame: Timeline.balloon0Star, value: -0.1 },        
-        { frame: Anarchia.END_FRAME, value: -0.1 }
-    ]);
-    
-    // anarchy
-    let anarchy = Anarchia.createPlane({
-        name: "balloon_0_anarchy",
-        texture: "textures/anarchy.png"
-    });
-    anarchy.setParent(balloon);
-    anarchy.position.x = -0.08;
-    anarchy.position.y = 0.1;
-    anarchy.position.z = 100;
-    anarchy.scaling.x = 0.2;
-    anarchy.scaling.y = 0.4;
-    Anarchia.createAnimation(anarchy, { property: "position.z" },[ // keys
-        { frame: Timeline.filmStart, value: 100 },
-        { frame: Timeline.balloon0Anarchy, value: -0.1 },        
-        { frame: Anarchia.END_FRAME, value: -0.1 }
-    ]);
-    
-    // tvtower
-    let tvtower = Anarchia.createPlane({
-        name: "balloon_0_tvtower",
-        texture: "textures/tvtower_plane.png"
-    });
-    tvtower.setParent(balloon);
-    tvtower.position.x = 0.07;
-    tvtower.position.y = 0.08;
-    tvtower.position.z = 100;
-    tvtower.scaling.x = 0.1;
-    tvtower.scaling.y = 0.55;
-    Anarchia.createAnimation(tvtower, { property: "position.z" },[ // keys
-        { frame: Timeline.filmStart, value: 100 },
-        { frame: Timeline.balloon0Tvtower, value: -0.1 },        
-        { frame: Anarchia.END_FRAME, value: -0.1 }
-    ]);
-    
-    // cat
-    let cat = Anarchia.createPlane({
-        name: "balloon_0_cat",
-        texture: "textures/balloon_0_cat.png"
-    });
-    cat.setParent(balloon);
-    cat.position.x = 0.12;
-    cat.position.y = -0.05;
-    cat.position.z = 100;
-    cat.scaling.x = 0.13;
-    cat.scaling.y = 0.4;
-    Anarchia.createAnimation(cat, { property: "position.z" },[ // keys
-        { frame: Timeline.filmStart, value: 100 },
-        { frame: Timeline.balloon0Cat, value: -0.11 },
-        { frame: Anarchia.END_FRAME, value: -0.11 }
-    ]);
-    
-    // flyback
-    let flyback = Anarchia.createPlane({
-        name: "balloon_0_flyback",
-        texture: "textures/balloon_0_flyback.png"
-    });
-    flyback.setParent(balloon);
-    flyback.position.x = 0.28;
-    flyback.position.y = -0.05;
-    flyback.position.z = 100;
-    flyback.scaling.x = 0.25;
-    flyback.scaling.y = 0.6;
-    Anarchia.createAnimation(flyback, { property: "position.z" },[ // keys
-        { frame: Timeline.filmStart, value: 100 },
-        { frame: Timeline.balloon0Flyback, value: -0.1 },        
-        { frame: Anarchia.END_FRAME, value: -0.1 }
-    ]);
-    
-    
-    return balloon;
+        return; // 0
+    }
 }

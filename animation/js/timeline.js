@@ -111,13 +111,16 @@ export default {
     // humans
     humanJitterStart:   16.1 * Anarchia.FRAME_RATE,
     
-    // balloon 0
-    balloon0Show:                      22 * Anarchia.FRAME_RATE,
-    balloon0Star:                      22 * Anarchia.FRAME_RATE,
-    balloon0Anarchy:                   23.5 * Anarchia.FRAME_RATE,
-    balloon0Tvtower:                   25.5 * Anarchia.FRAME_RATE,
-    balloon0Cat:                       26.5 * Anarchia.FRAME_RATE,
-    balloon0Flyback:                   31 * Anarchia.FRAME_RATE,
-    balloon0Hide:                      33 * Anarchia.FRAME_RATE 
-    
+    // balloons
+    balloons: [{
+        show:       22 * Anarchia.FRAME_RATE,
+        star:       22 * Anarchia.FRAME_RATE,
+        anarchy:    23.5 * Anarchia.FRAME_RATE,
+        tvtower:    25.5 * Anarchia.FRAME_RATE,
+        cat:        26.5 * Anarchia.FRAME_RATE,
+        flyback:    31 * Anarchia.FRAME_RATE,
+        hide:       33 * Anarchia.FRAME_RATE 
+    },{
+        
+    }]
 }
