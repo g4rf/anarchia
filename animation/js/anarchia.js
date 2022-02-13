@@ -346,7 +346,8 @@ export default {
             minHeight: 0.1,
             maxHeight: 1,
             minPause: 0,
-            maxPause: 5
+            maxPause: 5,
+            base: mesh.position.y
         };        
         for(const property in config) {
             param[property] = config[property];

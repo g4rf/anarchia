@@ -17,7 +17,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; !!! won't work perfectly
-Anarchia.duration(0, 34);
+Anarchia.duration(20, 50);
 
 
 /** light **/
@@ -30,21 +30,25 @@ light.groundColor = new BABYLON.Color3(1, 1, 1);
 
 
 /** landscape **/
-Landscape.background();
-Landscape.tvtower();
+//Landscape.headline();
+//Landscape.background();
+//Landscape.signCredentials();
+//Landscape.tvtower();
+//Landscape.houses();
+//Landscape.toilet();
 Landscape.heinrichplatz();
-Landscape.houses();
-Landscape.toilet();
-Landscape.headline();
-Landscape.signCredentials();
 
 
 /** performer **/
 Performer.camera();
+
 Performer.ufoFly();
 Performer.ufoLand();
+
 Performer.aliens();
 Performer.humans();
+Performer.punks();
+
 Performer.balloon0();
 
 // ToDo

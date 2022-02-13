@@ -39,15 +39,15 @@ export function tvtower() {
     
 export function heinrichplatz() {    
     /** heinrichplatz **/
-    const height = 11;
+    const height = 5.1;
     return Anarchia.createPlane({
         name: "heinrichplatz",
         texture: "textures/heinrichplatz.png",
         height: height,
-        width: 20,
+        width: 9,
         positionX: -1,
-        positionY: height / 2,
-        positionZ: 13
+        positionY: 5.5,
+        positionZ: 6
     });
 }
 

@@ -8,29 +8,45 @@ import Timeline from "./timeline.js";
  * @type BABYLON.UniversalCamera
  */
 export function camera() {
-    const cameraVectors = [
-        new BABYLON.Vector3(0, 17, -55),
-        new BABYLON.Vector3(-0.86, 7.06, -7),
-        new BABYLON.Vector3(-0.86, 6.5, -4),
-        new BABYLON.Vector3(-1, 5.5, 0)
-    ];
+    const vectors = {
+        start:         new BABYLON.Vector3(0, 17, -55),
+        toiletStart:   new BABYLON.Vector3(-0.86, 7.06, -7),
+        toiletEnd:     new BABYLON.Vector3(-0.86, 6.5, -4),
+        heinrichplatz: new BABYLON.Vector3(-1, 5.5, 0),
+        punks:         new BABYLON.Vector3(-0.5, 5, 2.5),
+    };
     
-    const camera = new BABYLON.UniversalCamera("camera", cameraVectors[0]);
+    const camera = new BABYLON.UniversalCamera("camera", vectors.start);
 
     Anarchia.createAnimation(camera, {
         name: "moveCameraToHeinrichplatz",
         property: "position",
         type: BABYLON.Animation.ANIMATIONTYPE_VECTOR3
-    },[ // keys
-        { frame: Timeline.filmStart, value: cameraVectors[0] },
-        
-        { frame: Timeline.cameraPositionStart, value: cameraVectors[0] },
-        { frame: Timeline.cameraPositionToiletStart, value: cameraVectors[1] },
-        { frame: Timeline.cameraPositionToiletEnd, value: cameraVectors[2] },
-        { frame: Timeline.cameraPositionHeinrichplatz, value: cameraVectors[3] },
-        
-        { frame: Anarchia.END_FRAME, value: cameraVectors[3] }
-    ],{ // easing
+    },[{ // keys
+        frame: Timeline.filmStart,
+        value: vectors.start
+    },{ 
+        frame: Timeline.camera.start, 
+        value: vectors.start
+    },{
+        frame: Timeline.camera.toiletStart, 
+        value: vectors.toiletStart 
+    },{ 
+        frame: Timeline.camera.toiletEnd, 
+        value: vectors.toiletEnd 
+    },{ 
+        frame: Timeline.camera.heinrichplatz, 
+        value: vectors.heinrichplatz 
+    },{ 
+        frame: Timeline.camera.punksZoomStart, 
+        value: vectors.heinrichplatz 
+    },{ 
+        frame: Timeline.camera.punksZoomEnd, 
+        value: vectors.punks 
+    },{ 
+        frame: Anarchia.END_FRAME,
+        value: vectors.punks
+    }],{ // easing
         type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
     },[ // events
@@ -217,33 +233,41 @@ export function aliens() {
             property: "position.x"
         },[ // keys
             { frame: Timeline.filmStart, value: alien.position.x },
-            { frame: Timeline["alien" + i + "JumpOut"] 
+            { frame: Timeline.alien[i].jumpOut 
                         + 0.2 * Anarchia.FRAME_RATE,
                 value: alien.position.x },
-            { frame: Timeline["alien" + i + "JumpOut"]
+            { frame: Timeline.alien[i].jumpOut
                         + 1 * Anarchia.FRAME_RATE,
                 value: alien.position.x + parameters[i].endX },
 
             { frame: Anarchia.END_FRAME, 
                 value: alien.position.x + parameters[i].endX }
         ], false, [
-            { frame: Timeline["alien" + i + "JumpOut"], callback: function() {
+            { frame: Timeline.alien[i].jumpOut, callback: function() {
                 Anarchia.jump(alien, { 
                     height: Anarchia.random(0.5, 1.5),
                     end: parameters[i].endY
                 });
             }},
-            { frame: Timeline["alien" + i + "RandomJumps"], callback: function() {
+            { frame: Timeline.alien[i].randomJumps, callback: function() {
                 Anarchia.randomJumping(alien, {
                     minHeight: 0.1,
                     maxHeight: 0.3,
-                    minPause: 1,
-                    maxPause: 2
+                    minPause: 2,
+                    maxPause: 4
                 });
             }},
-            { frame: Timeline["alien" + i + "StopRandomJumps"], callback: function() {
+            { frame: Timeline.alien[i].pogoStart, callback: function() {
                 Anarchia.stopJumping(alien);
-                
+                Anarchia.randomJumping(alien, {
+                    minHeight: 1,
+                    maxHeight: 1.5,
+                    minPause: 1.1,
+                    maxPause: 1.2
+                });
+            }},
+            { frame: Timeline.alien[i].pogoEnd, callback: function() {
+                Anarchia.stopJumping(alien);
             }}
         ]);
         
@@ -263,13 +287,13 @@ export function humans() {
     
     // parameters for each human
     const parameters = [
-        { size: 1.10, x:  3.00, y: 1.60, z: 12.9, 
+        { size: 0.55, x:  0.60, y: 4.12, z: 4.8, 
                                     rotationStart: -0.3, rotationEnd:  -0.05 },
-        { size: 1.15, x: -7.80, y: 0.80, z: 12.9,
+        { size: 0.53, x: -3.40, y: 3.85, z: 4.7,
                                     rotationStart: -0.1, rotationEnd: 0.1 },
-        { size: 0.80, x:  1.00, y: 4.38, z: 12.9,
+        { size: 0.48, x:  0.00, y: 5.06, z: 5.9,
                                     rotationStart: -0.1, rotationEnd: 0.05 },
-        { size: 0.70, x:  1.35, y: 4.25, z: 12.89, 
+        { size: 0.40, x:  0.20, y: 4.95, z: 5.89, 
                                     rotationStart: -0.1, rotationEnd: 0.05 }
     ];
     
@@ -317,6 +341,118 @@ export function humans() {
     }
     
     return humans;
+}
+
+/**
+ * Creates the punks.
+ * @returns {Array} Array of punk meshes.
+ */
+export function punks() {
+    const punks = [];
+    const jumpStartOffset = 0.2 * Anarchia.FRAME_RATE;
+    
+    // parameters
+    const parameters = [{
+        // punk 0
+        size: 0.7,
+        x: 3.2, // !!! change jumps as well
+        y: 4.65,  z: 5,
+        jumps: [
+            3.2,
+            3.2 - 1.2,
+            3.2 - 1.2 - 1,
+            3.2 - 1.2 - 1 - 0.5,
+            3.2 - 1.2 - 1 - 0.5 - 0.3,
+            3.2 - 1.2 - 1 - 0.5 - 0.3 - 0.3,
+        ]
+    },{ // punk 1
+        size: 0.6,
+        x: 3.3, // !!! change jumps as well
+        y: 4.55,  z: 4.9,
+        jumps: [
+            3.3,
+            3.3 - 1,
+            3.3 - 1 - 1.1,
+            3.3 - 1 - 1.1 - 0.6,
+            3.3 - 1 - 1.1 - 0.6 - 0.2,
+            3.3 - 1 - 1.1 - 0.6 - 0.2 - 0.05,
+        ]
+    }];
+    
+    for(let i = 0; i < parameters.length; i++) {
+        
+        const punk = Anarchia.createPlane({
+            name: "punk_" + i,
+            texture: "textures/humans/punk_" + i + ".png",
+            height: parameters[i].size,
+            width: parameters[i].size,
+            positionX: parameters[i].x,
+            positionY: parameters[i].y,
+            positionZ: parameters[i].z,
+        });
+
+        // jumping in
+        Anarchia.createAnimation(punk, {
+            property: "position.x"
+        },[{ // keys
+            frame: Timeline.filmStart, 
+            value: parameters[i].jumps[0]
+        },
+        { // jump in 1
+            frame: Timeline.punks[i].jumpIn[0].start,
+            value: parameters[i].jumps[0]
+        },{
+            frame: Timeline.punks[i].jumpIn[0].end,
+            value: parameters[i].jumps[1]
+        },{ // jump in 2
+            frame: Timeline.punks[i].jumpIn[1].start,
+            value: parameters[i].jumps[1]
+        },{
+            frame: Timeline.punks[i].jumpIn[1].end,
+            value: parameters[i].jumps[2]
+        },{ // jump in 3
+            frame: Timeline.punks[i].jumpIn[2].start,
+            value: parameters[i].jumps[2]
+        },{
+            frame: Timeline.punks[i].jumpIn[2].end,
+            value: parameters[i].jumps[3]
+        },{ // jump in 4
+            frame: Timeline.punks[i].jumpIn[3].start,
+            value: parameters[i].jumps[3]
+        },{
+            frame: Timeline.punks[i].jumpIn[3].end,
+            value: parameters[i].jumps[4]
+        },{ // jump in 5
+            frame: Timeline.punks[i].jumpIn[4].start,
+            value: parameters[i].jumps[4]
+        },{
+            frame: Timeline.punks[i].jumpIn[4].end,
+            value: parameters[i].jumps[5]
+        },
+        { // last position
+            frame: Anarchia.END_FRAME, 
+            value: parameters[i].jumps[parameters[i].jumps.length - 1]
+        }], false, [{ // jumps
+            frame: Timeline.punks[i].jumpIn[0].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.5 }); } 
+        },{
+            frame: Timeline.punks[i].jumpIn[1].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.5 }); }
+        },{ 
+            frame: Timeline.punks[i].jumpIn[2].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.3 }); }
+        },{ 
+            frame: Timeline.punks[i].jumpIn[3].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.1 }); }
+        },{ 
+            frame: Timeline.punks[i].jumpIn[4].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.1 }); }
+        }]);
+    
+        punks.push(punk);
+    }
+    
+    return [punks];
 }
 
 /**
