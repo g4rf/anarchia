@@ -10,10 +10,8 @@ import Timeline from "./timeline.js";
 export function camera() {
     const vectors = {
         start:         new BABYLON.Vector3(0, 17, -55),
-        toiletStart:   new BABYLON.Vector3(-0.86, 7.06, -7),
-        toiletEnd:     new BABYLON.Vector3(-0.86, 6.5, -4),
-        heinrichplatz: new BABYLON.Vector3(-1, 5.5, 0),
-        punks:         new BABYLON.Vector3(-0.5, 5, 2.5),
+        heinrichplatz: new BABYLON.Vector3(-1, 15, 0.01),
+        punks:         new BABYLON.Vector3(-0.5, 14.5, 2.5)
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
@@ -28,12 +26,6 @@ export function camera() {
     },{ 
         frame: Timeline.camera.start, 
         value: vectors.start
-    },{
-        frame: Timeline.camera.toiletStart, 
-        value: vectors.toiletStart 
-    },{ 
-        frame: Timeline.camera.toiletEnd, 
-        value: vectors.toiletEnd 
     },{ 
         frame: Timeline.camera.heinrichplatz, 
         value: vectors.heinrichplatz 
@@ -61,7 +53,7 @@ export function camera() {
  */
 export function ufoFly() {
     const height = 3;
-    const startY = 45;
+    const startY = 45 + 9.5;
     
     const ufo = Anarchia.createPlane({
         name: "ufoFly",
@@ -100,7 +92,7 @@ export function ufoFly() {
  */
 export function ufoLand() {
     const height = 1;
-    const startY = 7;
+    const startY = 7 + 9.5;
     
     // the (whole) ufo
     const bottom = Anarchia.createPlane({
@@ -118,9 +110,9 @@ export function ufoLand() {
     },[ // keys
         { frame: Timeline.filmStart, value: startY },
         { frame: Timeline.ufolandedPositionStart, value: startY },
-        { frame: Timeline.ufolandedPositionLanded, value: 4.7 },
+        { frame: Timeline.ufolandedPositionLanded, value: 4.7  + 9.5 },
         
-        { frame: Anarchia.END_FRAME, value: 4.7 }
+        { frame: Anarchia.END_FRAME, value: 4.7  + 9.5 }
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
@@ -291,19 +283,21 @@ export function punks() {
         // punk 0
         size: 0.7,
         x: 3.2, // !!! change jumps as well
-        y: 4.65,  z: 5,
+        y: 4.65 + 9.5,
+        z: 5,
         jumps: [
             3.2,
             3.2 - 1.2,
             3.2 - 1.2 - 1,
             3.2 - 1.2 - 1 - 0.5,
             3.2 - 1.2 - 1 - 0.5 - 0.3,
-            3.2 - 1.2 - 1 - 0.5 - 0.3 - 0.3,
+            3.2 - 1.2 - 1 - 0.5 - 0.3 - 0.3
         ]
     },{ // punk 1
         size: 0.6,
         x: 3.3, // !!! change jumps as well
-        y: 4.55,  z: 4.9,
+        y: 4.55 + 9.5,
+        z: 4.9,
         jumps: [
             3.3,
             3.3 - 1,
@@ -323,7 +317,7 @@ export function punks() {
             width: parameters[i].size,
             positionX: parameters[i].x,
             positionY: parameters[i].y,
-            positionZ: parameters[i].z,
+            positionZ: parameters[i].z
         });
         
         // rotation clockwise
@@ -420,13 +414,13 @@ export function humans() {
     
     // parameters for each human
     const parameters = [
-        { size: 0.55, x:  0.60, y: 4.12, z: 4.8, 
+        { size: 0.55, x:  0.60, y: 4.12 + 9.5, z: 4.8, 
                                     rotationStart: -0.3, rotationEnd:  -0.05 },
-        { size: 0.53, x: -3.40, y: 3.85, z: 4.7,
+        { size: 0.53, x: -3.40, y: 3.85 + 9.5, z: 4.7,
                                     rotationStart: -0.1, rotationEnd: 0.1 },
-        { size: 0.48, x:  0.00, y: 5.06, z: 5.9,
+        { size: 0.48, x:  0.00, y: 5.06 + 9.5, z: 5.9,
                                     rotationStart: -0.1, rotationEnd: 0.05 },
-        { size: 0.40, x:  0.20, y: 4.95, z: 5.89, 
+        { size: 0.40, x:  0.20, y: 4.95 + 9.5, z: 5.89, 
                                     rotationStart: -0.1, rotationEnd: 0.05 }
     ];
     
@@ -484,7 +478,7 @@ export function balloons() {
     const balloons = [];
     
     const parameters = [{
-        x: -1, y: 6, z: 5,
+        x: -1, y: 6 + 9.5, z: 5,
         width: 4, height: 2
     }];
     
@@ -595,7 +589,7 @@ function balloonContents(i, balloon) {
         // tvtower
         let tvtower = Anarchia.createPlane({
             name: "balloon_0_tvtower",
-            texture: "textures/tvtower_plane.png"
+            texture: "textures/city/tvtower.png"
         });
         tvtower.setParent(balloon);
         tvtower.position.x = 0.07;
