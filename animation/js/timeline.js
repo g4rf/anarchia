@@ -9,6 +9,7 @@ export default {
     // camera
     camera: {
         start:                8 * Anarchia.FRAME_RATE,
+        toiletStart:         10 * Anarchia.FRAME_RATE,
         heinrichplatz:       12 * Anarchia.FRAME_RATE,
         punksZoomStart:      41 * Anarchia.FRAME_RATE,
         punksZoomEnd:        42 * Anarchia.FRAME_RATE,

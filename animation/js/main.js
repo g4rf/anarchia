@@ -30,7 +30,7 @@ light.groundColor = new BABYLON.Color3(1, 1, 1);
 
 // ToDo
 // - create mesh group for houses
-// - make the houses and tv tower bigger (closer)
+// - give houses different sizes
 // –––––
 
 /** landscape **/
@@ -39,6 +39,7 @@ Landscape.background();
 //Landscape.signCredentials();
 Landscape.tvtower();
 Landscape.houses();
+Landscape.toilet();
 Landscape.heinrichplatz();
 
 

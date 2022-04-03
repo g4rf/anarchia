@@ -8,15 +8,14 @@ import Anarchia from "./anarchia.js";
  */
 export function background() {
     /** background **/
-    const height = 120;
     return Anarchia.createPlane({
-        name: "sky",
+        name: "city",
         texture: "textures/city/city.png",
         alpha: false,
-        height: height,
-        width: 220,  
-        positionX: 10,
-        positionY: 5,
+        height: 80,
+        width: 80 / 1237 * 1920,  
+        positionX: 0,
+        positionY: 18,
         positionZ: 16
     });
 }
@@ -27,49 +26,45 @@ export function background() {
  */
 export function tvtower() {
     /** tv tower **/
-    const height = 29;
+    const height = 38;
     return Anarchia.createPlane({
         name: "tvtower",
         texture: "textures/city/tvtower.png",
         height: height,
-        width: 3.6,
-        positionX: -6,
-        positionY: 26
+        width: height * 122 / 942,
+        positionX: -7,
+        positionY: height / 2
     });
 }
-
-/**
- * Creates the Heinrichplatz.
- * @returns {BABYLON.Mesh}
- */
+    
 export function heinrichplatz() {    
     /** heinrichplatz **/
     const height = 5.1;
     const width = 9;
-    const positionX = -1;
-    const positionY = 15;
+    const position = { x: -1, y: 5.5 };
+    
     const heinrichplatz = Anarchia.createPlane({
         name: "heinrichplatz",
         texture: "textures/city/heinrichplatz.png",
         height: height,
         width: width,
-        positionX: positionX,
-        positionY: positionY,
+        positionX: position.x,
+        positionY: position.y,
         positionZ: 6
     });    
+    
     const trafficlights = Anarchia.createPlane({
-        name: "heinrichplatz-trafficlights",
+        name: "trafficlights",
         texture: "textures/city/heinrichplatz-trafficlights.png",
         height: height * 0.6,
         width: width * 0.6,
-        positionX: positionX + 0.4,
-        positionY: positionY,
+        positionX: position.x + 0.4,
+        positionY: position.y,
         positionZ: 3
     });
-    return {
-        "heinrichplatz": heinrichplatz,
-        "trafficlights": trafficlights
-    };
+    trafficlights.setParent(heinrichplatz);
+    
+    return heinrichplatz;
 }
 
 /**
@@ -78,13 +73,21 @@ export function heinrichplatz() {
  */
 export function houses() {
     /** houses **/
+    const size = 12;
     const houses = [
-        { src: "house-1", x: -27  , y: 16, z: -1}, // 0
-        { src: "house-2", x:   0  , y: 16, z:  0}, // 1
-        { src: "house-3", x:  -5  , y: 16, z:  0}, // 2
-        { src: "house-4", x:   4.6, y: 16, z:  0}, // 3
-        { src: "house-5", x:  11  , y: 16, z:  0}, // 4
-        { src: "house-6", x:  16.2, y: 16, z:  0}, // 5
+        { src: "house-4", x: -27, z: -1 }, // 0
+        /*{ src: "house-2", x: -23, z: -2 }, // 1
+        { src: "house-3", x: -15, z: -3 }, // 2
+        { src: "house-4", x: -18, z: -3 }, // 3
+        { src: "house-5", x:  -6, z: -4 }, // 4
+        { src: "house-6", x:  -4, z: -6 }, // 5
+        { src: "house-1", x:  -2, z: -6.5 }, // 6
+        { src: "house-2", x:   4, z: -7 }, // 7
+        { src: "house-3", x:   4, z: -5 }, // 8
+        { src: "house-4", x:  15, z: -4 }, // 9
+        { src: "house-5", x:  21, z: -6 }, // 10
+        { src: "house-6", x:  15, z: -5 }, // 11
+        { src: "house-1", x:  24, z: -2 }, // 12*/
     ];
     const meshHouses = [];
     houses.forEach(function(house, i) {
@@ -92,15 +95,48 @@ export function houses() {
             Anarchia.createPlane({
                 name: "house_" + i,
                 texture: "textures/city/" + house.src + ".png",
-                height: 8,
-                width: 8,
+                height: size,
+                width: size,
                 positionX: house.x,
-                positionY: house.y,
+                positionY: 6.7,
                 positionZ: house.z
             })
         );
     });
     return meshHouses;
+}
+
+/**
+ * Creates the toilet house the camera moves through at the beginning.
+ * @returns Mesh The house.
+ */
+export function toilet() {
+    const house = Anarchia.createPlane({
+        name: "toilethouse",
+        texture: "textures/toilethouse.png",
+        height: 11.5,
+        width: 11.5,
+        positionX: -1.08,
+        positionY: 6.7,
+        positionZ: -3
+    });
+    /**
+     * Image attributions:
+     * Peggy und Marco Lachmann-Anke on Pixabay
+     * cottonbro on Pexels
+     * Masha Raymers on Pexels
+     * Anna Nekrashevich on Pexels
+     */
+    const toilet = Anarchia.createPlane({
+        name: "toilet",
+        texture: "textures/toilet-clean.png",
+        positionZ: 0.65
+    });
+    toilet.setParent(house);
+    toilet.position.x = -0.2;
+    toilet.position.y = -1.45;
+    toilet.scaling.x = 6;
+    toilet.scaling.y = 6 * 1600 / 1300;
 }
 
 /**
