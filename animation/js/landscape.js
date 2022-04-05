@@ -14,7 +14,7 @@ export function background() {
         alpha: false,
         height: 80,
         width: 80 / 1237 * 1920,  
-        positionX: 0,
+        positionX: 3,
         positionY: 18,
         positionZ: 16
     });
