@@ -73,37 +73,41 @@ export function heinrichplatz() {
  */
 export function houses() {
     /** houses **/
-    const size = 12;
-    const houses = [
-        { src: "house-4", x: -27, z: -1 }, // 0
-        /*{ src: "house-2", x: -23, z: -2 }, // 1
-        { src: "house-3", x: -15, z: -3 }, // 2
-        { src: "house-4", x: -18, z: -3 }, // 3
-        { src: "house-5", x:  -6, z: -4 }, // 4
-        { src: "house-6", x:  -4, z: -6 }, // 5
-        { src: "house-1", x:  -2, z: -6.5 }, // 6
-        { src: "house-2", x:   4, z: -7 }, // 7
-        { src: "house-3", x:   4, z: -5 }, // 8
-        { src: "house-4", x:  15, z: -4 }, // 9
-        { src: "house-5", x:  21, z: -6 }, // 10
-        { src: "house-6", x:  15, z: -5 }, // 11
-        { src: "house-1", x:  24, z: -2 }, // 12*/
+    const data = [
+        { src: "house-3", size: 12.0, x:  -6.2, y: 6.7, z: -4.0 }, // 0
+        { src: "house-5", size:  8.4, x:   5.0, y: 5.0, z: -3.5 }, // 1   
+        { src: "house-1", size:  9.0, x: -31.5, y: 6.4, z: -4.0 }, // 2
+        { src: "house-2", size: 12.0, x: -27.7, y: 7.4, z: -5.0 }, // 3
+        { src: "house-4", size: 12.0, x: -24.5, y: 7.4, z: -3.0 }, // 4
+        { src: "house-6", size: 12.0, x: -18.9, y: 7.2, z: -6.0 }, // 5
+        { src: "house-7", size:  9.0, x: -14.1, y: 5.0, z: -3.0 }, // 6
+        { src: "house-2", size: 12.0, x: -11.5, y: 6.4, z: -4.7 }, // 7
+        { src: "house-3", size: 12.0, x:   6.5, y: 6.7, z: -1.2 }, // 8
+        { src: "house-4", size: 12.0, x:  -8.0, y: 6.7, z: -7.0 }, // 9
+        { src: "house-5", size: 12.0, x: -15.6, y: 8.3, z: -2.4 }, // 10
+        { src: "house-6", size: 12.0, x:  25.9, y: 5.5, z: -2.8 }, // 11
+        { src: "house-5", size: 12.0, x:  24.1, y: 6.4, z: -0.9 }, // 12
+        { src: "house-4", size: 12.0, x:  11.9, y: 7.2, z: -6.1 }, // 13
+        { src: "house-3", size: 12.0, x:  14.7, y: 6.8, z: -1.3 }, // 14
+        { src: "house-2", size: 12.0, x:  19.6, y: 6.8, z: -4.0 }, // 15
+        { src: "house-1", size: 12.0, x:  29.0, y: 6.1, z: -1.3 }, // 16
+        { src: "house-7", size:  7.2, x:  15.0, y: 4.8, z: -7.2 }, // 17
+        
     ];
-    const meshHouses = [];
-    houses.forEach(function(house, i) {
-        meshHouses.push(
-            Anarchia.createPlane({
+    const houses = new BABYLON.AbstractMesh("houses");
+    data.forEach(function(house, i) {
+        var h = Anarchia.createPlane({
                 name: "house_" + i,
                 texture: "textures/city/" + house.src + ".png",
-                height: size,
-                width: size,
+                height: house.size,
+                width: house.size,
                 positionX: house.x,
-                positionY: 6.7,
+                positionY: house.y,
                 positionZ: house.z
-            })
-        );
+        });
+        h.setParent(houses);
     });
-    return meshHouses;
+    return houses;
 }
 
 /**
@@ -126,6 +130,7 @@ export function toilet() {
      * cottonbro on Pexels
      * Masha Raymers on Pexels
      * Anna Nekrashevich on Pexels
+     * congerdesign on Pixabay
      */
     const toilet = Anarchia.createPlane({
         name: "toilet",
@@ -133,10 +138,10 @@ export function toilet() {
         positionZ: 0.65
     });
     toilet.setParent(house);
-    toilet.position.x = -0.2;
-    toilet.position.y = -1.45;
-    toilet.scaling.x = 6;
-    toilet.scaling.y = 6 * 1600 / 1300;
+    toilet.position.x = 0.5;
+    toilet.position.y = -1.5;
+    toilet.scaling.x = 7 * 1700 / 1600;
+    toilet.scaling.y = 7;
 }
 
 /**

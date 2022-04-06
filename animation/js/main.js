@@ -76,3 +76,10 @@ Sounds.song(function() { // music ready
 
 /** gui events **/
 Events.bind();
+
+/** show inspector **/
+Anarchia.scene.debugLayer.show({
+    overlay: true,
+    enablePopup: false,
+    embedMode: true // both panes on the right
+});
