@@ -155,7 +155,7 @@ export function headline() {
         name: "headline",
         texture: "textures/headline.png",
         height: height,
-        width: height * 3226 / 1174,
+        width: height * 3500 / 1300,
         positionX: 20,
         positionY: 25,
         positionZ: 9
@@ -168,14 +168,14 @@ export function headline() {
  */
 export function signCredentials() {
     /** sign **/
-    const height = 3.5;
+    const height = 2.5;
     return Anarchia.createPlane({
         name: "signCredentials",
         texture: "textures/sign.png",
         height: height,
-        width: height * 1920 / 2510,
-        positionX: -2,
-        positionY: 14.8,
+        width: height * 1665 / 1642,
+        positionX: -2.1,
+        positionY: 15.6,
         positionZ: -50,
         rotationX: 0 * Math.PI,
         rotationY: -0.05 * Math.PI
