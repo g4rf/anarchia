@@ -16,7 +16,7 @@ export default {
     },
     
     // ufo fly
-    ufoflyPositionStart:   7 * Anarchia.FRAME_RATE,    
+    ufoflyPositionStart:   4 * Anarchia.FRAME_RATE,    
     ufoflyPositionLanded: 11 * Anarchia.FRAME_RATE,
     
     // ufo landed

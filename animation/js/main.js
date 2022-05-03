@@ -17,7 +17,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; !!! won't work perfectly
-Anarchia.duration(0, 12);
+Anarchia.duration(0, 19);
 
 
 /** light **/
@@ -27,11 +27,6 @@ const light = new BABYLON.HemisphericLight("light",
 light.diffuse = new BABYLON.Color3(1, 1, 1);
 light.specular = new BABYLON.Color3(1, 1, 1);
 light.groundColor = new BABYLON.Color3(1, 1, 1);
-
-// ToDo
-// - create mesh group for houses
-// - give houses different sizes
-// –––––
 
 /** landscape **/
 Landscape.headline();
@@ -46,8 +41,8 @@ Landscape.heinrichplatz();
 /** performer **/
 Performer.camera();
 
-//Performer.ufoFly();
-//Performer.ufoLand();
+Performer.ufoFly();
+Performer.ufoLand();
 
 //Performer.aliens();
 //Performer.humans();

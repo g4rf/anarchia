@@ -63,7 +63,7 @@ export function ufoFly() {
         name: "ufoFly",
         texture: "textures/ufo_fly.png",
         height: height,
-        width: height * 1157 / 501,
+        width: height * 1273 / 551,
         positionX: 1,
         positionY: startY,
         positionZ: 5
@@ -75,7 +75,7 @@ export function ufoFly() {
     },[ // keys
         { frame: Timeline.filmStart, value: startY },
         { frame: Timeline.ufoflyPositionStart, value: startY },
-        { frame: Timeline.ufoflyPositionLanded, value: 0 },
+        { frame: Timeline.ufoflyPositionLanded, value: 7 },
         
         { frame: Anarchia.END_FRAME, value: 0 }
     ],{ // easing
@@ -97,16 +97,19 @@ export function ufoFly() {
 export function ufoLand() {
     const height = 1;
     const startY = 7;
+    const endY = 4.6;
+    const x = -2.95;
+    const z = 4;
     
     // the (whole) ufo
     const bottom = Anarchia.createPlane({
         name: "ufoLand",
         texture: "textures/ufo_landed_bottom.png",
         height: height,
-        width: height * 1156 / 768,
-        positionX: -3.5,
+        width: height * 1272 / 845,
+        positionX: x,
         positionY: startY,
-        positionZ: 5
+        positionZ: z
     });    
     // land animation
     Anarchia.createAnimation(bottom, {
@@ -114,9 +117,9 @@ export function ufoLand() {
     },[ // keys
         { frame: Timeline.filmStart, value: startY },
         { frame: Timeline.ufolandedPositionStart, value: startY },
-        { frame: Timeline.ufolandedPositionLanded, value: 4.7 },
+        { frame: Timeline.ufolandedPositionLanded, value: endY },
         
-        { frame: Anarchia.END_FRAME, value: 4.7 }
+        { frame: Anarchia.END_FRAME, value: endY }
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
@@ -124,12 +127,13 @@ export function ufoLand() {
     
     // the ufo top
     const top = Anarchia.createPlane({
+        name: "ufoLandTop",
         texture: "textures/ufo_landed_top.png",
         height: height,
         width: height * 1156 / 768,
-        positionX: -3.5,
+        positionX: x,
         positionY: startY,
-        positionZ: 5.01
+        positionZ: z + 0.01
     });
     top.setParent(bottom);
         
@@ -163,7 +167,7 @@ export function ufoLand() {
     },[ // keys
         { frame: 0, value: 0 },
         { frame: start, value: 0 },
-        { frame: end, value: 0.465 },
+        { frame: end, value: 0.43 },
         
         { frame: Anarchia.END_FRAME, value: 0.465 }
     ], easing);
