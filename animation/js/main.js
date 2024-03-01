@@ -4,7 +4,6 @@
 import Anarchia from "./anarchia.js";
 import * as Landscape from "./landscape.js";
 import * as Performer from "./performer.js";
-import * as Sounds from "./sounds.js";
 import * as Events from "./events.js";
 
 
@@ -17,7 +16,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; !!! won't work perfectly
-Anarchia.duration(0, 19);
+Anarchia.duration(0, 200);
 
 
 /** light **/
@@ -44,11 +43,11 @@ Performer.camera();
 Performer.ufoFly();
 Performer.ufoLand();
 
-//Performer.aliens();
-//Performer.humans();
-//Performer.punks();
+Performer.aliens();
+Performer.humans();
+Performer.punks();
 
-//Performer.balloons();
+Performer.balloons();
 
 // ToDo
 // - 
@@ -59,15 +58,14 @@ Anarchia.engine.runRenderLoop(function () {
     Anarchia.scene.render();
 });
 
+Anarchia.hideLoading();
 
-/** music **/
-Sounds.song(function() { // music ready
-    // hide loading
-    document.getElementById("loading").classList.add("hidden");
-    // show button bar
-    document.getElementById("bar").classList.remove("hidden");
-});
-
+/** music will be loaded by click on play as the security settings forces this.
+ * Firefox:
+ * Ein AudioContext wurde an der automatischen Wiedergabe gehindert. Er muss 
+ * nach Interaktion des Benutzers mit der Seite erstellt oder fortgesetzt 
+ * werden.
+ **/
 
 /** gui events **/
 Events.bind();

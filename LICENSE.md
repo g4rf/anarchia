@@ -1,6 +1,6 @@
 # LICENSE
 
-As the short film will be submitted to various film festivals, the release is planned for 2023. Until the 
+As the short film will be submitted to various film festivals, the release is planned for 2024. Until the
 official release, publication, distribution and performance – even in parts or modified – is only permitted 
 after consultation with the director. Irrespective of this, the source code and the audio track may be used 
 anytime and anywhere and is licensed under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) 

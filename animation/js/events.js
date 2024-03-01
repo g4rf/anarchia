@@ -10,14 +10,7 @@ export function bind() {
 
     // play
     document.getElementById("play").addEventListener("click", function() {
-        // music on
-        if(Anarchia.sounds.song) Anarchia.sounds.song.play();
-        
-        // animations on
-        Anarchia.animations.forEach(function(mesh) {
-            Anarchia.scene.beginAnimation(mesh,
-                    Anarchia.START_FRAME, Anarchia.END_FRAME, true);
-        });
+        Anarchia.play();
     });
 
     // stop

@@ -595,7 +595,7 @@ function balloonContents(i, balloon) {
         // tvtower
         let tvtower = Anarchia.createPlane({
             name: "balloon_0_tvtower",
-            texture: "textures/tvtower_plane.png"
+            texture: "textures/city/tvtower.png"
         });
         tvtower.setParent(balloon);
         tvtower.position.x = 0.07;

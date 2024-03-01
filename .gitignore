@@ -5,7 +5,3 @@ package-lock.json
 
 # tmp files
 .~*
-
-# copyright infringements
-/animation/textures/heinrichplatz.*
-/animation/textures/city-horizon.*

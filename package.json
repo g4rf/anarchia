@@ -8,8 +8,8 @@
         "email": "post@klavierpunk.de"
     },
     "repository": {
-        "type" : "git",
-        "url" : "https://github.com/g4rf/anarchia.git"
+        "type": "git",
+        "url": "https://github.com/g4rf/anarchia.git"
     },
     "license": "SEE LICENSE IN LICENSE.md",
     "author": {
@@ -19,34 +19,58 @@
     },
     "contributors": [
         {
+            "name": "Yok Quetschenpaua",
+            "url": "https://pocketpunk.so36.net"
+        },
+        {
             "name": "Alina Milkina (drawings)",
             "email": "alina.milkina.sh@gmail.com",
             "url": "https://alinamilkina.carbonmade.com"
         },
-        { "name": "Andreas »Atze« Rudolf  (guitar, banjo, backvocals" },
-        { "name": "Hendrik »Henk« Teichmann (bass, double bass)" },
-        { "name": "Joachim Jurenz (drums, backvocals)" },
-        { "name": "Omani Frei (visual advices)" },
-        { "name": "Brad Hock (text check)" },
-        { 
+        {
+            "name": "Andreas »Atze« Rudolf (guitar)"
+        },
+        {
+            "name": "Hendrik »Henk« Teichmann (bass)"
+        },
+        {
+            "name": "Achim Jurenz (drums, backvocals)"
+        },
+        {
+            "name": "Hirai Masaya (guitar, vocals, Japanese text)",
+            "url": "https://instagram.com/hiraimasaya"
+        },
+        {
+            "name": "Omani Frei (visual advices)",
+            "url": "https://omanifrei.com"
+        },
+        {
+            "name": "Brad Hock (english text check)",
+            "url": "https://www.instagram.com/bardo.bread/"
+        },
+        {
             "name": "Virtuous Vibes Tonstudio (recordings)",
             "email": "info@virtuose-vibes.de",
             "url": "https://virtuose-vibes.de"
+        },
+        {
+            "name": "Ryosuke Ueno (recording and mixing of Japanese version)",
+            "url": "https://www.instagram.com/ueno1gou/"
         }
     ],
     "funding": [
         {
-            "type" : "PayPal",
-            "url" : "https://paypal.me/g4rf"
+            "type": "PayPal",
+            "url": "https://paypal.me/g4rf"
         },
         {
-            "type" : "Etsy",
-            "url" : "https://www.etsy.com/shop/NeustadtArtKollektiv"
+            "type": "Etsy",
+            "url": "https://www.etsy.com/shop/NeustadtArtKollektiv"
         }
     ],
     "type": "module",
     "dependencies": {
-        "live-server": "^1.2.1",
+        "live-server": "^1.2.2",
         "live-server-https": "^0.0.2"
     }
 }

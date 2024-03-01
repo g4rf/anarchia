@@ -3,8 +3,22 @@
 import Anarchia from "./anarchia.js";
 
 export function song(callback) {
+    // sound already loaded
+    if(Anarchia.sounds.song) {
+        Anarchia.sounds.song.play();
+        callback();
+        return;
+    }
+    
+    // load sound
+    let callbackHideLoading = function() {
+        Anarchia.hideLoading();
+        Anarchia.sounds.song.play();
+        callback();
+    };
+    Anarchia.showLoading();
     Anarchia.sounds.song = new BABYLON.Sound("anarchia", "audio/anarchia.mp3", 
-        Anarchia.scene, callback, { 
+        Anarchia.scene, callbackHideLoading, { 
             length: Anarchia.END_SECOND - Anarchia.START_SECOND,
             offset: Anarchia.START_SECOND,
             loop: false,

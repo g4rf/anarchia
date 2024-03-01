@@ -1,5 +1,7 @@
 /* global BABYLON */
 
+import * as Sounds from "./sounds.js";
+
 export default {
     /**
      * frame rate
@@ -64,6 +66,26 @@ export default {
      * @type Array
      */
     animations: [],
+    
+    /**
+     * Shows "loading" instead of button bar.
+     */
+    showLoading: function() {
+        // hide loading
+        document.getElementById("loading").classList.remove("hidden");
+        // show button bar
+        document.getElementById("bar").classList.add("hidden");
+    },
+    
+    /**
+     * Hides loading and shows button bar.
+     */
+    hideLoading: function() {
+        // hide loading
+        document.getElementById("loading").classList.add("hidden");
+        // show button bar
+        document.getElementById("bar").classList.remove("hidden");
+    },
 
     /**
      * Generates random float between min (inclusive) and max (inclusive).
@@ -90,6 +112,23 @@ export default {
         this.END_SECOND = endSecond;
         this.START_FRAME = startSecond * this.FRAME_RATE;
         this.END_FRAME = endSecond * this.FRAME_RATE;
+    },
+    
+    /**
+     * Starts the animation.
+     */
+    play: function() {
+        let self = this;
+        
+        // music on
+        Sounds.song(function() {
+            // animations on
+            self.animations.forEach(function(mesh) {
+                self.scene.beginAnimation(mesh,
+                        self.START_FRAME, self.END_FRAME, true);
+            });
+        
+        });
     },
     
     /**
@@ -196,7 +235,7 @@ export default {
             name: "",
             property: "",
             type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-            loop: BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT,
+            loop: BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
         };
         for(const property in config) {
             param[property] = config[property];
