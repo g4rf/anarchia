@@ -8,6 +8,8 @@ import * as Events from "./events.js";
 
 
 /** initialization **/
+Anarchia.showLoading();
+
 Anarchia.canvas = document.getElementById("render");
 Anarchia.engine = new BABYLON.Engine(Anarchia.canvas, true);
 Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
@@ -27,6 +29,7 @@ light.diffuse = new BABYLON.Color3(1, 1, 1);
 light.specular = new BABYLON.Color3(1, 1, 1);
 light.groundColor = new BABYLON.Color3(1, 1, 1);
 
+
 /** landscape **/
 Landscape.headline();
 Landscape.background();
@@ -44,35 +47,30 @@ Performer.ufoFly();
 Performer.ufoLand();
 
 Performer.aliens();
-Performer.humans();
+//Performer.humans();
 Performer.punks();
 
 Performer.balloons();
 
-// ToDo
-// - 
-// –––––
-
-/** screen on **/
-Anarchia.engine.runRenderLoop(function () {
-    Anarchia.scene.render();
-});
-
-Anarchia.hideLoading();
-
-/** music will be loaded by click on play as the security settings forces this.
- * Firefox:
- * Ein AudioContext wurde an der automatischen Wiedergabe gehindert. Er muss 
- * nach Interaktion des Benutzers mit der Seite erstellt oder fortgesetzt 
- * werden.
- **/
 
 /** gui events **/
 Events.bind();
 
+
+/** calculate screen size **/
+(function() {
+    let width = $("screen").innerWidth();
+    let zoom = width / 1920;
+    $("#render").css({
+        "transform": "scale(" + zoom + ")"
+    });
+})();
+
 /** show inspector **/
-Anarchia.scene.debugLayer.show({
-    overlay: true,
-    enablePopup: false,
-    embedMode: true // both panes on the right
+//document.getElementById("inspector").click();
+
+
+/** show buttons **/
+Anarchia.hideLoading(function() {
+    Anarchia.showButtons();
 });

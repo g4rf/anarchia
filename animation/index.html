@@ -5,19 +5,34 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="css/main.css">
 </head><body>
-    <div id="loading">
-        &#8987;&nbsp;loading...
-    </div>
-    <div id="bar" class="hidden">
-        <button id="play">&#9654;&#65039;</button>
-        <button id="stop" class="hidden">&#128259;</button>
-        &nbsp;
-        <button id="record">&#128721;</button>
-        &nbsp;|&nbsp;
-        <button id="inspector">&#9881;&#65039;</button>
-    </div>
-    <canvas id="render"></canvas>
+        
+    <screen>
+        <!-- canvas -->
+        <canvas id="render">Press the button…</canvas>
+    </screen>
+    
+    <control>
+        
+        <!-- loading -->
+        <div id="loading">
+            &#8987;&nbsp;loading...
+        </div>
 
+        <!-- buttons -->
+        <div id="bar">
+            <button id="play">&#9654;&#65039;</button>
+            <button id="reload" class="hidden">&#128259;</button>
+            &nbsp;
+            <button id="record">&#128721;</button>
+            &nbsp;|&nbsp;
+            <button id="inspector">&#9881;&#65039;</button>
+        </div>
+        
+    </control>
+
+    <!-- scripts -->
+    <script src="js/jquery/jquery-3.7.1.min.js"></script>    
+    
     <script src="js/babylon/babylon.js"></script>
     <script src="js/babylon/babylon.inspector.bundle.js"></script>
         

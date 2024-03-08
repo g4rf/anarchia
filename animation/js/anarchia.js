@@ -20,7 +20,7 @@ export default {
      * ! beware: that won't function very properly
      * @type Number
      */
-    END_FRAME: 0,
+    END_FRAME: 1,
     
     /**
      * start of animation in frames
@@ -68,23 +68,39 @@ export default {
     animations: [],
     
     /**
-     * Shows "loading" instead of button bar.
+     * Show loading indicator.
      */
-    showLoading: function() {
-        // hide loading
-        document.getElementById("loading").classList.remove("hidden");
-        // show button bar
-        document.getElementById("bar").classList.add("hidden");
+    showLoading: function(callback) {
+        if(typeof callback != "function") callback = function() {};
+        
+        $("#loading").fadeIn('fast', callback);
     },
     
     /**
-     * Hides loading and shows button bar.
+     * Hide loading indicator.
      */
-    hideLoading: function() {
-        // hide loading
-        document.getElementById("loading").classList.add("hidden");
-        // show button bar
-        document.getElementById("bar").classList.remove("hidden");
+    hideLoading: function(callback) {
+        if(typeof callback != "function") callback = function() {};
+        
+        $("#loading").fadeOut('slow', callback);
+    },
+    
+    /**
+     * Show buttons.
+     */
+    showButtons: function(callback) {
+        if(typeof callback != "function") callback = function() {};
+        
+        $("#bar").fadeIn('fast', callback);
+    },
+    
+    /**
+     * Hide buttons.
+     */
+    hideButtons: function(callback) {
+        if(typeof callback != "function") callback = function() {};
+        
+        $("#bar").fadeOut('slow', callback);
     },
 
     /**
@@ -110,7 +126,19 @@ export default {
     duration: function(startSecond, endSecond) {
         this.START_SECOND = startSecond;
         this.END_SECOND = endSecond;
-        this.START_FRAME = startSecond * this.FRAME_RATE;
+        
+        /**
+         * Bug in BABYLON, that throw a type error when start frame is 0:
+         * > TypeError: AudioListener.setPosition: Argument 1 is not a finite 
+         * > floating-point value.
+         * We set it to 1, to avoid this.
+         */
+        if(startSecond == 0) {
+            this.START_FRAME = 1;
+        } else {
+            this.START_FRAME = startSecond * this.FRAME_RATE;
+        }
+        
         this.END_FRAME = endSecond * this.FRAME_RATE;
     },
     
@@ -120,15 +148,31 @@ export default {
     play: function() {
         let self = this;
         
-        // music on
-        Sounds.song(function() {
-            // animations on
-            self.animations.forEach(function(mesh) {
-                self.scene.beginAnimation(mesh,
-                        self.START_FRAME, self.END_FRAME, true);
-            });
+        // show loading
+        self.hideButtons(function() {
+            self.showLoading();
+        });        
         
-        });
+        Sounds.song( // load and start music
+        
+            // screen on    
+            function() {
+            
+                // render screen
+                self.engine.runRenderLoop(function () {
+                    self.scene.render();
+                });
+
+                // animations on
+                self.animations.forEach(function(mesh) {
+                    self.scene.beginAnimation(mesh,
+                            self.START_FRAME, self.END_FRAME);
+                });
+
+                // hide buttons
+                self.hideLoading();
+            }
+        );
     },
     
     /**
