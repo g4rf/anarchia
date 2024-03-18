@@ -484,8 +484,26 @@ export function balloons() {
     const balloons = [];
     
     const parameters = [{
-        x: -1, y: 6, z: 5,
-        width: 4, height: 2
+        // balloon 0 aliens
+        x: -1, 
+        y: 6, 
+        z: 5,
+        width: 4,
+        height: 2
+    },{
+        // balloon 1 punks
+        x: 0, 
+        y: 5.5, 
+        z: 5,
+        width: 2,
+        height: 1
+    },{
+        // balloon 2 aliens
+        x: -1.2, 
+        y: 5.5, 
+        z: 5,
+        width: 1,
+        height: 1
     }];
     
     for(let i = 0; i < parameters.length; i++) {
@@ -493,7 +511,7 @@ export function balloons() {
         const p = parameters[i];
         const t = Timeline.balloons[i];
     
-        let balloon = Anarchia.createPlane({
+        const balloon = Anarchia.createPlane({
             name: "balloon_" + i,
             texture: "textures/balloon.png",
             height: 0,
@@ -557,6 +575,7 @@ export function balloons() {
 function balloonContents(i, balloon) {
     const t = Timeline.balloons[i];
     
+    // aliens 1
     if(i == 0) {
         // star
         let star = Anarchia.createPlane({
@@ -640,6 +659,84 @@ function balloonContents(i, balloon) {
         Anarchia.createAnimation(flyback, { property: "position.z" },[ // keys
             { frame: Timeline.filmStart, value: 100 },
             { frame: t.flyback, value: -0.1 },        
+            { frame: Anarchia.END_FRAME, value: -0.1 }
+        ]);
+        
+        return; // 0
+    }
+    
+    // punks
+    if(i == 1) {
+        // aliens
+        let aliens = Anarchia.createPlane({
+            name: "balloon_1_aliens",
+            texture: "textures/aliens/alien_0.png"
+        });
+        aliens.setParent(balloon);
+        aliens.position.x = -0.2;
+        aliens.position.y = 0.05;
+        aliens.position.z = 100;
+        aliens.scaling.x = 0.2;
+        aliens.scaling.y = 0.4;
+        Anarchia.createAnimation(aliens, { property: "position.z" },[ // keys
+            { frame: Timeline.filmStart, value: 100 },
+            { frame: t.aliens, value: -0.1 },        
+            { frame: Anarchia.END_FRAME, value: -0.1 }
+        ]);
+        
+        // star
+        let star = Anarchia.createPlane({
+            name: "balloon_1_star",
+            texture: "textures/balloon_0_star.png"
+        });
+        star.setParent(balloon);
+        star.position.x = 0;
+        star.position.y = 0.05;
+        star.position.z = 100;
+        star.scaling.x = 0.2;
+        star.scaling.y = 0.4;
+        Anarchia.createAnimation(star, { property: "position.z" },[ // keys
+            { frame: Timeline.filmStart, value: 100 },
+            { frame: t.star, value: -0.1 },        
+            { frame: Anarchia.END_FRAME, value: -0.1 }
+        ]);
+        
+        // moshpit
+        let moshpit = Anarchia.createPlane({
+            name: "balloon_1_moshpit",
+            texture: "textures/moshpit.png"
+        });
+        moshpit.setParent(balloon);
+        moshpit.position.x = 0.2;
+        moshpit.position.y = 0.05;
+        moshpit.position.z = 100;
+        moshpit.scaling.x = 0.2;
+        moshpit.scaling.y = 0.4;
+        Anarchia.createAnimation(moshpit, { property: "position.z" },[ // keys
+            { frame: Timeline.filmStart, value: 100 },
+            { frame: t.moshpit, value: -0.1 },        
+            { frame: Anarchia.END_FRAME, value: -0.1 }
+        ]);
+        
+        return; // 0
+    }
+    
+    // aliens 2
+    if(i == 2) {
+        // moshpit
+        let moshpit = Anarchia.createPlane({
+            name: "balloon_2_moshpit",
+            texture: "textures/moshpit.png"
+        });
+        moshpit.setParent(balloon);
+        moshpit.position.x = 0;
+        moshpit.position.y = 0.05;
+        moshpit.position.z = 100;
+        moshpit.scaling.x = 0.4;
+        moshpit.scaling.y = 0.4;
+        Anarchia.createAnimation(moshpit, { property: "position.z" },[ // keys
+            { frame: Timeline.filmStart, value: 100 },
+            { frame: t.moshpit, value: -0.1 },        
             { frame: Anarchia.END_FRAME, value: -0.1 }
         ]);
         

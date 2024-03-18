@@ -29,7 +29,7 @@ export function bind() {
         Anarchia.scene.debugLayer.show({
             overlay: true,
             enablePopup: false,
-            embedMode: true // both panes on the right
+            embedMode: false // one pane left, one right
         });
     });
 }

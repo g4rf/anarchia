@@ -106,6 +106,9 @@ export default {
             end:      48.4 * Anarchia.FRAME_RATE
         }]
     }],
+
+    // police
+    
     
     // humans
     humanJitterStart:   15.1 * Anarchia.FRAME_RATE,
@@ -120,6 +123,14 @@ export default {
         flyback:    30 * Anarchia.FRAME_RATE,
         hide:       32 * Anarchia.FRAME_RATE 
     },{
-        
+        show:       47 * Anarchia.FRAME_RATE,
+        aliens:     47.5 * Anarchia.FRAME_RATE,
+        star:       48.5 * Anarchia.FRAME_RATE,
+        moshpit:    50 * Anarchia.FRAME_RATE,
+        hide:       52 * Anarchia.FRAME_RATE
+    },{
+        show:       52.5 * Anarchia.FRAME_RATE,
+        moshpit:    53 * Anarchia.FRAME_RATE,
+        hide:       58 * Anarchia.FRAME_RATE
     }]
 }

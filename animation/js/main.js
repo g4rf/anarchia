@@ -18,7 +18,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; !!! won't work perfectly
-Anarchia.duration(0, 200);
+Anarchia.duration(50, 60);
 
 
 /** light **/
@@ -59,16 +59,19 @@ Events.bind();
 
 /** calculate screen size **/
 (function() {
-    let width = $("screen").innerWidth();
+    let width = $("screen").innerWidth()
+    
+    // with inspector
+    if(window.location.hash == "#inspector") {
+         width -= 600;
+         document.getElementById("inspector").click();
+    }
+     
     let zoom = width / 1920;
     $("#render").css({
         "transform": "scale(" + zoom + ")"
     });
 })();
-
-/** show inspector **/
-//document.getElementById("inspector").click();
-
 
 /** show buttons **/
 Anarchia.hideLoading(function() {
