@@ -13,6 +13,8 @@ export default {
         heinrichplatz:       12 * Anarchia.FRAME_RATE,
         punksZoomStart:      41 * Anarchia.FRAME_RATE,
         punksZoomEnd:        42 * Anarchia.FRAME_RATE,
+        policeZoomStart:     56 * Anarchia.FRAME_RATE,
+        policeZoomEnd:       65 * Anarchia.FRAME_RATE
     },
     
     // ufo fly
@@ -108,7 +110,10 @@ export default {
     }],
 
     // police
-    
+    police: {
+        moveStart:    50 * Anarchia.FRAME_RATE,
+        moveEnd:      60 * Anarchia.FRAME_RATE       
+    },
     
     // humans
     humanJitterStart:   15.1 * Anarchia.FRAME_RATE,

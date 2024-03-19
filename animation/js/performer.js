@@ -13,6 +13,7 @@ export function camera() {
         toiletStart:   new BABYLON.Vector3(-0.86, 7.06, -7),
         heinrichplatz: new BABYLON.Vector3(-1, 5.5, 0),
         punks:         new BABYLON.Vector3(-0.5, 5, 2.5),
+        police:        new BABYLON.Vector3(-1, 5.5, 0)
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
@@ -21,7 +22,9 @@ export function camera() {
         name: "moveCameraToHeinrichplatz",
         property: "position",
         type: BABYLON.Animation.ANIMATIONTYPE_VECTOR3
-    },[{ // keys
+    },
+    // key positions
+    [{ 
         frame: Timeline.filmStart,
         value: vectors.start
     },{ 
@@ -39,9 +42,18 @@ export function camera() {
     },{ 
         frame: Timeline.camera.punksZoomEnd, 
         value: vectors.punks 
-    },{ 
-        frame: Anarchia.END_FRAME,
+    },{
+        frame: Timeline.camera.policeZoomStart, 
         value: vectors.punks
+    },{
+        frame: Timeline.camera.policeZoomEnd, 
+        value: vectors.police
+    },
+    
+        
+    { 
+        frame: Anarchia.END_FRAME,
+        value: vectors.police
     }],{ // easing
         type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
@@ -323,7 +335,7 @@ export function punks() {
             width: parameters[i].size,
             positionX: parameters[i].x,
             positionY: parameters[i].y,
-            positionZ: parameters[i].z,
+            positionZ: parameters[i].z
         });
         
         // rotation clockwise
@@ -474,6 +486,144 @@ export function humans() {
     }
     
     return humans;
+}
+
+/**
+ * Creates the police.
+ * @returns {Array} Array of police meshes.
+ */
+export function police() {
+    const police = [];
+    
+    // parameters for each police pig
+    const parameters = [
+        // back row
+        { 
+            pigs: 9,
+            size: 0.55, 
+            xStart: 4, 
+            xEnd: -5,
+            y: 4.8, 
+            z: 5.5, 
+            rotationStart: -0.3, 
+            rotationEnd:  0 
+        },
+        // front row
+        { 
+            pigs: 7,
+            size: 0.55, 
+            xStart: 3.0,
+            xEnd: -4,
+            y: 4.3, 
+            z: 3.8, 
+            rotationStart: 0, 
+            rotationEnd:  0 
+        }
+    ];
+    
+    // loop through rows
+    for (let i = 0; i < parameters.length; i++) 
+    {        
+        // add numberOfPolicePerRow to the row
+        for(let p = 0; p < parameters[i].pigs; p++) 
+        {
+            // distance
+            const distance = 
+                    Math.abs(parameters[i].xEnd - parameters[i].xStart) /
+                        parameters[i].pigs;
+            // start
+            const start = parameters[i].xStart + (p * distance);
+            // end
+            const end = parameters[i].xEnd + (p * distance);
+            
+            const policeman = Anarchia.createPlane({
+                name: "police_row_" + i + "_pig_" + p,
+                texture: "textures/humans/police.png",
+                height: parameters[i].size,
+                width: parameters[i].size,
+                positionX: start,
+                positionY: parameters[i].y,
+                positionZ: parameters[i].z
+            });
+
+            // move animation
+            Anarchia.createAnimation(policeman,
+            { // config
+                property: "position.x"
+            },
+            [ // keys
+                { 
+                    frame: Timeline.filmStart, 
+                    value: start
+                },{ 
+                    frame: Timeline.police.moveStart,
+                    value: start
+                },{ 
+                    frame: Timeline.police.moveEnd,
+                    value: end
+                },{ 
+                    frame: Anarchia.END_FRAME, 
+                    value: end 
+                }
+            ],
+            { // easing
+                type: new BABYLON.BezierCurveEase(.53,.2,.43,.75),
+                mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
+            },
+            [ // events 
+                { // start rotation
+                    frame: Timeline.police.moveStart, 
+                    callback: function() {
+                        const group = new BABYLON.AnimationGroup();
+                        const rotate = new BABYLON.Animation(
+                                "rotate_police_row_" + i + "_pig_" + p,
+                                "rotation.z",
+                                Anarchia.FRAME_RATE,
+                                BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                                BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+                        );
+                        rotate.setKeys([{
+                            frame: 0,
+                            value: 0 * Math.PI
+                        },{
+                            frame: Anarchia.FRAME_RATE * 0.5,
+                            value: 2 * Math.PI
+                        }]);
+
+                        group.addTargetedAnimation(rotate, policeman);
+                        group.play(true);
+                    }
+                },
+                { // stop rotation, add jitter
+                    frame: Timeline.police.moveEnd, 
+                    callback: function() {
+                        Anarchia.scene.stopAnimation(policeman);
+
+                        const group = new BABYLON.AnimationGroup();
+                        const blending = new BABYLON.Animation(
+                                "blend_police_row_" + i + "_pig_" + p,
+                                "rotation.z",
+                                Anarchia.FRAME_RATE,
+                                BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                                BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE);
+                        blending.enableBlending = true;
+                        blending.blendingSpeed = 0.05;
+                        blending.setKeys([{
+                            frame: 0,
+                            value: 2 * Math.PI
+                        }]);
+                        group.addTargetedAnimation(blending, policeman);
+                        group.play(true);
+                    }
+                }
+            ]);
+
+            // add to array
+            police.push(policeman);
+        }
+    }
+    
+    return police;
 }
 
 /**

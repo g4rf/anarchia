@@ -18,7 +18,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; !!! won't work perfectly
-Anarchia.duration(50, 60);
+Anarchia.duration(48, 65);
 
 
 /** light **/
@@ -49,6 +49,7 @@ Performer.ufoLand();
 Performer.aliens();
 //Performer.humans();
 Performer.punks();
+Performer.police();
 
 Performer.balloons();
 
