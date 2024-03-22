@@ -569,15 +569,5 @@ export default {
         mesh.randomJitterTimers.forEach(function(timer) {
             window.clearTimeout(timer);
         });
-    },
-    
-    /**
-     * Returns a random number between min (inclusive) and max (exclusive).
-     * @param {float} min
-     * @param {float} max
-     * @returns {float} Random number.
-     */
-    getRandom: function(min, max) {
-        return Math.random() * (max - min) + min;
     }
 }

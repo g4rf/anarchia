@@ -119,11 +119,11 @@ export default {
     humanJitterStart:   15.1 * Anarchia.FRAME_RATE,
     
     // clouds
-    dustclouds: [{
+    dustclouds: {
         // dust cloud blue
         show:   54 * Anarchia.FRAME_RATE,
         hide:   75 * Anarchia.FRAME_RATE
-    }],
+    },
     
     // balloons
     balloons: [{

@@ -629,35 +629,61 @@ export function police() {
 export function dustclouds() {
     const dustclouds = [];
     
-    // parameters for each cloud
-    const parameters = [
-        // cloud blue
-        { 
-            texture: "textures/clouds/cloud-blue.png",
-            height: 1.5,
-            width: 1.0,
-            x: 0, 
-            yStart: 5.0,
-            yEnd: 9, 
-            z: 5.3, 
-            rotationZ: 0.5 * Math.PI
-        }
-    ];
+    // parameters for dust clouds
+    const p = { 
+        textures: [
+            "textures/clouds/cloud-blue.png",
+            "textures/clouds/cloud-grey.png",
+            "textures/clouds/cloud-lightblue.png",
+            "textures/clouds/cloud-orange.png",
+            "textures/clouds/cloud-yellow.png"
+        ],
+        width: { // is a real size
+            min: 0.5,
+            max: 1.5
+        },
+        height: { // is a multiply of width
+            min: 1.5,
+            max: 2.0
+        },
+        x: {
+            min: -5,
+            max: 3
+        },
+        rows: [ // rows where we add little randomness
+            { y: 4.5, z: 3.8 },
+            { y: 5.0, z: 5.5 }
+        ],
+        yEnd: {
+            min: 6,
+            max: 9
+        },
+        rotationZ: 1.5 * Math.PI
+    };
+    
+    const numberOfDustClouds = Anarchia.random(42, 84, 0);
     
     // loop through clouds
-    for (let i = 0; i < parameters.length; i++) 
-    {        
-        const p = parameters[i];
-        const t = Timeline.dustclouds[i];
-
+    for (let i = 0; i < numberOfDustClouds; i++) 
+    {               
+        // select random texture
+        const textureIndex  = Math.floor(Anarchia.random(0, p.textures.length));
+        
+        // select random row with imprecision
+        const imprecision = 0.2;
+        const rowIndex = Math.floor(Anarchia.random(0, p.rows.length));
+        const y = p.rows[rowIndex].y + Anarchia.random(-imprecision, imprecision);
+        const z = p.rows[rowIndex].z + Anarchia.random(-imprecision, imprecision);
+        
+        // create random cloud
         const dustcloud = Anarchia.createPlane({
-            name: "cloud_" + i + "_blue",
-            texture: p.texture,
+            name: "dustcloud_" + i,
+            texture: p.textures[textureIndex],
             height: 0,
             width: 0,
-            positionX: p.x,
-            positionY: p.yStart,
-            positionZ: p.z,
+            positionX: Anarchia.random(p.x.min, p.x.max),
+            positionY: y,
+            positionZ: z,
             rotationZ: p.rotationZ
         });
         
@@ -666,19 +692,37 @@ export function dustclouds() {
             mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
         };
         
+        // random start until 2 seconds before end
+        const start = Anarchia.random(
+                Timeline.dustclouds.show,
+                Timeline.dustclouds.hide - 2 * Anarchia.FRAME_RATE,
+                0
+        );
+        // random end in the last second
+        const end = Anarchia.random(
+                Timeline.dustclouds.hide,
+                Timeline.dustclouds.hide - 1 * Anarchia.FRAME_RATE,
+                0
+        );
+
+        // random width
+        const width = Anarchia.random(p.width.min, p.width.max);
+        // random height based on width
+        const height = width * Anarchia.random(p.height.min, p.height.max);
+        
         // scale height
         Anarchia.createAnimation(dustcloud, {
             property: "scaling.y"
         },[ // keys
             { frame: Timeline.filmStart, value: 0 },
             {
-                frame: t.show, 
+                frame: start,
                 value: 0
             },{ 
-                frame: t.show + 0.2 * Anarchia.FRAME_RATE,
-                value: p.height
+                frame: start + 0.2 * Anarchia.FRAME_RATE,
+                value: height
             },{ 
-                frame: t.hide,
+                frame: end,
                 value: 0
             },
             { frame: Anarchia.END_FRAME, value: 0 }
@@ -690,18 +734,21 @@ export function dustclouds() {
         },[ // keys
             { frame: Timeline.filmStart, value: 0 },
             { 
-                frame: t.show, 
+                frame: start, 
                 value: 0 
             },{
-                frame: t.show + 0.2 * Anarchia.FRAME_RATE, 
-                value: p.width 
+                frame: start + 0.2 * Anarchia.FRAME_RATE, 
+                value: width 
             },{
-                frame: t.hide, 
+                frame: end, 
                 value: 0 
             },
             { frame: Anarchia.END_FRAME, value: 0 }
         ], ease, []);
 
+        // random end position
+        const yEnd = Anarchia.random(p.yEnd.min, p.yEnd.max);
+        
         // move animation
         Anarchia.createAnimation(dustcloud,
         { // config
@@ -710,16 +757,16 @@ export function dustclouds() {
         [ // keys
             { 
                 frame: Timeline.filmStart, 
-                value: p.yStart
+                value: y
             },{ 
-                frame: t.show,
-                value: p.yStart
+                frame: start,
+                value: y
             },{ 
-                frame: t.hide,
-                value: p.yEnd
+                frame: end,
+                value: yEnd
             },{ 
                 frame: Anarchia.END_FRAME, 
-                value: p.yEnd
+                value: yEnd
             }
         ],
         { // easing
