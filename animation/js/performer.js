@@ -586,7 +586,7 @@ export function police() {
                             frame: 0,
                             value: 0 * Math.PI
                         },{
-                            frame: Anarchia.FRAME_RATE * 0.5,
+                            frame: 0.5 * Anarchia.FRAME_RATE,
                             value: 2 * Math.PI
                         }]);
 
@@ -594,7 +594,7 @@ export function police() {
                         group.play(true);
                     }
                 },
-                { // stop rotation, add jitter
+                { // stop rotation, blend to up position
                     frame: Timeline.police.moveEnd, 
                     callback: function() {
                         Anarchia.scene.stopAnimation(policeman);
@@ -624,6 +624,116 @@ export function police() {
     }
     
     return police;
+}
+
+export function dustclouds() {
+    const dustclouds = [];
+    
+    // parameters for each cloud
+    const parameters = [
+        // cloud blue
+        { 
+            texture: "textures/clouds/cloud-blue.png",
+            height: 1.5,
+            width: 1.0,
+            x: 0, 
+            yStart: 5.0,
+            yEnd: 9, 
+            z: 5.3, 
+            rotationZ: 0.5 * Math.PI
+        }
+    ];
+    
+    // loop through clouds
+    for (let i = 0; i < parameters.length; i++) 
+    {        
+        const p = parameters[i];
+        const t = Timeline.dustclouds[i];
+
+        const dustcloud = Anarchia.createPlane({
+            name: "cloud_" + i + "_blue",
+            texture: p.texture,
+            height: 0,
+            width: 0,
+            positionX: p.x,
+            positionY: p.yStart,
+            positionZ: p.z,
+            rotationZ: p.rotationZ
+        });
+        
+        const ease = {
+            type: new BABYLON.SineEase(),
+            mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
+        };
+        
+        // scale height
+        Anarchia.createAnimation(dustcloud, {
+            property: "scaling.y"
+        },[ // keys
+            { frame: Timeline.filmStart, value: 0 },
+            {
+                frame: t.show, 
+                value: 0
+            },{ 
+                frame: t.show + 0.2 * Anarchia.FRAME_RATE,
+                value: p.height
+            },{ 
+                frame: t.hide,
+                value: 0
+            },
+            { frame: Anarchia.END_FRAME, value: 0 }
+        ], ease, []);
+
+        // scale width
+        Anarchia.createAnimation(dustcloud, {
+            property: "scaling.x"
+        },[ // keys
+            { frame: Timeline.filmStart, value: 0 },
+            { 
+                frame: t.show, 
+                value: 0 
+            },{
+                frame: t.show + 0.2 * Anarchia.FRAME_RATE, 
+                value: p.width 
+            },{
+                frame: t.hide, 
+                value: 0 
+            },
+            { frame: Anarchia.END_FRAME, value: 0 }
+        ], ease, []);
+
+        // move animation
+        Anarchia.createAnimation(dustcloud,
+        { // config
+            property: "position.y"
+        },
+        [ // keys
+            { 
+                frame: Timeline.filmStart, 
+                value: p.yStart
+            },{ 
+                frame: t.show,
+                value: p.yStart
+            },{ 
+                frame: t.hide,
+                value: p.yEnd
+            },{ 
+                frame: Anarchia.END_FRAME, 
+                value: p.yEnd
+            }
+        ],
+        { // easing
+            type: new BABYLON.BezierCurveEase(.62,.01,.68,.63),
+            mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
+        },
+        [] // events 
+        );
+
+        // add to array
+        dustclouds.push(dustcloud);
+    }
+    
+    return dustclouds;
 }
 
 /**
@@ -682,15 +792,25 @@ export function balloons() {
         Anarchia.createAnimation(balloon, {
             property: "scaling.y"
         },[ // keys
-            { frame: Timeline.filmStart, value: 0 },
-
-            { frame: t.show, value: 0 },
-            { frame: t.show + 0.2 * Anarchia.FRAME_RATE, value: height },
-
-            { frame: t.hide, value: height * 0.95 },
-            { frame: t.hide + 0.1 * Anarchia.FRAME_RATE, value: 0 },
-
-            { frame: Anarchia.END_FRAME, value: 0 }
+            { 
+                frame: Timeline.filmStart * Anarchia.FRAME_RATE,
+                value: 0
+            },{ 
+                frame: t.show,
+                value: 0
+            },{ 
+                frame: t.show + 0.2 * Anarchia.FRAME_RATE,
+                value: height 
+            },{
+                frame: t.hide, 
+                value: height * 0.95
+            },{ 
+                frame: t.hide + 0.1 * Anarchia.FRAME_RATE, 
+                value: 0
+            },{
+                frame: Anarchia.END_FRAME, 
+                value: 0
+            }
         ], ease, []);
 
         // scale width
