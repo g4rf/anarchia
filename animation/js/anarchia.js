@@ -126,19 +126,7 @@ export default {
     duration: function(startSecond, endSecond) {
         this.START_SECOND = startSecond;
         this.END_SECOND = endSecond;
-        
-        /**
-         * Bug in BABYLON, that throw a type error when start frame is 0:
-         * > TypeError: AudioListener.setPosition: Argument 1 is not a finite 
-         * > floating-point value.
-         * We set it to 1, to avoid this.
-         */
-        if(startSecond == 0) {
-            this.START_FRAME = 1;
-        } else {
-            this.START_FRAME = startSecond * this.FRAME_RATE;
-        }
-        
+        this.START_FRAME = startSecond * this.FRAME_RATE;
         this.END_FRAME = endSecond * this.FRAME_RATE;
     },
     
@@ -162,7 +150,7 @@ export default {
                 self.engine.runRenderLoop(function () {
                     self.scene.render();
                 });
-
+                
                 // animations on
                 self.animations.forEach(function(mesh) {
                     self.scene.beginAnimation(mesh,
@@ -257,14 +245,14 @@ export default {
     
     /**
      * Creates an animation
-     * @param {type} [config]
+     * @param {object} [config]
      *          [name=""]
      *          [property=""]
      *          [type=BABYLON.Animation.ANIMATIONTYPE_FLOAT]
      *          [loop=BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT]
-     * @param {type} keys
-     * @param {type} easing
-     * @param {type} events
+     * @param {array} keys
+     * @param {function} easing
+     * @param {array} events
      * @returns {BABYLON.Animation}
      */
     createAnimation: function(mesh, config, keys, easing, events) {

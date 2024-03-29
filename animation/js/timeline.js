@@ -29,45 +29,61 @@ export default {
     
     alien: [{
         // alien 0
-        jumpOut:        19 * Anarchia.FRAME_RATE,
-        randomJumps:    21 * Anarchia.FRAME_RATE,
-        pogoStart:      31 * Anarchia.FRAME_RATE,
-        pogoEnd:        41 * Anarchia.FRAME_RATE,
+        jumpOut:         19 * Anarchia.FRAME_RATE,
+        randomJumps:     21 * Anarchia.FRAME_RATE,
+        pogoStart:       31 * Anarchia.FRAME_RATE,
+        pogoEnd:         41 * Anarchia.FRAME_RATE,
+        policePogoStart: 62 * Anarchia.FRAME_RATE,
+        policePogoEnd:   73 * Anarchia.FRAME_RATE
     },{ // alien 1
-        jumpOut:        19.1 * Anarchia.FRAME_RATE,
-        randomJumps:    21.1 * Anarchia.FRAME_RATE,
-        pogoStart:      32 * Anarchia.FRAME_RATE,
-        pogoEnd:        42 * Anarchia.FRAME_RATE,
+        jumpOut:         19.1 * Anarchia.FRAME_RATE,
+        randomJumps:     21.1 * Anarchia.FRAME_RATE,
+        pogoStart:       32.0 * Anarchia.FRAME_RATE,
+        pogoEnd:         42.0 * Anarchia.FRAME_RATE,
+        policePogoStart: 64.0 * Anarchia.FRAME_RATE,
+        policePogoEnd:   73.0 * Anarchia.FRAME_RATE
     },{ // alien 2
-        jumpOut:        19.2 * Anarchia.FRAME_RATE,
-        randomJumps:    21.2 * Anarchia.FRAME_RATE,
-        pogoStart:      33 * Anarchia.FRAME_RATE,
-        pogoEnd:        43 * Anarchia.FRAME_RATE,
+        jumpOut:         19.2 * Anarchia.FRAME_RATE,
+        randomJumps:     21.2 * Anarchia.FRAME_RATE,
+        pogoStart:       33 * Anarchia.FRAME_RATE,
+        pogoEnd:         43 * Anarchia.FRAME_RATE,
+        policePogoStart: 64.0 * Anarchia.FRAME_RATE,
+        policePogoEnd:   73.0 * Anarchia.FRAME_RATE
     },{ // alien 3
-        jumpOut:        19.3 * Anarchia.FRAME_RATE,
-        randomJumps:    21.3 * Anarchia.FRAME_RATE,
-        pogoStart:      31.5 * Anarchia.FRAME_RATE,
-        pogoEnd:        40.5 * Anarchia.FRAME_RATE,
+        jumpOut:         19.3 * Anarchia.FRAME_RATE,
+        randomJumps:     21.3 * Anarchia.FRAME_RATE,
+        pogoStart:       31.5 * Anarchia.FRAME_RATE,
+        pogoEnd:         40.5 * Anarchia.FRAME_RATE,
+        policePogoStart: 63.5 * Anarchia.FRAME_RATE,
+        policePogoEnd:   72.5 * Anarchia.FRAME_RATE
     },{ // alien 4
-        jumpOut:        19.4 * Anarchia.FRAME_RATE,
-        randomJumps:    21.4 * Anarchia.FRAME_RATE,
-        pogoStart:      32.5 * Anarchia.FRAME_RATE,
-        pogoEnd:        41.5 * Anarchia.FRAME_RATE,
+        jumpOut:         19.4 * Anarchia.FRAME_RATE,
+        randomJumps:     21.4 * Anarchia.FRAME_RATE,
+        pogoStart:       32.5 * Anarchia.FRAME_RATE,
+        pogoEnd:         41.5 * Anarchia.FRAME_RATE,
+        policePogoStart: 63.5 * Anarchia.FRAME_RATE,
+        policePogoEnd:   72.5 * Anarchia.FRAME_RATE
     },{ // alien 5
-        jumpOut:        19.5 * Anarchia.FRAME_RATE,
-        randomJumps:    21.5 * Anarchia.FRAME_RATE,
-        pogoStart:      33 * Anarchia.FRAME_RATE,
-        pogoEnd:        42 * Anarchia.FRAME_RATE,
+        jumpOut:         19.5 * Anarchia.FRAME_RATE,
+        randomJumps:     21.5 * Anarchia.FRAME_RATE,
+        pogoStart:       33.0 * Anarchia.FRAME_RATE,
+        pogoEnd:         42.0 * Anarchia.FRAME_RATE,
+        policePogoStart: 63.0 * Anarchia.FRAME_RATE,
+        policePogoEnd:   73.0 * Anarchia.FRAME_RATE
     },{ // alien 6
-        jumpOut:        19.6 * Anarchia.FRAME_RATE,
-        randomJumps:    21.6 * Anarchia.FRAME_RATE,
-        pogoStart:      34 * Anarchia.FRAME_RATE,
-        pogoEnd:        41.5 * Anarchia.FRAME_RATE,
+        jumpOut:         19.6 * Anarchia.FRAME_RATE,
+        randomJumps:     21.6 * Anarchia.FRAME_RATE,
+        pogoStart:       34.0 * Anarchia.FRAME_RATE,
+        pogoEnd:         41.5 * Anarchia.FRAME_RATE,
+        policePogoStart: 63.0 * Anarchia.FRAME_RATE,
+        policePogoEnd:   72.5 * Anarchia.FRAME_RATE
     },{ // alien 7
-        jumpOut:        19.7 * Anarchia.FRAME_RATE,
-        randomJumps:    21.7 * Anarchia.FRAME_RATE,
-        pogoStart:      31.5 * Anarchia.FRAME_RATE,
-        pogoEnd:        41.8 * Anarchia.FRAME_RATE,
+        jumpOut:         19.7 * Anarchia.FRAME_RATE,
+        randomJumps:     21.7 * Anarchia.FRAME_RATE,
+        pogoStart:       31.5 * Anarchia.FRAME_RATE,
+        pogoEnd:         41.8 * Anarchia.FRAME_RATE,
+        policePogoStart: 63.5 * Anarchia.FRAME_RATE,
+        policePogoEnd:   72.8 * Anarchia.FRAME_RATE
     }],
 
     // punks
@@ -88,7 +104,9 @@ export default {
         },{
             start:    47 * Anarchia.FRAME_RATE,
             end:      47.5 * Anarchia.FRAME_RATE
-        }]        
+        }],
+        policePogoStart: 64 * Anarchia.FRAME_RATE,
+        policePogoEnd:   73 * Anarchia.FRAME_RATE
     },{
         // punk 1
         jumpIn: [{
@@ -106,7 +124,9 @@ export default {
         },{
             start:    48 * Anarchia.FRAME_RATE,
             end:      48.4 * Anarchia.FRAME_RATE
-        }]
+        }],
+        policePogoStart: 64 * Anarchia.FRAME_RATE,
+        policePogoEnd:   73 * Anarchia.FRAME_RATE
     }],
 
     // police
@@ -116,7 +136,10 @@ export default {
     },
     
     // humans
-    humanJitterStart:   15.1 * Anarchia.FRAME_RATE,
+    humans: {
+        jitterStart:   15.1 * Anarchia.FRAME_RATE,
+        escapeStart:   52 * Anarchia.FRAME_RATE
+    },
     
     // clouds
     dustclouds: {

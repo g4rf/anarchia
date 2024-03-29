@@ -23,13 +23,4 @@ export function bind() {
 
         Anarchia.play();
     });
-
-    // inspector
-    document.getElementById("inspector").addEventListener("click", function() {
-        Anarchia.scene.debugLayer.show({
-            overlay: true,
-            enablePopup: false,
-            embedMode: false // one pane left, one right
-        });
-    });
 }

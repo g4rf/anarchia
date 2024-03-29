@@ -18,7 +18,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 /** settings **/
 Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; !!! won't work perfectly
-Anarchia.duration(52, 76);
+Anarchia.duration(49, 74);
 
 
 /** light **/
@@ -47,7 +47,7 @@ Performer.ufoFly();
 Performer.ufoLand();
 
 Performer.aliens();
-//Performer.humans();
+Performer.humans();
 Performer.punks();
 Performer.police();
 
@@ -62,12 +62,16 @@ Events.bind();
 
 /** calculate screen size **/
 (function() {
-    let width = $("screen").innerWidth()
+    let width = $("screen").innerWidth();
     
     // with inspector
     if(window.location.hash == "#inspector") {
          width -= 600;
-         document.getElementById("inspector").click();
+         Anarchia.scene.debugLayer.show({
+            overlay: true,
+            enablePopup: false,
+            embedMode: false // one pane left, one right
+        });
     }
      
     let zoom = width / 1920;

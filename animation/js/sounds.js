@@ -9,7 +9,8 @@ export function song(callback) {
             length: Anarchia.END_SECOND - Anarchia.START_SECOND,
             offset: Anarchia.START_SECOND,
             loop: false,
-            autoplay: true
+            autoplay: true,
+            spatialSound: false
         }
     );
 }

@@ -9,15 +9,15 @@ import Timeline from "./timeline.js";
  */
 export function camera() {
     const vectors = {
-        start:         new BABYLON.Vector3(0, 17, -55),
-        toiletStart:   new BABYLON.Vector3(-0.86, 7.06, -7),
-        heinrichplatz: new BABYLON.Vector3(-1, 5.5, 0),
-        punks:         new BABYLON.Vector3(-0.5, 5, 2.5),
-        police:        new BABYLON.Vector3(-1, 5.5, 0)
+        start:         new BABYLON.Vector3( 0.00, 17.00, -55.00),
+        toiletStart:   new BABYLON.Vector3(-0.86,  7.06,  -7.00),
+        heinrichplatz: new BABYLON.Vector3(-1.00,  5.50,   0.00),
+        punks:         new BABYLON.Vector3(-0.50,  5.00,   2.50),
+        police:        new BABYLON.Vector3(-1.00,  5.50,   0.00)
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
-
+    
     Anarchia.createAnimation(camera, {
         name: "moveCameraToHeinrichplatz",
         property: "position",
@@ -280,7 +280,25 @@ export function aliens() {
             }},
             { frame: Timeline.alien[i].pogoEnd, callback: function() {
                 Anarchia.stopJumping(alien);
-            }}
+            }},
+            { 
+                frame: Timeline.alien[i].policePogoStart, 
+                callback: function() {
+                    Anarchia.stopJumping(alien);
+                    Anarchia.randomJumping(alien, {
+                        minHeight: 1,
+                        maxHeight: 1.5,
+                        minPause: 1.1,
+                        maxPause: 1.2
+                    });
+                }
+            },
+            { 
+                frame: Timeline.alien[i].policePogoEnd, 
+                callback: function() {
+                    Anarchia.stopJumping(alien);
+                }
+            }
         ]);
         
         // add to array
@@ -400,21 +418,39 @@ export function punks() {
         { // last position
             frame: Anarchia.END_FRAME, 
             value: parameters[i].jumps[parameters[i].jumps.length - 1]
-        }], false, [{ // jumps
+        }], false, [
+        { // jumps
             frame: Timeline.punks[i].jumpIn[0].start - jumpStartOffset, 
             callback: function() { Anarchia.jump(punk, { height: 0.5 }); } 
-        },{
+        },{  // jumps
             frame: Timeline.punks[i].jumpIn[1].start - jumpStartOffset, 
             callback: function() { Anarchia.jump(punk, { height: 0.5 }); }
-        },{ 
+        },{  // jumps
             frame: Timeline.punks[i].jumpIn[2].start - jumpStartOffset, 
             callback: function() { Anarchia.jump(punk, { height: 0.3 }); }
-        },{ 
+        },{  // jumps
             frame: Timeline.punks[i].jumpIn[3].start - jumpStartOffset, 
             callback: function() { Anarchia.jump(punk, { height: 0.1 }); }
-        },{ 
+        },{  // jumps
             frame: Timeline.punks[i].jumpIn[4].start - jumpStartOffset, 
             callback: function() { Anarchia.jump(punk, { height: 0.1 }); }
+        },{ 
+            frame: Timeline.alien[i].policePogoStart, 
+            callback: function() {
+                Anarchia.stopJumping(punk);
+                Anarchia.randomJumping(punk, {
+                    minHeight: 1,
+                    maxHeight: 1.5,
+                    minPause: 1.1,
+                    maxPause: 1.2
+                });
+            }
+        },
+        { 
+            frame: Timeline.alien[i].policePogoEnd, 
+            callback: function() {
+                Anarchia.stopJumping(punk);
+            }
         }]);
     
         punks.push(punk);
@@ -432,54 +468,161 @@ export function humans() {
     
     // parameters for each human
     const parameters = [
-        { size: 0.55, x:  0.60, y: 4.12, z: 4.8, 
-                                    rotationStart: -0.3, rotationEnd:  -0.05 },
-        { size: 0.53, x: -3.40, y: 3.85, z: 4.7,
-                                    rotationStart: -0.1, rotationEnd: 0.1 },
-        { size: 0.48, x:  0.00, y: 5.06, z: 5.9,
-                                    rotationStart: -0.1, rotationEnd: 0.05 },
-        { size: 0.40, x:  0.20, y: 4.95, z: 5.89, 
-                                    rotationStart: -0.1, rotationEnd: 0.05 }
+        { // human 0 - right
+            size: 0.55,
+            x:  1.3,
+            y: 4.3,
+            z: 4.8, 
+            rotationStart: -0.3,
+            rotationEnd:  -0.05
+        },{ // human 1 - back left
+            size: 0.53, 
+            x: -2.70, 
+            xEnd: -6,
+            y: 4.90, 
+            z: 5.9,
+            rotationStart: -0.1, 
+            rotationEnd: 0.1
+        },{ // human 2 - door left
+            size: 0.48, 
+            x:  0.00,
+            xEnd: -6,
+            y: 4.7, 
+            z: 5.9,
+            rotationStart: -0.1,
+            rotationEnd: 0.05 
+        },{ // human 3 - door right
+            size: 0.40, 
+            x:  0.25,
+            xEnd: -6,
+            y: 4.65, 
+            z: 5.89, 
+            rotationStart: -0.1, 
+            rotationEnd: 0.05 
+        }
     ];
     
     for (let i = 0; i < parameters.length; i++) {
         
-        let human = Anarchia.createPlane({
+        const p = parameters[i];
+        
+        const human = Anarchia.createPlane({
             name: "human_" + i,
             texture: "textures/humans/human_" + i + ".png",
-            height: parameters[i].size,
-            width: parameters[i].size,
-            positionX: parameters[i].x,
-            positionY: parameters[i].y,
-            positionZ: parameters[i].z
+            height: p.size,
+            width: p.size,
+            positionX: p.x,
+            positionY: p.y,
+            positionZ: p.z
         });
 
-        // rotate animation
+        // follow ufo
         Anarchia.createAnimation(human, {
             property: "rotation.z"
         },[ // keys
-            { frame: Timeline.filmStart, 
-                value: parameters[i].rotationStart * Math.PI },
-            { frame: Timeline.ufolandedPositionStart,
-                value: parameters[i].rotationStart * Math.PI },
-            { frame: Timeline.ufolandedPositionLanded,
-                value: parameters[i].rotationEnd * Math.PI },
-
-            { frame: Anarchia.END_FRAME, 
-                value: parameters[i].rotationEnd * Math.PI }
+            { 
+                frame: Timeline.filmStart, 
+                value: p.rotationStart * Math.PI 
+            },{ 
+                frame: Timeline.ufolandedPositionStart,
+                value: p.rotationStart * Math.PI
+            },{ 
+                frame: Timeline.ufolandedPositionLanded,
+                value: p.rotationEnd * Math.PI
+            },{
+                frame: Anarchia.END_FRAME, 
+                value: p.rotationEnd * Math.PI 
+            }
         ], false, [
-            { frame: Timeline.humanJitterStart, callback: function() {
-                Anarchia.addJitter(human, {
-                    property: "rotation.z",
-                    beginValue: parameters[i].rotationEnd * Math.PI,
-                    maxValue: Math.PI * (parameters[i].rotationEnd + 0.1),
-                    minDuration: 1,
-                    maxDuration: 5,
-                    minPause: 0.1,
-                    maxPause: 5
-                });
-            }}
+            {   // slow jitter
+                frame: Timeline.humans.jitterStart, 
+                callback: function() {
+                    Anarchia.addJitter(human, {
+                        property: "rotation.z",
+                        beginValue: p.rotationEnd * Math.PI,
+                        maxValue: Math.PI * (p.rotationEnd + 0.1),
+                        minDuration: 1,
+                        maxDuration: 5,
+                        minPause: 0.1,
+                        maxPause: 5
+                    });
+                }
+            },{   // police jitter
+                frame: Timeline.police.moveStart, 
+                callback: function() {
+                    Anarchia.stopJitters(human);
+                    Anarchia.addJitter(human, {
+                        property: "rotation.z",
+                        beginValue: p.rotationEnd * Math.PI,
+                        maxValue: Math.PI * (p.rotationEnd + 0.4),
+                        minDuration: 0.1,
+                        maxDuration: 1,
+                        minPause: 0.1,
+                        maxPause: 0.2
+                    });
+                }
+            }
         ]);
+        
+        // escape from police (not human 0)
+        if(i != 0) {
+            // move animation
+            Anarchia.createAnimation(human,
+            { // config
+                property: "position.x"
+            },
+            [ // keys
+                { 
+                    frame: Timeline.filmStart, 
+                    value: p.x
+                },{ 
+                    frame: Timeline.humans.escapeStart,
+                    value: p.x
+                },{ 
+                    frame: Timeline.police.moveEnd,
+                    value: p.xEnd
+                },{ 
+                    frame: Anarchia.END_FRAME, 
+                    value: p.xEnd
+                }
+            ],
+            { // easing
+                type: new BABYLON.BezierCurveEase(.53,.2,.43,.75),
+                mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
+            },
+            [ // events 
+                { // start rotation
+                    frame: Timeline.humans.escapeStart, 
+                    callback: function() {
+                        Anarchia.stopJitters(human);
+                        const group = new BABYLON.AnimationGroup();
+                        const rotate = new BABYLON.Animation(
+                                "human_" + i + "_escape",
+                                "rotation.z",
+                                Anarchia.FRAME_RATE,
+                                BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                                BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+                        );
+                        rotate.setKeys([{
+                            frame: 0,
+                            value: 0 * Math.PI
+                        },{
+                            frame: 0.5 * Anarchia.FRAME_RATE,
+                            value: 2 * Math.PI
+                        }]);
+
+                        group.addTargetedAnimation(rotate, human);
+                        group.play(true);
+                    }
+                },
+                { // stop animations
+                    frame: Timeline.police.moveEnd, 
+                    callback: function() {
+                        Anarchia.scene.stopAnimation(human);
+                    }
+                }
+            ]);
+        }
         
         // add to array
         humans.push(human);
