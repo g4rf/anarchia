@@ -9,11 +9,12 @@ import Timeline from "./timeline.js";
  */
 export function camera() {
     const vectors = {
-        start:         new BABYLON.Vector3( 0.00, 17.00, -55.00),
-        toiletStart:   new BABYLON.Vector3(-0.86,  7.06,  -7.00),
-        heinrichplatz: new BABYLON.Vector3(-1.00,  5.50,   0.00),
-        punks:         new BABYLON.Vector3(-0.50,  5.00,   2.50),
-        police:        new BABYLON.Vector3(-1.00,  5.50,   0.00)
+        start:               new BABYLON.Vector3( 0.00, 17.00, -55.00),
+        toiletStart:         new BABYLON.Vector3(-0.86,  7.06,  -7.00),
+        heinrichplatz:       new BABYLON.Vector3(-1.00,  5.50,   0.00),
+        heinrichplatzMoving: new BABYLON.Vector3(-0.90,  5.40,   0.10),
+        punks:               new BABYLON.Vector3(-0.50,  5.00,   2.50),
+        police:              new BABYLON.Vector3(-1.00,  5.50,   0.00)
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
@@ -38,7 +39,7 @@ export function camera() {
         value: vectors.heinrichplatz 
     },{ 
         frame: Timeline.camera.punksZoomStart, 
-        value: vectors.heinrichplatz 
+        value: vectors.heinrichplatzMoving 
     },{ 
         frame: Timeline.camera.punksZoomEnd, 
         value: vectors.punks 
@@ -782,8 +783,8 @@ export function dustclouds() {
             "textures/clouds/cloud-yellow.png"
         ],
         width: { // is a real size
-            min: 0.5,
-            max: 1.5
+            min: 0.1,
+            max: 0.3
         },
         height: { // is a multiply of width
             min: 1.5,
@@ -804,7 +805,7 @@ export function dustclouds() {
         rotationZ: 1.5 * Math.PI
     };
     
-    const numberOfDustClouds = Anarchia.random(42, 84, 0);
+    const numberOfDustClouds = Anarchia.random(42, 64, 0);
     
     // loop through clouds
     for (let i = 0; i < numberOfDustClouds; i++) 
@@ -983,7 +984,7 @@ export function balloons() {
             property: "scaling.y"
         },[ // keys
             { 
-                frame: Timeline.filmStart * Anarchia.FRAME_RATE,
+                frame: Timeline.filmStart,
                 value: 0
             },{ 
                 frame: t.show,
@@ -1202,4 +1203,172 @@ function balloonContents(i, balloon) {
         
         return; // 0
     }
+}
+
+/**
+ * Creates the stick, stones and the stool.
+ * @returns {Array} Array of combat meshes.
+ */
+export function combats() {
+    const combats = [];
+    const t = Timeline.combats;
+    
+    // stool
+    const ts = t.stool;
+    const p = {
+        size: 0.6,
+        xStart: 0.9,
+        xEnd: 1,
+        yStart: 4.4,
+        yEnd: 4.7,
+        z: 4.79,
+        rotationStart: 0.5 * Math.PI,
+        rotationEnd: 0.25 * Math.PI
+    };
+    const stool = Anarchia.createPlane({
+        name: "stool",
+        texture: "textures/stool.png",
+        height: 0,
+        width: 0,
+        positionX: p.xStart,
+        positionY: p.yStart,
+        positionZ: p.z
+    });
+    const ease = {
+        type: new BABYLON.SineEase(),
+        mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
+    };
+    
+    // scale size
+    const stoolKeys = [
+        { 
+            frame: Timeline.filmStart,
+            value: 0
+        },{ 
+            frame: ts.raiseStart,
+            value: 0
+        },{ 
+            frame: ts.raiseStart + 0.2 * Anarchia.FRAME_RATE,
+            value: p.size * 0.9
+        },{
+            frame: ts.downEnd + 0.1 * Anarchia.FRAME_RATE, 
+            value: p.size
+        },{ 
+            frame: ts.downEnd + 0.2 * Anarchia.FRAME_RATE, 
+            value: 0
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: 0
+        }
+    ];
+    // height
+    Anarchia.createAnimation(stool, {
+        property: "scaling.y"
+    }, stoolKeys, ease, []);
+    // width
+    Anarchia.createAnimation(stool, {
+        property: "scaling.x"
+    }, stoolKeys, ease, []);
+
+    // position x
+    Anarchia.createAnimation(stool, {
+        property: "position.x"
+    },[ // keys
+        { 
+            frame: Timeline.filmStart, 
+            value: p.xStart
+        },{ 
+            frame: ts.raiseStart,
+            value: p.xStart
+        },{ 
+            frame: ts.raiseEnd,
+            value: p.xEnd
+        },{ 
+            frame: ts.downStart,
+            value: p.xEnd
+        },{ 
+            frame: ts.downEnd,
+            value: p.xStart
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: p.xStart
+        }
+    ], ease, []);
+
+    // position y
+    Anarchia.createAnimation(stool, {
+        property: "position.y"
+    },[ // keys
+        { 
+            frame: Timeline.filmStart, 
+            value: p.yStart
+        },{ 
+            frame: ts.raiseStart,
+            value: p.yStart
+        },{ 
+            frame: ts.raiseEnd,
+            value: p.yEnd
+        },{ 
+            frame: ts.downStart,
+            value: p.yEnd
+        },{ 
+            frame: ts.downEnd,
+            value: p.yStart
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: p.yStart
+        }
+    ], ease, []);
+    
+    // rotation & jitter
+    Anarchia.createAnimation(stool, {
+        property: "rotation.z"
+    },[ // keys
+        { 
+            frame: Timeline.filmStart, 
+            value: p.rotationStart
+        },{ 
+            frame: ts.raiseStart,
+            value: p.rotationStart
+        },{ 
+            frame: ts.raiseEnd,
+            value: p.rotationEnd
+        },{ 
+            frame: ts.downStart,
+            value: p.rotationEnd
+        },{ 
+            frame: ts.downEnd,
+            value: p.rotationStart
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: p.rotationStart
+        }
+    ], ease, [
+        {   // slow jitter
+            frame: ts.raiseEnd, 
+            callback: function() {
+                Anarchia.addJitter(stool, {
+                    property: "rotation.z",
+                    beginValue: p.rotationEnd,
+                    maxValue: p.rotationEnd + 0.1 * Math.PI,
+                    minDuration: 1,
+                    maxDuration: 5,
+                    minPause: 0.1,
+                    maxPause: 5
+                });
+            }
+        },{   // police jitter
+            frame: ts.downStart, 
+            callback: function() {
+                Anarchia.stopJitters(stool);
+            }
+        }
+    ]);
+
+    combats.push(stool);
+    
+    // sticks & stones
+    // TODO: randomly generate flying sticks and stones
+    
+    return combats;
 }

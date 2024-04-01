@@ -14,7 +14,7 @@ export default {
         punksZoomStart:      41 * Anarchia.FRAME_RATE,
         punksZoomEnd:        42 * Anarchia.FRAME_RATE,
         policeZoomStart:     56 * Anarchia.FRAME_RATE,
-        policeZoomEnd:       65 * Anarchia.FRAME_RATE
+        policeZoomEnd:       85 * Anarchia.FRAME_RATE
     },
     
     // ufo fly
@@ -145,7 +145,7 @@ export default {
     dustclouds: {
         // dust cloud blue
         show:   54 * Anarchia.FRAME_RATE,
-        hide:   75 * Anarchia.FRAME_RATE
+        hide:   85 * Anarchia.FRAME_RATE
     },
     
     // balloons
@@ -167,5 +167,15 @@ export default {
         show:       52.5 * Anarchia.FRAME_RATE,
         moshpit:    53 * Anarchia.FRAME_RATE,
         hide:       58 * Anarchia.FRAME_RATE
-    }]
+    }],
+        
+    // combats
+    combats: {
+        stool: {
+            raiseStart:     74 * Anarchia.FRAME_RATE,
+            raiseEnd:       75 * Anarchia.FRAME_RATE,
+            downStart:      82 * Anarchia.FRAME_RATE,
+            downEnd:        84 * Anarchia.FRAME_RATE
+        }
+    }
 }
