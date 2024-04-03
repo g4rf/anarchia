@@ -192,7 +192,9 @@ export function ufoLand() {
  * Creates console (joystick).
  * @returns {BABYLON.Mesh}
  */
-export function console() {
+export function controlpanel() {
+    const t = Timeline.controlpanel;
+    
     const height = 0.7;
     const width = height * 1262 / 1600;
     const yStart = 4.55;
@@ -201,8 +203,8 @@ export function console() {
     const z = 5.00001;
     
     // the console
-    const console = Anarchia.createPlane({
-        name: "console",
+    const controlpanel = Anarchia.createPlane({
+        name: "controlpanel",
         texture: "textures/joystick.png",
         height: 0,
         width: 0,
@@ -217,17 +219,17 @@ export function console() {
     };
     
     // scale height (popup)
-    Anarchia.createAnimation(console, {
+    Anarchia.createAnimation(controlpanel, {
         property: "scaling.y"
     },[ // keys
         { 
             frame: Timeline.filmStart,
             value: 0
         },{ 
-            frame: Timeline.console.move.start,
+            frame: t.move.start,
             value: 0
         },{ 
-            frame: Timeline.console.move.start + 0.2 * Anarchia.FRAME_RATE,
+            frame: t.move.start + 0.2 * Anarchia.FRAME_RATE,
             value: height 
         },{
             frame: Anarchia.END_FRAME, 
@@ -236,36 +238,36 @@ export function console() {
     ], ease, []);
 
     // scale width (popup)
-    Anarchia.createAnimation(console, {
+    Anarchia.createAnimation(controlpanel, {
         property: "scaling.x"
     },[ // keys
         { 
             frame: Timeline.filmStart,
             value: 0
         },{ 
-            frame: Timeline.console.move.start,
+            frame: t.move.start,
             value: 0
         },{ 
-            frame: Timeline.console.move.start + 0.2 * Anarchia.FRAME_RATE,
+            frame: t.move.start + 0.2 * Anarchia.FRAME_RATE,
             value: width 
         },{
             frame: Anarchia.END_FRAME, 
             value: width
         }
     ], ease, []);
-    
+
     // move up
-    Anarchia.createAnimation(console, {
+    Anarchia.createAnimation(controlpanel, {
         property: "position.y"
     },[ // keys
         { 
             frame: Timeline.filmStart, 
             value: yStart 
         },{
-            frame: Timeline.console.move.start,
+            frame: t.move.start,
             value: yStart
         },{ 
-            frame: Timeline.console.move.end,
+            frame: t.move.end,
             value: yEnd
         },{
             frame: Anarchia.END_FRAME, 
@@ -274,9 +276,61 @@ export function console() {
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
-    });    
+    }, flash(controlpanel));
     
-    return console;
+    return controlpanel;
+}
+
+/**
+ * Creates the flash light.
+ * @param {BABYLON.Mesh} controlpanel
+ * @returns {Array} Array of frame events
+ */
+function flash(controlpanel) {
+    const t = Timeline.controlpanel;
+    
+    let light;
+    let events = [
+        { // flash
+            frame: t.glow,
+            callback: function() {
+                const texture = new BABYLON.Texture(
+                        "textures/joystick-glow.png", 
+                        Anarchia.scene
+                );
+                texture.hasAlpha = true;
+                controlpanel.material.diffuseTexture = texture;
+                
+                light = new BABYLON.PointLight(
+                    "flash", 
+                    Anarchia.scene.activeCamera.position, 
+                    Anarchia.scene
+                );
+            }
+        }
+    ];
+    
+    const intensityMax = 9999999;
+    const flashFrames = 0.76 * Anarchia.FRAME_RATE;
+    const intensitySteps = intensityMax / flashFrames;
+    for(let i = 1; i < flashFrames; i++) {
+        events.push({
+           frame: t.glow + i,
+           callback: function() {
+               light.intensity += intensitySteps;
+           }
+        });
+    }
+    
+    // move camera to charlottenburg
+    
+    // dim flash
+    
+    // raise flash
+    
+    // move camera to heinrichplatz
+    
+    return events;
 }
 
 /**

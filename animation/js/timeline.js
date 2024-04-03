@@ -28,11 +28,12 @@ export default {
     ufolandedTopOpened:      19 * Anarchia.FRAME_RATE,
     
     // console/joystick
-    console: {
+    controlpanel: {
         move: {
             start:  79 * Anarchia.FRAME_RATE,
             end:    82 * Anarchia.FRAME_RATE
-        }
+        },
+        glow: 85 * Anarchia.FRAME_RATE
     },
     
     alien: [{
