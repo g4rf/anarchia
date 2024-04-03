@@ -27,6 +27,14 @@ export default {
     ufolandedOpenTop:        15 * Anarchia.FRAME_RATE,
     ufolandedTopOpened:      19 * Anarchia.FRAME_RATE,
     
+    // console/joystick
+    console: {
+        move: {
+            start:  79 * Anarchia.FRAME_RATE,
+            end:    82 * Anarchia.FRAME_RATE
+        }
+    },
+    
     alien: [{
         // alien 0
         jumpOut:         19 * Anarchia.FRAME_RATE,

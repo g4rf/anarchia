@@ -189,6 +189,97 @@ export function ufoLand() {
 }
 
 /**
+ * Creates console (joystick).
+ * @returns {BABYLON.Mesh}
+ */
+export function console() {
+    const height = 0.7;
+    const width = height * 1262 / 1600;
+    const yStart = 4.55;
+    const yEnd = 4.85;
+    const x = -3.45;
+    const z = 5.00001;
+    
+    // the console
+    const console = Anarchia.createPlane({
+        name: "console",
+        texture: "textures/joystick.png",
+        height: 0,
+        width: 0,
+        positionX: x,
+        positionY: yStart,
+        positionZ: z
+    });
+    
+    const ease = {
+        type: new BABYLON.SineEase(),
+        mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
+    };
+    
+    // scale height (popup)
+    Anarchia.createAnimation(console, {
+        property: "scaling.y"
+    },[ // keys
+        { 
+            frame: Timeline.filmStart,
+            value: 0
+        },{ 
+            frame: Timeline.console.move.start,
+            value: 0
+        },{ 
+            frame: Timeline.console.move.start + 0.2 * Anarchia.FRAME_RATE,
+            value: height 
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: height
+        }
+    ], ease, []);
+
+    // scale width (popup)
+    Anarchia.createAnimation(console, {
+        property: "scaling.x"
+    },[ // keys
+        { 
+            frame: Timeline.filmStart,
+            value: 0
+        },{ 
+            frame: Timeline.console.move.start,
+            value: 0
+        },{ 
+            frame: Timeline.console.move.start + 0.2 * Anarchia.FRAME_RATE,
+            value: width 
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: width
+        }
+    ], ease, []);
+    
+    // move up
+    Anarchia.createAnimation(console, {
+        property: "position.y"
+    },[ // keys
+        { 
+            frame: Timeline.filmStart, 
+            value: yStart 
+        },{
+            frame: Timeline.console.move.start,
+            value: yStart
+        },{ 
+            frame: Timeline.console.move.end,
+            value: yEnd
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: yEnd
+        }
+    ],{ // easing
+        type: new BABYLON.ExponentialEase(2),
+        mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
+    });    
+    
+    return console;
+}
+
+/**
  * Creates the aliens.
  * @returns {Array}  Array of alien meshes.
  */
@@ -957,11 +1048,19 @@ export function balloons() {
         height: 1
     }];
     
+    const ease = {
+        type: new BABYLON.SineEase(),
+        mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
+    };
+    
     for(let i = 0; i < parameters.length; i++) {
     
         const p = parameters[i];
         const t = Timeline.balloons[i];
-    
+        
+        const width = p.width;
+        const height = p.height;
+
         const balloon = Anarchia.createPlane({
             name: "balloon_" + i,
             texture: "textures/balloon.png",
@@ -970,15 +1069,8 @@ export function balloons() {
             positionX: p.x,
             positionY: p.y,
             positionZ: p.z
-        });
-
-        const ease = {
-            type: new BABYLON.SineEase(),
-            mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
-        };
-        const width = p.width;
-        const height = p.height;
-
+        });        
+        
         // scale height
         Anarchia.createAnimation(balloon, {
             property: "scaling.y"

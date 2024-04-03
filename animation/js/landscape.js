@@ -37,34 +37,62 @@ export function tvtower() {
     });
 }
     
-export function heinrichplatz() {    
-    /** heinrichplatz **/
-    const height = 5.1;
-    const width = 9;
-    const position = { x: -1, y: 5.5 };
+/**
+ * Creates the city (houses & trafficlights).
+ * @return Array Array of BABYLON.Mesh
+ */
+export function heinrichplatz() {
+    let elements = [];
     
+    // heinrichplatz
     const heinrichplatz = Anarchia.createPlane({
         name: "heinrichplatz",
         texture: "textures/city/heinrichplatz.png",
-        height: height,
-        width: width,
-        positionX: position.x,
-        positionY: position.y,
+        height: 5.1,
+        width: 9,
+        positionX: -1,
+        positionY: 5.5,
         positionZ: 6
     });    
+    elements.push(heinrichplatz);
     
-    const trafficlights = Anarchia.createPlane({
-        name: "trafficlights",
-        texture: "textures/city/heinrichplatz-trafficlights.png",
-        height: height * 0.6,
-        width: width * 0.6,
-        positionX: position.x + 0.4,
-        positionY: position.y,
+    // trafficlight right
+    const trafficlightRight = Anarchia.createPlane({
+        name: "trafficlight-right",
+        texture: "textures/city/trafficlight-full-mirror.png",
+        height: 3,
+        width: 1.3,
+        positionX: 0.45,
+        positionY: 5.2,
         positionZ: 3
     });
-    trafficlights.setParent(heinrichplatz);
+    elements.push(trafficlightRight);
     
-    return heinrichplatz;
+    // trafficlight left back
+    const trafficlightLeftBack = Anarchia.createPlane({
+        name: "trafficlight-left-back",
+        texture: "textures/city/trafficlight-full.png",
+        height: 3,
+        width: 1.3,
+        positionX: -4,
+        positionY: 5.85,
+        positionZ: 5.1
+    });
+    elements.push(trafficlightLeftBack);
+    
+    // trafficlight left front
+    const trafficlightLeftFront = Anarchia.createPlane({
+        name: "trafficlight-left-front",
+        texture: "textures/city/trafficlight-partly.png",
+        height: 2,
+        width: 0.45,
+        positionX: -3.1,
+        positionY: 5,
+        positionZ: 3
+    });
+    elements.push(trafficlightLeftFront);
+    
+    return elements;
 }
 
 /**
