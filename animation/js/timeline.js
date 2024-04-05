@@ -13,8 +13,26 @@ export default {
         heinrichplatz:       12 * Anarchia.FRAME_RATE,
         punksZoomStart:      41 * Anarchia.FRAME_RATE,
         punksZoomEnd:        42 * Anarchia.FRAME_RATE,
-        policeZoomStart:     56 * Anarchia.FRAME_RATE,
-        policeZoomEnd:       85 * Anarchia.FRAME_RATE
+        policeZoomStart:     54 * Anarchia.FRAME_RATE,
+        policeZoomEnd:       60 * Anarchia.FRAME_RATE,
+        charlottenburg:      85.4 * Anarchia.FRAME_RATE,
+        heinrichplatz2:      94.0 * Anarchia.FRAME_RATE
+    },
+    
+    // beaming the pigs
+    beam: {
+        flash:      85.0 * Anarchia.FRAME_RATE,
+        dim:        85.8 * Anarchia.FRAME_RATE,
+        flashAgain: 93.6 * Anarchia.FRAME_RATE,
+        dimAgain:   94.4 * Anarchia.FRAME_RATE
+    },
+    
+    // console/joystick
+    controlpanel: {
+        move: {
+            start:  79 * Anarchia.FRAME_RATE,
+            end:    82 * Anarchia.FRAME_RATE
+        }
     },
     
     // ufo fly
@@ -26,15 +44,6 @@ export default {
     ufolandedPositionLanded: 15 * Anarchia.FRAME_RATE,
     ufolandedOpenTop:        15 * Anarchia.FRAME_RATE,
     ufolandedTopOpened:      19 * Anarchia.FRAME_RATE,
-    
-    // console/joystick
-    controlpanel: {
-        move: {
-            start:  79 * Anarchia.FRAME_RATE,
-            end:    82 * Anarchia.FRAME_RATE
-        },
-        glow: 85 * Anarchia.FRAME_RATE
-    },
     
     alien: [{
         // alien 0
@@ -154,7 +163,7 @@ export default {
     dustclouds: {
         // dust cloud blue
         show:   54 * Anarchia.FRAME_RATE,
-        hide:   85 * Anarchia.FRAME_RATE
+        hide:   86 * Anarchia.FRAME_RATE
     },
     
     // balloons

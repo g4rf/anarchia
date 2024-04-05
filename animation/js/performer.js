@@ -10,17 +10,25 @@ import Timeline from "./timeline.js";
 export function camera() {
     const vectors = {
         start:               new BABYLON.Vector3( 0.00, 17.00, -55.00),
+        
         toiletStart:         new BABYLON.Vector3(-0.86,  7.06,  -7.00),
+        
         heinrichplatz:       new BABYLON.Vector3(-1.00,  5.50,   0.00),
         heinrichplatzMoving: new BABYLON.Vector3(-0.90,  5.40,   0.10),
-        punks:               new BABYLON.Vector3(-0.50,  5.00,   2.50),
-        police:              new BABYLON.Vector3(-1.00,  5.50,   0.00)
+        
+        punks:               new BABYLON.Vector3(-0.50,  5.00,   2.30),
+        punksMoving:         new BABYLON.Vector3(-0.50,  5.00,   2.70),
+        
+        police:              new BABYLON.Vector3(-0.50,  5.00,   0.50),
+        policeMoving:        new BABYLON.Vector3(-1.00,  5.50,   0.00),
+        
+        charlottenburg:      new BABYLON.Vector3(19.00,  5.50,   0.00) // x + 20
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
     
     Anarchia.createAnimation(camera, {
-        name: "moveCameraToHeinrichplatz",
+        name: "moveCamera",
         property: "position",
         type: BABYLON.Animation.ANIMATIONTYPE_VECTOR3
     },
@@ -49,17 +57,23 @@ export function camera() {
     },{
         frame: Timeline.camera.policeZoomEnd, 
         value: vectors.police
-    },
-    
-        
-    { 
-        frame: Anarchia.END_FRAME,
-        value: vectors.police
+    },{
+        frame: Timeline.camera.charlottenburg - 1, 
+        value: vectors.policeMoving
+    },{
+        frame: Timeline.camera.charlottenburg, 
+        value: vectors.charlottenburg
+    },{
+        frame: Timeline.camera.heinrichplatz2 - 1, 
+        value: vectors.charlottenburg
+    },{
+        frame: Timeline.camera.heinrichplatz2, 
+        value: vectors.heinrichplatz
     }],{ // easing
         type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
     },[ // events
-    ]);
+    ]);   
     
     return camera;
 }
@@ -276,8 +290,10 @@ export function controlpanel() {
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
-    }, flash(controlpanel));
-    
+
+       // flash 
+    }, beam(controlpanel));
+        
     return controlpanel;
 }
 
@@ -286,13 +302,13 @@ export function controlpanel() {
  * @param {BABYLON.Mesh} controlpanel
  * @returns {Array} Array of frame events
  */
-function flash(controlpanel) {
-    const t = Timeline.controlpanel;
+function beam(controlpanel) {
+    const t = Timeline.beam;
     
     let light;
     let events = [
         { // flash
-            frame: t.glow,
+            frame: t.flash,
             callback: function() {
                 const texture = new BABYLON.Texture(
                         "textures/joystick-glow.png", 
@@ -303,32 +319,60 @@ function flash(controlpanel) {
                 
                 light = new BABYLON.PointLight(
                     "flash", 
-                    Anarchia.scene.activeCamera.position, 
+                    new BABYLON.Vector3(0, 0, 0),
                     Anarchia.scene
                 );
+                light.parent = Anarchia.scene.activeCamera;
             }
         }
     ];
     
-    const intensityMax = 9999999;
-    const flashFrames = 0.76 * Anarchia.FRAME_RATE;
+    // flash parameter
+    const intensityMax = 10000000;
+    const flashFrames = 0.4 * Anarchia.FRAME_RATE;
     const intensitySteps = intensityMax / flashFrames;
-    for(let i = 1; i < flashFrames; i++) {
+    
+    // i = 1, coz we initialize at i = 0
+    for(let i = 1; i <= flashFrames; i++) {
+        // flash (to charlottenburg)
         events.push({
-           frame: t.glow + i,
+           frame: t.flash + i,
            callback: function() {
+               light.setEnabled(true);
                light.intensity += intensitySteps;
            }
         });
+        // dim
+        events.push({
+           frame: t.dim + i,
+           callback: function() {
+               if(i == flashFrames) {
+                   light.setEnabled(false);
+                   return;
+               }
+               light.intensity -= intensitySteps;
+           }
+        });
+        // flash again (back to heinrichplatz)
+        events.push({
+           frame: t.flashAgain + i,
+           callback: function() {
+               light.setEnabled(true);
+               light.intensity += intensitySteps;
+           }
+        });
+        // dim again
+        events.push({
+           frame: t.dimAgain + i,
+           callback: function() {
+               if(i == flashFrames) {
+                   light.setEnabled(false);
+                   return;
+               }
+               light.intensity -= intensitySteps;
+           }
+        });
     }
-    
-    // move camera to charlottenburg
-    
-    // dim flash
-    
-    // raise flash
-    
-    // move camera to heinrichplatz
     
     return events;
 }
@@ -792,6 +836,7 @@ export function police() {
             size: 0.55, 
             xStart: 4, 
             xEnd: -5,
+            xBeam: 15, // x + 20
             y: 4.8, 
             z: 5.5, 
             rotationStart: -0.3, 
@@ -803,6 +848,7 @@ export function police() {
             size: 0.55, 
             xStart: 3.0,
             xEnd: -4,
+            xBeam: 16, // x + 20
             y: 4.3, 
             z: 3.8, 
             rotationStart: 0, 
@@ -824,6 +870,8 @@ export function police() {
             const start = parameters[i].xStart + (p * distance);
             // end
             const end = parameters[i].xEnd + (p * distance);
+            // beam
+            const beam = parameters[i].xBeam + (p * distance);
             
             const policeman = Anarchia.createPlane({
                 name: "police_row_" + i + "_pig_" + p,
@@ -851,8 +899,14 @@ export function police() {
                     frame: Timeline.police.moveEnd,
                     value: end
                 },{ 
+                    frame: Timeline.camera.charlottenburg - 1,
+                    value: end
+                },{ 
+                    frame: Timeline.camera.charlottenburg,
+                    value: beam
+                },{
                     frame: Anarchia.END_FRAME, 
-                    value: end 
+                    value: beam 
                 }
             ],
             { // easing
@@ -904,6 +958,17 @@ export function police() {
                         group.addTargetedAnimation(blending, policeman);
                         group.play(true);
                     }
+                },
+                { // remove clothes
+                    frame: Timeline.camera.charlottenburg,
+                    callback: function() {
+                        const texture = new BABYLON.Texture(
+                                "textures/humans/police-nipples.png", 
+                                Anarchia.scene
+                        );
+                        texture.hasAlpha = true;
+                        policeman.material.diffuseTexture = texture;
+                    } 
                 }
             ]);
 
@@ -929,7 +994,7 @@ export function dustclouds() {
         ],
         width: { // is a real size
             min: 0.1,
-            max: 0.3
+            max: 0.7
         },
         height: { // is a multiply of width
             min: 1.5,
@@ -950,7 +1015,9 @@ export function dustclouds() {
         rotationZ: 1.5 * Math.PI
     };
     
-    const numberOfDustClouds = Anarchia.random(42, 64, 0);
+    const minDustClouds = 42;
+    const maxDustClouds = 90;
+    const numberOfDustClouds = Anarchia.random(minDustClouds, maxDustClouds, 0);
     
     // loop through clouds
     for (let i = 0; i < numberOfDustClouds; i++) 
