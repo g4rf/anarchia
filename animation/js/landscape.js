@@ -96,6 +96,29 @@ export function heinrichplatz() {
 }
 
 /**
+ * Creates the city (houses & trafficlights).
+ * @return Array Array of BABYLON.Mesh
+ */
+export function charlottenburg() {
+    let elements = [];
+    
+    // heinrichplatz
+    const charlottenburg = Anarchia.createPlane({
+        name: "charlottenburg",
+        texture: "textures/city/charlottenburg.png",
+        height: 5.1,
+        width: 9,
+        positionX: 19,
+        positionY: 5.6,
+        positionZ: 6
+    });    
+    
+    elements.push(charlottenburg);
+    
+    return elements;
+}
+
+/**
  * Creates the city (houses).
  * @return Array Array of BABYLON.Mesh
  */

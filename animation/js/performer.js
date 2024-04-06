@@ -9,20 +9,22 @@ import Timeline from "./timeline.js";
  */
 export function camera() {
     const vectors = {
-        start:               new BABYLON.Vector3( 0.00, 17.00, -55.00),
+        start:                new BABYLON.Vector3( 0.00, 17.00, -55.00),
         
-        toiletStart:         new BABYLON.Vector3(-0.86,  7.06,  -7.00),
+        toiletStart:          new BABYLON.Vector3(-0.86,  7.06,  -7.00),
         
-        heinrichplatz:       new BABYLON.Vector3(-1.00,  5.50,   0.00),
-        heinrichplatzMoving: new BABYLON.Vector3(-0.90,  5.40,   0.10),
+        heinrichplatzMovingOut: new BABYLON.Vector3(-0.90,  5.40,   0.10),
+        heinrichplatz:          new BABYLON.Vector3(-1.00,  5.50,   0.00),        
+        heinrichplatzMovingIn:  new BABYLON.Vector3(-1.00,  5.50,   0.50),
         
-        punks:               new BABYLON.Vector3(-0.50,  5.00,   2.30),
-        punksMoving:         new BABYLON.Vector3(-0.50,  5.00,   2.70),
+        punks:                new BABYLON.Vector3(-0.50,  5.00,   2.30),
+        punksMoving:          new BABYLON.Vector3(-0.50,  5.00,   2.70),
         
-        police:              new BABYLON.Vector3(-0.50,  5.00,   0.50),
-        policeMoving:        new BABYLON.Vector3(-1.00,  5.50,   0.00),
+        police:               new BABYLON.Vector3(-0.50,  5.00,   0.50),
+        policeMoving:         new BABYLON.Vector3(-1.00,  5.50,   0.00),
         
-        charlottenburg:      new BABYLON.Vector3(19.00,  5.50,   0.00) // x + 20
+        charlottenburg:       new BABYLON.Vector3(19,  5.50,   0.00), // x + 20
+        charlottenburgMoving: new BABYLON.Vector3(19,  5.50,   0.50)
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
@@ -47,7 +49,7 @@ export function camera() {
         value: vectors.heinrichplatz 
     },{ 
         frame: Timeline.camera.punksZoomStart, 
-        value: vectors.heinrichplatzMoving 
+        value: vectors.heinrichplatzMovingOut
     },{ 
         frame: Timeline.camera.punksZoomEnd, 
         value: vectors.punks 
@@ -61,14 +63,17 @@ export function camera() {
         frame: Timeline.camera.charlottenburg - 1, 
         value: vectors.policeMoving
     },{
-        frame: Timeline.camera.charlottenburg, 
+        frame: Timeline.camera.charlottenburg,
         value: vectors.charlottenburg
     },{
         frame: Timeline.camera.heinrichplatz2 - 1, 
-        value: vectors.charlottenburg
+        value: vectors.charlottenburgMoving
     },{
         frame: Timeline.camera.heinrichplatz2, 
         value: vectors.heinrichplatz
+    },{
+        frame: Timeline.camera.heinrichplatzEnd, 
+        value: vectors.heinrichplatzMovingIn
     }],{ // easing
         type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
@@ -488,6 +493,24 @@ export function aliens() {
                 callback: function() {
                     Anarchia.stopJumping(alien);
                 }
+            },
+            { 
+                frame: Timeline.alien[i].charlottenburgPogoStart, 
+                callback: function() {
+                    Anarchia.stopJumping(alien);
+                    Anarchia.randomJumping(alien, {
+                        minHeight: 1,
+                        maxHeight: 1.5,
+                        minPause: 1.1,
+                        maxPause: 1.2
+                    });
+                }
+            },
+            { 
+                frame: Timeline.alien[i].charlottenburgPogoEnd, 
+                callback: function() {
+                    Anarchia.stopJumping(alien);
+                }
             }
         ]);
         
@@ -625,7 +648,7 @@ export function punks() {
             frame: Timeline.punks[i].jumpIn[4].start - jumpStartOffset, 
             callback: function() { Anarchia.jump(punk, { height: 0.1 }); }
         },{ 
-            frame: Timeline.alien[i].policePogoStart, 
+            frame: Timeline.punks[i].policePogoStart, 
             callback: function() {
                 Anarchia.stopJumping(punk);
                 Anarchia.randomJumping(punk, {
@@ -635,9 +658,24 @@ export function punks() {
                     maxPause: 1.2
                 });
             }
-        },
-        { 
-            frame: Timeline.alien[i].policePogoEnd, 
+        },{ 
+            frame: Timeline.punks[i].policePogoEnd, 
+            callback: function() {
+                Anarchia.stopJumping(punk);
+            }
+        },{ 
+            frame: Timeline.punks[i].charlottenburgPogoStart, 
+            callback: function() {
+                Anarchia.stopJumping(punk);
+                Anarchia.randomJumping(punk, {
+                    minHeight: 1,
+                    maxHeight: 1.5,
+                    minPause: 1.1,
+                    maxPause: 1.2
+                });
+            }
+        },{ 
+            frame: Timeline.punks[i].charlottenburgPogoEnd, 
             callback: function() {
                 Anarchia.stopJumping(punk);
             }
@@ -904,9 +942,15 @@ export function police() {
                 },{ 
                     frame: Timeline.camera.charlottenburg,
                     value: beam
+                },{ 
+                    frame: Timeline.camera.heinrichplatz2 - 1,
+                    value: beam
+                },{ 
+                    frame: Timeline.camera.heinrichplatz2,
+                    value: end
                 },{
                     frame: Anarchia.END_FRAME, 
-                    value: beam 
+                    value: end 
                 }
             ],
             { // easing
@@ -959,11 +1003,22 @@ export function police() {
                         group.play(true);
                     }
                 },
-                { // remove clothes
+                { // remove uniform
                     frame: Timeline.camera.charlottenburg,
                     callback: function() {
                         const texture = new BABYLON.Texture(
                                 "textures/humans/police-nipples.png", 
+                                Anarchia.scene
+                        );
+                        texture.hasAlpha = true;
+                        policeman.material.diffuseTexture = texture;
+                    } 
+                },
+                { // change to only uniform
+                    frame: Timeline.camera.heinrichplatz2,
+                    callback: function() {
+                        const texture = new BABYLON.Texture(
+                                "textures/humans/police-uniform.png", 
                                 Anarchia.scene
                         );
                         texture.hasAlpha = true;
