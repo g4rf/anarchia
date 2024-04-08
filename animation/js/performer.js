@@ -73,11 +73,14 @@ export function camera() {
         frame: Timeline.camera.heinrichplatz2, 
         value: vectors.heinrichplatz
     },{
-        frame: Timeline.camera.heinrichplatzEnd, 
+        frame: Timeline.cinema.show, 
         value: vectors.heinrichplatzMovingIn
     },{
+        frame: Timeline.cinema.hide, 
+        value: vectors.cinemaMoving
+    },{
         frame: Anarchia.END_FRAME, 
-        value: vectors.heinrichplatzMovingIn
+        value: vectors.cinemaMoving
     }],{ // easing
         type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
