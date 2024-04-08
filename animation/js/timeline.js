@@ -36,6 +36,12 @@ export default {
         }
     },
     
+    // cinema
+    cinema: {
+        show: 105 * Anarchia.FRAME_RATE,
+        hide: 127 * Anarchia.FRAME_RATE
+    },
+    
     // ufo fly
     ufoflyPositionStart:   4 * Anarchia.FRAME_RATE,    
     ufoflyPositionLanded: 11 * Anarchia.FRAME_RATE,

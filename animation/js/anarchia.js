@@ -207,6 +207,15 @@ export default {
             vScale: 1,
             vOffset: 0,
             
+            video: "",
+            useMipmap: false,
+            invertY: false,
+            independentVideoSource: true,
+            autoPlay: false,
+            loop: false,
+            muted: false,
+            poster: "",
+            
             visible: true
         };
         for(const property in config) {
@@ -228,8 +237,10 @@ export default {
         mesh.rotation.y = param.rotationY;
         mesh.rotation.z = param.rotationZ;
         
-        if(param.texture != false) {
-            const material = new BABYLON.StandardMaterial(param.name + "-material");
+        if(param.texture != false) 
+        {
+            const material = 
+                    new BABYLON.StandardMaterial(param.name + "-material");
             material.diffuseTexture = new BABYLON.Texture(param.texture);
             material.diffuseTexture.hasAlpha = param.alpha;
             material.diffuseTexture.uScale = param.uScale;
@@ -237,6 +248,29 @@ export default {
             material.diffuseTexture.vScale = param.vScale;
             material.diffuseTexture.vOffset = param.vOffset;
 
+            mesh.material = material;
+        }
+        else if (param.video != false) 
+        {
+            const material = 
+                    new BABYLON.StandardMaterial(param.name + "-material");
+             const videoTexture = new BABYLON.VideoTexture(
+                param.name + "-video", 
+                param.video, 
+                this.scene, 
+                param.useMipmap,
+                param.invertY,
+                BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
+                {
+                    independentVideoSource: param.independentVideoSource,
+                    autoPlay: param.autoPlay,
+                    loop: param.loop,
+                    muted: param.muted,
+                    poster: param.poster
+                }
+            );
+            material.diffuseTexture = videoTexture;
+            
             mesh.material = material;
         }
         

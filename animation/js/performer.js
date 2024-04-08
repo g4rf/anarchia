@@ -16,6 +16,7 @@ export function camera() {
         heinrichplatzMovingOut: new BABYLON.Vector3(-0.90,  5.40,   0.10),
         heinrichplatz:          new BABYLON.Vector3(-1.00,  5.50,   0.00),        
         heinrichplatzMovingIn:  new BABYLON.Vector3(-1.00,  5.50,   0.50),
+        cinemaMoving:           new BABYLON.Vector3(-1.00,  5.50,   1.00),
         
         punks:                new BABYLON.Vector3(-0.50,  5.00,   2.30),
         punksMoving:          new BABYLON.Vector3(-0.50,  5.00,   2.70),
@@ -28,7 +29,7 @@ export function camera() {
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
-    
+            
     Anarchia.createAnimation(camera, {
         name: "moveCamera",
         property: "position",
@@ -73,6 +74,9 @@ export function camera() {
         value: vectors.heinrichplatz
     },{
         frame: Timeline.camera.heinrichplatzEnd, 
+        value: vectors.heinrichplatzMovingIn
+    },{
+        frame: Anarchia.END_FRAME, 
         value: vectors.heinrichplatzMovingIn
     }],{ // easing
         type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
@@ -380,6 +384,54 @@ function beam(controlpanel) {
     }
     
     return events;
+}
+
+/**
+ * Creates the cinema for the police violence.
+ * @returns {BABYLON.Mesh}
+ */
+export function cinema() {    
+    const height = 1.4;
+    const width = height * 1920 / 1080;
+    const x = -1;
+    const y = 5.5;
+    const z = 2;
+    
+    const cinema = Anarchia.createPlane({
+        name: "cinema",
+        video: "video/creepy-stone.mp4",
+        height: height,
+        width: width,
+        positionX: x,
+        positionY: y,
+        positionZ: z,
+        visible: false
+    });
+    
+    Anarchia.createAnimation(cinema, {
+        name: "showCinema",
+        property: "position.x"
+    },[ // keys
+        { frame: Timeline.filmStart, value: x },
+        { frame: Anarchia.END_FRAME, value: x }
+    ],{ // easing
+        type: new BABYLON.ExponentialEase(2),
+        mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
+    },[{ 
+        frame: Timeline.cinema.show,
+        callback: function() {
+            cinema.isVisible = true;
+            cinema.material.diffuseTexture.video.play();
+        }
+    },{ 
+        frame: Timeline.cinema.hide,
+        callback: function() {
+            cinema.isVisible = false;
+        }
+    }
+    ]);
+    
+    return cinema;
 }
 
 /**
