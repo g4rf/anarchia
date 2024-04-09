@@ -31,6 +31,8 @@ The music for the German cover »Autonomia« and the English version »Anarchia�
 - Visual Adivce
   - [Omani Frei](https://omanifrei.com)
 
+Images and videos are taken from [Pixabay and contributors](https://pixabay.com). Video from space by [Tomislav Jakupec](https://pixabay.com/users/tommyvideo-3092371/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=6044) from [Pixabay](https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=6044).
+
 ## Funding
 
 The music and video is free under Creative Commons (see [LICENSE.md](LICENSE.md). Nevertheless I'm happy to receive some fundings via [PayPal](https://paypal.me/g4rf). You may also buy some of my stuff in the [Etsy shop of the Neustadt Art Kollektiv](https://www.etsy.com/shop/NeustadtArtKollektiv).
