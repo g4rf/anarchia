@@ -254,7 +254,7 @@ export default {
         {
             const material = 
                     new BABYLON.StandardMaterial(param.name + "-material");
-             const videoTexture = new BABYLON.VideoTexture(
+            const videoTexture = new BABYLON.VideoTexture(
                 param.name + "-video", 
                 param.video, 
                 this.scene, 

@@ -17,7 +17,9 @@ export default {
         policeZoomEnd:       60 * Anarchia.FRAME_RATE,
         charlottenburg:      85.4 * Anarchia.FRAME_RATE,
         heinrichplatz2:      94.0 * Anarchia.FRAME_RATE,
-        heinrichplatzEnd:   106.0 * Anarchia.FRAME_RATE
+        heinrichplatzEnd:   106.0 * Anarchia.FRAME_RATE,
+        toiletEnd:          141.0 * Anarchia.FRAME_RATE,
+        end:                150.0 * Anarchia.FRAME_RATE
     },
     
     // beaming the pigs
@@ -39,7 +41,8 @@ export default {
     // cinema
     cinema: {
         show: 105 * Anarchia.FRAME_RATE,
-        hide: 127 * Anarchia.FRAME_RATE
+        rewind: 127 * Anarchia.FRAME_RATE,
+        hide: 139 * Anarchia.FRAME_RATE
     },
     
     // ufo fly
@@ -183,7 +186,9 @@ export default {
     // humans
     humans: {
         jitterStart:   15.1 * Anarchia.FRAME_RATE,
-        escapeStart:   52 * Anarchia.FRAME_RATE
+        escapeStart:   52 * Anarchia.FRAME_RATE,
+        charlottenburgPogoStart: 95 * Anarchia.FRAME_RATE,
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
     },
     
     // clouds

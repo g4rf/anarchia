@@ -25,7 +25,9 @@ export function camera() {
         policeMoving:         new BABYLON.Vector3(-1.00,  5.50,   0.00),
         
         charlottenburg:       new BABYLON.Vector3(19,  5.50,   0.00), // x + 20
-        charlottenburgMoving: new BABYLON.Vector3(19,  5.50,   0.50)
+        charlottenburgMoving: new BABYLON.Vector3(19,  5.50,   0.50),
+        
+        end:                  new BABYLON.Vector3(0.00, 17.00, -500)
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
@@ -76,15 +78,26 @@ export function camera() {
         frame: Timeline.cinema.show, 
         value: vectors.heinrichplatzMovingIn
     },{
-        frame: Timeline.cinema.hide, 
+        frame: Timeline.cinema.rewind, 
         value: vectors.cinemaMoving
     },{
+        frame: Timeline.cinema.hide, 
+        value: vectors.heinrichplatz
+    },{
+        frame: Timeline.camera.toiletEnd, 
+        value: vectors.toiletStart 
+    },{
+        frame: Timeline.camera.end, 
+        value: vectors.end 
+    },{
         frame: Anarchia.END_FRAME, 
-        value: vectors.cinemaMoving
-    }],{ // easing
+        value: vectors.heinrichplatz
+    }],
+    { // easing
         type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
-    },[ // events
+    },
+    [ // events
     ]);   
     
     return camera;
@@ -223,10 +236,10 @@ export function controlpanel() {
     
     const height = 0.7;
     const width = height * 1262 / 1600;
-    const yStart = 4.55;
-    const yEnd = 4.85;
-    const x = -3.45;
-    const z = 5.00001;
+    const yStart = 4.8;
+    const yEnd = 5;
+    const x = -2.95;
+    const z = 4.00001;
     
     // the console
     const controlpanel = Anarchia.createPlane({
@@ -396,9 +409,9 @@ function beam(controlpanel) {
 export function cinema() {    
     const height = 1.4;
     const width = height * 1920 / 1080;
-    const x = -1;
-    const y = 5.5;
-    const z = 2;
+    const x = 0;
+    const y = 0;
+    const z = 1.5;
     
     const cinema = Anarchia.createPlane({
         name: "cinema",
@@ -411,6 +424,34 @@ export function cinema() {
         visible: false
     });
     
+    // bound to camera
+    cinema.setParent(Anarchia.scene.activeCamera);
+    Anarchia.scene.registerBeforeRender(function() {
+        if(cinema.isVisible) {
+            cinema.position = new BABYLON.Vector3(x, y, z);
+        }
+    });
+    
+    // rewind film; set WebGL extension for alpha channel video
+    Anarchia.canvas.getContext("webgl2").getExtension("EXT_float_blend");
+    const rewindMaterial = new BABYLON.StandardMaterial("rewind-material");
+    const rewindTexture = new BABYLON.VideoTexture(
+        "rewind-video", 
+        "video/camera-rewind.webm", 
+        Anarchia.scene, 
+        false, // use mipmap
+        false, // invert y
+        BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
+        {
+            autoPlay: false,
+            loop: false
+        }
+    );            
+    rewindMaterial.emissiveTexture = rewindTexture;
+    rewindMaterial.opacityTexture = rewindTexture;
+    rewindMaterial.disableLighting = true;
+            
+    // meta animation for setting video starts on event
     Anarchia.createAnimation(cinema, {
         name: "showCinema",
         property: "position.x"
@@ -424,7 +465,15 @@ export function cinema() {
         frame: Timeline.cinema.show,
         callback: function() {
             cinema.isVisible = true;
+            cinema.position = new BABYLON.Vector3(0, 0 , 0);
             cinema.material.diffuseTexture.video.play();
+        }
+    },{ 
+        frame: Timeline.cinema.rewind,
+        callback: function() {
+            cinema.isVisible = true;
+            cinema.material = rewindMaterial;
+            cinema.material.emissiveTexture.video.play();
         }
     },{ 
         frame: Timeline.cinema.hide,
@@ -843,6 +892,23 @@ export function humans() {
                         minPause: 0.1,
                         maxPause: 0.2
                     });
+                }
+            },{ 
+                frame: Timeline.humans.charlottenburgPogoStart, 
+                callback: function() {
+                    if(i == 0) {
+                        Anarchia.randomJumping(human, {
+                            minHeight: 1,
+                            maxHeight: 1.5,
+                            minPause: 1.1,
+                            maxPause: 1.2
+                        });
+                    }
+                }
+            },{ 
+                frame: Timeline.humans.charlottenburgPogoEnd, 
+                callback: function() {
+                    Anarchia.stopJumping(human);
                 }
             }
         ]);
