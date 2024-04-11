@@ -73,6 +73,7 @@ Events.bind();
     if(window.location.hash == "#inspector") {
          width -= 600;
          Anarchia.scene.debugLayer.show({
+            globalRoot: $("body").get(0),
             overlay: true,
             enablePopup: false,
             embedMode: false // one pane left, one right
@@ -80,7 +81,7 @@ Events.bind();
     }
      
     let zoom = width / 1920;
-    $("#render").css({
+    $("#render, video").css({
         "transform": "scale(" + zoom + ")"
     });
 })();

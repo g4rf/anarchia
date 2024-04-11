@@ -142,23 +142,32 @@ export default {
         });        
         
         Sounds.song( // load and start music
-        
-            // screen on    
-            function() {
-            
-                // render screen
-                self.engine.runRenderLoop(function () {
-                    self.scene.render();
-                });
+            function() {                
                 
-                // animations on
-                self.animations.forEach(function(mesh) {
-                    self.scene.beginAnimation(mesh,
-                            self.START_FRAME, self.END_FRAME);
-                });
+                let readyVideos = function() {
+                    for (const video of document.getElementsByTagName("video")) {
+                        if(video.readyState != 4) { // HAVE_ENOUGH_DATA
+                            console.log("Waiting for video", video);
+                            window.setTimeout(readyVideos, 100);
+                            return;
+                        }
+                    }
+                    
+                    // render screen
+                    self.engine.runRenderLoop(function () {
+                        self.scene.render();
+                    });
 
-                // hide buttons
-                self.hideLoading();
+                    // animations on
+                    self.animations.forEach(function(mesh) {
+                        self.scene.beginAnimation(mesh,
+                                self.START_FRAME, self.END_FRAME);
+                    });
+
+                    // hide buttons
+                    self.hideLoading();
+                };
+                readyVideos();
             }
         );
     },

@@ -13,7 +13,9 @@ screen {
   justify-content: center;
   align-items: center;
 }
-#render {
+screen #render,
+screen video {
+  display: block;
   width: 1920px;
   height: 1080px;
   background-color: #333;
@@ -47,6 +49,6 @@ control {
 }
 /* helper classes */
 .hidden {
-  display: none;
-  visibility: hidden;
+  display: none !important;
+  visibility: hidden !important;
 }

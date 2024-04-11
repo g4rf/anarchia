@@ -406,7 +406,39 @@ function beam(controlpanel) {
  * Creates the cinema for the police violence.
  * @returns {BABYLON.Mesh}
  */
-export function cinema() {    
+export function cinema() {
+    /*Anarchia.createAnimation(cinema, {
+        name: "showCinema",
+        property: "position.x"
+    },[ // keys
+        { frame: Timeline.filmStart, value: x },
+        { frame: Anarchia.END_FRAME, value: x }
+    ],{ // easing
+        type: new BABYLON.ExponentialEase(2),
+        mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
+    },[{ 
+        frame: Timeline.cinema.show,
+        callback: function() {
+            cinema.isVisible = true;
+            cinema.position = new BABYLON.Vector3(0, 0 , 0);
+            cinema.material.diffuseTexture.video.play();
+        }
+    },{ 
+        frame: Timeline.cinema.rewind,
+        callback: function() {
+            cinema.isVisible = true;
+            cinema.material = rewindMaterial;
+            cinema.material.emissiveTexture.video.play();
+        }
+    },{ 
+        frame: Timeline.cinema.hide,
+        callback: function() {
+            cinema.isVisible = false;
+        }
+    }
+    ]);*/
+    
+    return;
     const height = 1.4;
     const width = height * 1920 / 1080;
     const x = 0;
