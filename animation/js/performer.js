@@ -98,7 +98,23 @@ export function camera() {
         mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
     },
     [ // events
-    ]);   
+    { // cinema: start pigs violence
+        frame: Timeline.cinema.show,
+        callback: function() {
+            $("#creepy-stone").removeClass("hidden").get(0).play();
+        }
+    },{ // cinema: show rewind
+        frame: Timeline.cinema.rewind,
+        callback: function() {
+            $("#creepy-stone").addClass("hidden");
+            $("#camera-rewind").removeClass("hidden").get(0).play();
+        }
+    },{ // cinema: hide
+        frame: Timeline.cinema.hide,
+        callback: function() {
+            $("#camera-rewind").addClass("hidden");
+        }
+    }]);   
     
     return camera;
 }
@@ -400,122 +416,6 @@ function beam(controlpanel) {
     }
     
     return events;
-}
-
-/**
- * Creates the cinema for the police violence.
- * @returns {BABYLON.Mesh}
- */
-export function cinema() {
-    /*Anarchia.createAnimation(cinema, {
-        name: "showCinema",
-        property: "position.x"
-    },[ // keys
-        { frame: Timeline.filmStart, value: x },
-        { frame: Anarchia.END_FRAME, value: x }
-    ],{ // easing
-        type: new BABYLON.ExponentialEase(2),
-        mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
-    },[{ 
-        frame: Timeline.cinema.show,
-        callback: function() {
-            cinema.isVisible = true;
-            cinema.position = new BABYLON.Vector3(0, 0 , 0);
-            cinema.material.diffuseTexture.video.play();
-        }
-    },{ 
-        frame: Timeline.cinema.rewind,
-        callback: function() {
-            cinema.isVisible = true;
-            cinema.material = rewindMaterial;
-            cinema.material.emissiveTexture.video.play();
-        }
-    },{ 
-        frame: Timeline.cinema.hide,
-        callback: function() {
-            cinema.isVisible = false;
-        }
-    }
-    ]);*/
-    
-    return;
-    const height = 1.4;
-    const width = height * 1920 / 1080;
-    const x = 0;
-    const y = 0;
-    const z = 1.5;
-    
-    const cinema = Anarchia.createPlane({
-        name: "cinema",
-        video: "video/creepy-stone.mp4",
-        height: height,
-        width: width,
-        positionX: x,
-        positionY: y,
-        positionZ: z,
-        visible: false
-    });
-    
-    // bound to camera
-    cinema.setParent(Anarchia.scene.activeCamera);
-    Anarchia.scene.registerBeforeRender(function() {
-        if(cinema.isVisible) {
-            cinema.position = new BABYLON.Vector3(x, y, z);
-        }
-    });
-    
-    // rewind film; set WebGL extension for alpha channel video
-    Anarchia.canvas.getContext("webgl2").getExtension("EXT_float_blend");
-    const rewindMaterial = new BABYLON.StandardMaterial("rewind-material");
-    const rewindTexture = new BABYLON.VideoTexture(
-        "rewind-video", 
-        "video/camera-rewind.webm", 
-        Anarchia.scene, 
-        false, // use mipmap
-        false, // invert y
-        BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
-        {
-            autoPlay: false,
-            loop: false
-        }
-    );            
-    rewindMaterial.emissiveTexture = rewindTexture;
-    rewindMaterial.opacityTexture = rewindTexture;
-    rewindMaterial.disableLighting = true;
-            
-    // meta animation for setting video starts on event
-    Anarchia.createAnimation(cinema, {
-        name: "showCinema",
-        property: "position.x"
-    },[ // keys
-        { frame: Timeline.filmStart, value: x },
-        { frame: Anarchia.END_FRAME, value: x }
-    ],{ // easing
-        type: new BABYLON.ExponentialEase(2),
-        mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
-    },[{ 
-        frame: Timeline.cinema.show,
-        callback: function() {
-            cinema.isVisible = true;
-            cinema.position = new BABYLON.Vector3(0, 0 , 0);
-            cinema.material.diffuseTexture.video.play();
-        }
-    },{ 
-        frame: Timeline.cinema.rewind,
-        callback: function() {
-            cinema.isVisible = true;
-            cinema.material = rewindMaterial;
-            cinema.material.emissiveTexture.video.play();
-        }
-    },{ 
-        frame: Timeline.cinema.hide,
-        callback: function() {
-            cinema.isVisible = false;
-        }
-    }
-    ]);
-    
-    return cinema;
 }
 
 /**

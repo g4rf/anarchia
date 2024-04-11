@@ -41,13 +41,11 @@ Landscape.heinrichplatz();
 Landscape.charlottenburg();
 
 /** performer **/
-Performer.camera();
+Performer.camera(); // also holds the cinema
 
 Performer.ufoFly();
 Performer.ufoLand();
 Performer.controlpanel();
-
-Performer.cinema();
 
 Performer.aliens();
 Performer.humans();

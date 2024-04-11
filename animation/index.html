@@ -8,11 +8,12 @@
         
     <screen>
         <!-- canvas -->
-        <canvas class="hidden" id="render"></canvas>
+        <canvas id="render"></canvas>
         
         <!-- police violence -->
         <video src="video/creepy-stone.mp4"
-               class=""
+               id="creepy-stone"
+               class="hidden"
                preload="auto"
                playsinline="true"
                width="1920"
@@ -22,6 +23,16 @@
         ></video>   
         
         <!-- rewind -->
+        <video src="video/camera-rewind.webm"
+               id="camera-rewind"
+               class="hidden"
+               preload="auto"
+               playsinline="true"
+               width="1920"
+               height="1080"
+               disablepictureinpicture="true"
+               disableremoteplayback="true"
+        ></video>  
     </screen>
     
     <control>

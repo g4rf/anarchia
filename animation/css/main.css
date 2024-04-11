@@ -7,18 +7,21 @@ body {
 screen {
   z-index: -1;
   position: fixed;
-  display: flex;
+  display: grid;
+  grid-template: "screen";
   width: 100vw;
   height: 100vh;
-  justify-content: center;
+  justify-items: center;
   align-items: center;
+  justify-content: center;
+  align-content: center;
 }
 screen #render,
 screen video {
+  grid-area: screen;
   display: block;
   width: 1920px;
   height: 1080px;
-  background-color: #333;
 }
 control {
   position: fixed;

@@ -143,7 +143,7 @@ export default {
         
         Sounds.song( // load and start music
             function() {                
-                
+
                 let readyVideos = function() {
                     for (const video of document.getElementsByTagName("video")) {
                         if(video.readyState != 4) { // HAVE_ENOUGH_DATA
