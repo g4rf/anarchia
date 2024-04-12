@@ -15,6 +15,8 @@ export default {
         punksZoomEnd:        42 * Anarchia.FRAME_RATE,
         policeZoomStart:     54 * Anarchia.FRAME_RATE,
         policeZoomEnd:       60 * Anarchia.FRAME_RATE,
+        stool:               74 * Anarchia.FRAME_RATE,
+        control:             79 * Anarchia.FRAME_RATE,
         charlottenburg:      85.4 * Anarchia.FRAME_RATE,
         heinrichplatz2:      94.0 * Anarchia.FRAME_RATE,
         heinrichplatzEnd:   106.0 * Anarchia.FRAME_RATE,
@@ -31,17 +33,19 @@ export default {
     },
     
     // console/joystick
-    controlpanel: {
+    control: {
         move: {
             start:  79 * Anarchia.FRAME_RATE,
-            end:    82 * Anarchia.FRAME_RATE
+            end:    82 * Anarchia.FRAME_RATE,
+            down:   128 * Anarchia.FRAME_RATE,
+            hide:   129 * Anarchia.FRAME_RATE
         }
     },
     
     // cinema
     cinema: {
         show: 105 * Anarchia.FRAME_RATE,
-        rewind: 127 * Anarchia.FRAME_RATE,
+        rewind: 128 * Anarchia.FRAME_RATE,
         hide: 139 * Anarchia.FRAME_RATE
     },
     
@@ -54,6 +58,10 @@ export default {
     ufolandedPositionLanded: 15 * Anarchia.FRAME_RATE,
     ufolandedOpenTop:        15 * Anarchia.FRAME_RATE,
     ufolandedTopOpened:      19 * Anarchia.FRAME_RATE,
+    ufolandedCloseTop:      137 * Anarchia.FRAME_RATE,
+    ufolandedTopClosed:     138 * Anarchia.FRAME_RATE,
+    ufolandedLiftupStart:   138 * Anarchia.FRAME_RATE,
+    ufolandedLiftupEnd:     139 * Anarchia.FRAME_RATE,
     
     alien: [{
         // alien 0
@@ -64,7 +72,8 @@ export default {
         policePogoStart: 62 * Anarchia.FRAME_RATE,
         policePogoEnd:   73 * Anarchia.FRAME_RATE,
         charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        jumpIn:         133 * Anarchia.FRAME_RATE
     },{ // alien 1
         jumpOut:         19.1 * Anarchia.FRAME_RATE,
         randomJumps:     21.1 * Anarchia.FRAME_RATE,
@@ -73,7 +82,8 @@ export default {
         policePogoStart: 64.0 * Anarchia.FRAME_RATE,
         policePogoEnd:   73.0 * Anarchia.FRAME_RATE,
         charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        jumpIn:         134.1 * Anarchia.FRAME_RATE
     },{ // alien 2
         jumpOut:         19.2 * Anarchia.FRAME_RATE,
         randomJumps:     21.2 * Anarchia.FRAME_RATE,
@@ -82,7 +92,8 @@ export default {
         policePogoStart: 64.0 * Anarchia.FRAME_RATE,
         policePogoEnd:   73.0 * Anarchia.FRAME_RATE,
         charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        jumpIn:         134.2 * Anarchia.FRAME_RATE
     },{ // alien 3
         jumpOut:         19.3 * Anarchia.FRAME_RATE,
         randomJumps:     21.3 * Anarchia.FRAME_RATE,
@@ -91,7 +102,8 @@ export default {
         policePogoStart: 63.5 * Anarchia.FRAME_RATE,
         policePogoEnd:   72.5 * Anarchia.FRAME_RATE,
         charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        jumpIn:         134.8 * Anarchia.FRAME_RATE
     },{ // alien 4
         jumpOut:         19.4 * Anarchia.FRAME_RATE,
         randomJumps:     21.4 * Anarchia.FRAME_RATE,
@@ -100,7 +112,8 @@ export default {
         policePogoStart: 63.5 * Anarchia.FRAME_RATE,
         policePogoEnd:   72.5 * Anarchia.FRAME_RATE,
         charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        jumpIn:         135.5 * Anarchia.FRAME_RATE
     },{ // alien 5
         jumpOut:         19.5 * Anarchia.FRAME_RATE,
         randomJumps:     21.5 * Anarchia.FRAME_RATE,
@@ -109,7 +122,8 @@ export default {
         policePogoStart: 63.0 * Anarchia.FRAME_RATE,
         policePogoEnd:   73.0 * Anarchia.FRAME_RATE,
         charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        jumpIn:         136.0 * Anarchia.FRAME_RATE
     },{ // alien 6
         jumpOut:         19.6 * Anarchia.FRAME_RATE,
         randomJumps:     21.6 * Anarchia.FRAME_RATE,
@@ -118,16 +132,8 @@ export default {
         policePogoStart: 63.0 * Anarchia.FRAME_RATE,
         policePogoEnd:   72.5 * Anarchia.FRAME_RATE,
         charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
-    },{ // alien 7
-        jumpOut:         19.7 * Anarchia.FRAME_RATE,
-        randomJumps:     21.7 * Anarchia.FRAME_RATE,
-        pogoStart:       31.5 * Anarchia.FRAME_RATE,
-        pogoEnd:         41.8 * Anarchia.FRAME_RATE,
-        policePogoStart: 63.5 * Anarchia.FRAME_RATE,
-        policePogoEnd:   72.8 * Anarchia.FRAME_RATE,
-        charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        jumpIn:         136.4 * Anarchia.FRAME_RATE
     }],
 
     // punks
@@ -152,7 +158,23 @@ export default {
         policePogoStart: 64 * Anarchia.FRAME_RATE,
         policePogoEnd:   73 * Anarchia.FRAME_RATE,
         charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        jumpOut: [{
+            start:    131 * Anarchia.FRAME_RATE,
+            end:      131.26 * Anarchia.FRAME_RATE
+        },{
+            start:    131.66 * Anarchia.FRAME_RATE,
+            end:      131.92 * Anarchia.FRAME_RATE
+        },{
+            start:    132.32 * Anarchia.FRAME_RATE,
+            end:      132.55 * Anarchia.FRAME_RATE
+        },{
+            start:    133.32 * Anarchia.FRAME_RATE,
+            end:      133.48 * Anarchia.FRAME_RATE
+        },{
+            start:    134.32 * Anarchia.FRAME_RATE,
+            end:      134.48 * Anarchia.FRAME_RATE
+        }]
     },{
         // punk 1
         jumpIn: [{
@@ -174,7 +196,23 @@ export default {
         policePogoStart: 64 * Anarchia.FRAME_RATE,
         policePogoEnd:   73 * Anarchia.FRAME_RATE,
         charlottenburgPogoStart: 93 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        jumpOut: [{
+            start:    130.1 * Anarchia.FRAME_RATE,
+            end:      130.34 * Anarchia.FRAME_RATE
+        },{
+            start:    130.64 * Anarchia.FRAME_RATE,
+            end:      130.94 * Anarchia.FRAME_RATE
+        },{
+            start:    131.41 * Anarchia.FRAME_RATE,
+            end:      131.64 * Anarchia.FRAME_RATE
+        },{
+            start:    132.7 * Anarchia.FRAME_RATE,
+            end:      132.83 * Anarchia.FRAME_RATE
+        },{
+            start:    133.69 * Anarchia.FRAME_RATE,
+            end:      133.82 * Anarchia.FRAME_RATE
+        }]
     }],
 
     // police
@@ -185,10 +223,12 @@ export default {
     
     // humans
     humans: {
-        jitterStart:   15.1 * Anarchia.FRAME_RATE,
-        escapeStart:   52 * Anarchia.FRAME_RATE,
-        charlottenburgPogoStart: 95 * Anarchia.FRAME_RATE,
-        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE
+        jitterStart:              15.1 * Anarchia.FRAME_RATE,
+        escapeStart:              52 * Anarchia.FRAME_RATE,
+        charlottenburgPogoStart:  95 * Anarchia.FRAME_RATE,
+        charlottenburgPogoEnd:   106 * Anarchia.FRAME_RATE,
+        returnStart:             129 * Anarchia.FRAME_RATE,
+        returnEnd:               132 * Anarchia.FRAME_RATE 
     },
     
     // clouds

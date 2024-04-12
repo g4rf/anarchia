@@ -360,7 +360,7 @@ export default {
      * @param {BABYLON.Mesh} mesh
      * @param {Object} [config] The parameters of the jump:
      *      [height=1] The height of the jump.
-     *      [end=0] The end position on y axis relativ to current position.
+     *      [end=0] The end position on y axis relative to current position.
      *      [speed=1] The animation speed factor.
      *      [bounces=1] The bounces at animation end, see BABYLON.BounceEase.
      *      [bounciness=5] The bounciness, see BABYLON.BounceEase.
@@ -596,9 +596,20 @@ export default {
     stopJitters: function(mesh) {
         if(typeof mesh.randomJitterTimers == "undefined") return;
         
-        // TODO: remove old timers from array to save memory
         mesh.randomJitterTimers.forEach(function(timer) {
             window.clearTimeout(timer);
+        });
+        mesh.randomJitterTimers = [];
+    },
+    
+    /**
+     * Stops all random jitters on all meshes.
+     */
+    stopAllJitters: function() {
+        const self = this;
+        
+        self.animations.forEach(function(mesh) {
+            self.stopJitters(mesh);
         });
     }
 }

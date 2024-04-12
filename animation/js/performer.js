@@ -9,25 +9,31 @@ import Timeline from "./timeline.js";
  */
 export function camera() {
     const vectors = {
-        start:                new BABYLON.Vector3( 0.00, 17.00, -55.00),
+        start: new BABYLON.Vector3( 0.00, 17.00, -55.00),
         
-        toiletStart:          new BABYLON.Vector3(-0.86,  7.06,  -7.00),
+        toiletStart: new BABYLON.Vector3(-0.86, 7.06, -7.00),
         
-        heinrichplatzMovingOut: new BABYLON.Vector3(-0.90,  5.40,   0.10),
-        heinrichplatz:          new BABYLON.Vector3(-1.00,  5.50,   0.00),        
-        heinrichplatzMovingIn:  new BABYLON.Vector3(-1.00,  5.50,   0.50),
-        cinemaMoving:           new BABYLON.Vector3(-1.00,  5.50,   1.00),
+        heinrichplatzMovingOut: new BABYLON.Vector3(-0.90, 5.40, 0.10),
+        heinrichplatz:          new BABYLON.Vector3(-1.00, 5.50, 0.00),        
+        heinrichplatzMovingIn:  new BABYLON.Vector3(-1.00, 5.50, 0.50),
+        cinemaMoving:           new BABYLON.Vector3(-1.00, 5.50, 1.00),
         
-        punks:                new BABYLON.Vector3(-0.50,  5.00,   2.30),
-        punksMoving:          new BABYLON.Vector3(-0.50,  5.00,   2.70),
+        punks:       new BABYLON.Vector3(-0.50, 5.00, 2.30),
+        punksMoving: new BABYLON.Vector3(-0.50, 5.00, 2.70),
         
-        police:               new BABYLON.Vector3(-0.50,  5.00,   0.50),
-        policeMoving:         new BABYLON.Vector3(-1.00,  5.50,   0.00),
+        police:       new BABYLON.Vector3(-0.50, 5.40, 0.50),
+        policeMoving: new BABYLON.Vector3(-1.00, 5.50, 0.00),
         
-        charlottenburg:       new BABYLON.Vector3(19,  5.50,   0.00), // x + 20
-        charlottenburgMoving: new BABYLON.Vector3(19,  5.50,   0.50),
+        stool:       new BABYLON.Vector3(1.00, 4.75, 2.90),
+        stoolMoving: new BABYLON.Vector3(0.95, 4.75, 2.80),
         
-        end:                  new BABYLON.Vector3(0.00, 17.00, -500)
+        control:       new BABYLON.Vector3(-2.95, 4.95, 2.80),
+        controlMoving: new BABYLON.Vector3(-3.05, 4.95, 2.90),
+        
+        charlottenburg:       new BABYLON.Vector3(19, 5.50, 0.20), // x + 20
+        charlottenburgMoving: new BABYLON.Vector3(19, 5.50, 0.60),
+        
+        end: new BABYLON.Vector3(0.00, 17.00, -500)
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
@@ -63,8 +69,20 @@ export function camera() {
         frame: Timeline.camera.policeZoomEnd, 
         value: vectors.police
     },{
-        frame: Timeline.camera.charlottenburg - 1, 
+        frame: Timeline.camera.stool - 0.2 * Anarchia.FRAME_RATE, 
         value: vectors.policeMoving
+    },{
+        frame: Timeline.camera.stool, 
+        value: vectors.stool
+    },{
+        frame: Timeline.camera.control - 0.2 * Anarchia.FRAME_RATE, 
+        value: vectors.stoolMoving
+    },{
+        frame: Timeline.camera.control, 
+        value: vectors.control
+    },{
+        frame: Timeline.camera.charlottenburg - 1, 
+        value: vectors.controlMoving
     },{
         frame: Timeline.camera.charlottenburg,
         value: vectors.charlottenburg
@@ -77,8 +95,13 @@ export function camera() {
     },{
         frame: Timeline.cinema.show, 
         value: vectors.heinrichplatzMovingIn
-    },{
-        frame: Timeline.cinema.rewind, 
+    },{ // during video we don't need no movement on canvas,
+        // so we save cpu time
+        frame: Timeline.cinema.rewind - 2, 
+        value: vectors.heinrichplatzMovingIn
+    },{ // for the replay effect set the camera 1 frame before the video
+        // starts to the new coordinates
+        frame: Timeline.cinema.rewind - 1, 
         value: vectors.cinemaMoving
     },{
         frame: Timeline.cinema.hide, 
@@ -102,10 +125,13 @@ export function camera() {
         frame: Timeline.cinema.show,
         callback: function() {
             $("#creepy-stone").removeClass("hidden").get(0).play();
+            Anarchia.stopAllJitters();
         }
     },{ // cinema: show rewind
         frame: Timeline.cinema.rewind,
         callback: function() {
+            Anarchia.stopAllJitters(); // TODO remove here
+                        
             $("#creepy-stone").addClass("hidden");
             $("#camera-rewind").removeClass("hidden").get(0).play();
         }
@@ -179,6 +205,7 @@ export function ufoLand() {
         positionY: startY,
         positionZ: z
     });    
+    
     // land animation
     Anarchia.createAnimation(bottom, {
         property: "position.y"
@@ -186,13 +213,14 @@ export function ufoLand() {
         { frame: Timeline.filmStart, value: startY },
         { frame: Timeline.ufolandedPositionStart, value: startY },
         { frame: Timeline.ufolandedPositionLanded, value: endY },
-        
-        { frame: Anarchia.END_FRAME, value: endY }
+        { frame: Timeline.ufolandedLiftupStart, value: endY },
+        { frame: Timeline.ufolandedLiftupEnd, value: startY },
+        { frame: Anarchia.END_FRAME, value: startY }
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
-        mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
+        mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
     });
-    
+        
     // the ufo top
     const top = Anarchia.createPlane({
         name: "ufoLandTop",
@@ -205,39 +233,61 @@ export function ufoLand() {
     });
     top.setParent(bottom);
         
-    // open top
-    const start = Timeline.ufolandedOpenTop;
-    const end = Timeline.ufolandedTopOpened;
+    // open & close top
+    const openStart = Timeline.ufolandedOpenTop;
+    const openEnd = Timeline.ufolandedTopOpened;
+    const closeStart = Timeline.ufolandedCloseTop;
+    const closeEnd = Timeline.ufolandedTopClosed;
+    
     const easing = {
         type: new BABYLON.ExponentialEase(10),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
     };
+    
     Anarchia.createAnimation(top, {
         property: "rotation.z"
     },[ // keys
-        { frame: 0, value: 0 * Math.PI },
-        { frame: start, value: 0 * Math.PI },
-        { frame: end, value: 0.5 * Math.PI },
-        
-        { frame: Anarchia.END_FRAME, value: 0.5 * Math.PI }
+        { 
+            frame: Timeline.filmStart,
+            value: 0 * Math.PI
+        },{ 
+            frame: openStart, 
+            value: 0 * Math.PI
+        },{
+            frame: openEnd,
+            value: 0.5 * Math.PI
+        },{ 
+            frame: closeStart, 
+            value: 0.5 * Math.PI
+        },{
+            frame: closeEnd,
+            value: 0 * Math.PI
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: 0 * Math.PI
+        }
     ], easing);
+    
     Anarchia.createAnimation(top, {
         property: "position.x"
     },[ // keys
-        { frame: 0, value: 0 },
-        { frame: start, value: 0 },
-        { frame: end, value: -0.113 },
-        
-        { frame: Anarchia.END_FRAME, value: -0.113 }
+        { frame: Timeline.filmStart,    value: 0        },
+        { frame: openStart,             value: 0        },
+        { frame: openEnd,               value: -0.113   },
+        { frame: closeStart,            value: -0.113   },
+        { frame: closeEnd,              value: 0        },
+        { frame: Anarchia.END_FRAME,    value: 0        }
     ], easing);
+    
     Anarchia.createAnimation(top, {
         property: "position.y"
     },[ // keys
-        { frame: 0, value: 0 },
-        { frame: start, value: 0 },
-        { frame: end, value: 0.43 },
-        
-        { frame: Anarchia.END_FRAME, value: 0.465 }
+        { frame: Timeline.filmStart,    value: 0    },
+        { frame: openStart,             value: 0    },
+        { frame: openEnd,               value: 0.43 },
+        { frame: closeStart,            value: 0.43 },
+        { frame: closeEnd,              value: 0    },
+        { frame: Anarchia.END_FRAME,    value: 0    }
     ], easing);
     
     return bottom;
@@ -247,8 +297,8 @@ export function ufoLand() {
  * Creates console (joystick).
  * @returns {BABYLON.Mesh}
  */
-export function controlpanel() {
-    const t = Timeline.controlpanel;
+export function control() {
+    const t = Timeline.control;
     
     const height = 0.7;
     const width = height * 1262 / 1600;
@@ -258,8 +308,8 @@ export function controlpanel() {
     const z = 4.00001;
     
     // the console
-    const controlpanel = Anarchia.createPlane({
-        name: "controlpanel",
+    const control = Anarchia.createPlane({
+        name: "control",
         texture: "textures/joystick.png",
         height: 0,
         width: 0,
@@ -274,7 +324,7 @@ export function controlpanel() {
     };
     
     // scale height (popup)
-    Anarchia.createAnimation(controlpanel, {
+    Anarchia.createAnimation(control, {
         property: "scaling.y"
     },[ // keys
         { 
@@ -287,13 +337,19 @@ export function controlpanel() {
             frame: t.move.start + 0.2 * Anarchia.FRAME_RATE,
             value: height 
         },{
-            frame: Anarchia.END_FRAME, 
+            frame: t.move.hide - 0.2 * Anarchia.FRAME_RATE, 
             value: height
+        },{
+            frame: t.move.hide, 
+            value: 0
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: 0
         }
     ], ease, []);
 
     // scale width (popup)
-    Anarchia.createAnimation(controlpanel, {
+    Anarchia.createAnimation(control, {
         property: "scaling.x"
     },[ // keys
         { 
@@ -306,13 +362,19 @@ export function controlpanel() {
             frame: t.move.start + 0.2 * Anarchia.FRAME_RATE,
             value: width 
         },{
+            frame: t.move.hide - 0.2 * Anarchia.FRAME_RATE, 
+            value: width
+        },{
+            frame: t.move.hide, 
+            value: 0
+        },{
             frame: Anarchia.END_FRAME, 
             value: width
         }
     ], ease, []);
 
-    // move up
-    Anarchia.createAnimation(controlpanel, {
+    // move up & down
+    Anarchia.createAnimation(control, {
         property: "position.y"
     },[ // keys
         { 
@@ -324,39 +386,45 @@ export function controlpanel() {
         },{ 
             frame: t.move.end,
             value: yEnd
+        },{ 
+            frame: t.move.down,
+            value: yEnd
+        },{ 
+            frame: t.move.hide,
+            value: yStart
         },{
             frame: Anarchia.END_FRAME, 
-            value: yEnd
+            value: yStart
         }
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
 
        // flash 
-    }, beam(controlpanel));
+    }, beam(control));
         
-    return controlpanel;
+    return control;
 }
 
 /**
  * Creates the flash light.
- * @param {BABYLON.Mesh} controlpanel
+ * @param {BABYLON.Mesh} control
  * @returns {Array} Array of frame events
  */
-function beam(controlpanel) {
+function beam(control) {
     const t = Timeline.beam;
     
     let light;
     let events = [
         { // flash
-            frame: t.flash,
+            frame: t.flash - 0.5 * Anarchia.FRAME_RATE,
             callback: function() {
                 const texture = new BABYLON.Texture(
                         "textures/joystick-glow.png", 
                         Anarchia.scene
                 );
                 texture.hasAlpha = true;
-                controlpanel.material.diffuseTexture = texture;
+                control.material.diffuseTexture = texture;
                 
                 light = new BABYLON.PointLight(
                     "flash", 
@@ -438,7 +506,7 @@ export function aliens() {
     
     for (let i = 0; i < parameters.length; i++) {
         
-        const size = Anarchia.random(0.3, 0.5);
+        const size = Anarchia.random(0.25, 0.45);
         let alien = Anarchia.createPlane({
             name: "alien_" + i,
             texture: "textures/aliens/alien_" + i + ".png",
@@ -475,43 +543,72 @@ export function aliens() {
         Anarchia.createAnimation(alien, {
             property: "position.x"
         },[ // keys
-            { frame: Timeline.filmStart, value: alien.position.x },
-            { frame: Timeline.alien[i].jumpOut 
-                        + 0.2 * Anarchia.FRAME_RATE,
-                value: alien.position.x },
-            { frame: Timeline.alien[i].jumpOut
-                        + 1 * Anarchia.FRAME_RATE,
-                value: alien.position.x + parameters[i].endX },
+            { 
+                frame: Timeline.filmStart, 
+                value: alien.position.x
+            },
+            
+            { // jump out 
+                frame: Timeline.alien[i].jumpOut + 0.2 * Anarchia.FRAME_RATE,
+                value: alien.position.x 
+            },
+            {   
+                frame: Timeline.alien[i].jumpOut + 1 * Anarchia.FRAME_RATE,
+                value: alien.position.x + parameters[i].endX 
+            },
+            
+            { // jump in 
+                frame: Timeline.alien[i].jumpIn + 0.1 * Anarchia.FRAME_RATE,
+                value: alien.position.x + parameters[i].endX 
+            },
+            {   
+                frame: Timeline.alien[i].jumpIn + 0.5 * Anarchia.FRAME_RATE,
+                value: 0 
+            },
 
-            { frame: Anarchia.END_FRAME, 
-                value: alien.position.x + parameters[i].endX }
+            { 
+                frame: Anarchia.END_FRAME, 
+                value: 0
+            }
         ], false, [
-            { frame: Timeline.alien[i].jumpOut, callback: function() {
-                Anarchia.jump(alien, { 
-                    height: Anarchia.random(0.5, 1.5),
-                    end: parameters[i].endY
-                });
-            }},
-            { frame: Timeline.alien[i].randomJumps, callback: function() {
-                Anarchia.randomJumping(alien, {
-                    minHeight: 0.1,
-                    maxHeight: 0.3,
-                    minPause: 2,
-                    maxPause: 4
-                });
-            }},
-            { frame: Timeline.alien[i].pogoStart, callback: function() {
-                Anarchia.stopJumping(alien);
-                Anarchia.randomJumping(alien, {
-                    minHeight: 1,
-                    maxHeight: 1.5,
-                    minPause: 1.1,
-                    maxPause: 1.2
-                });
-            }},
-            { frame: Timeline.alien[i].pogoEnd, callback: function() {
-                Anarchia.stopJumping(alien);
-            }},
+            { // jump out
+                frame: Timeline.alien[i].jumpOut, 
+                callback: function() {
+                    Anarchia.jump(alien, { 
+                        height: Anarchia.random(0.5, 1.5),
+                        end: parameters[i].endY
+                    });
+                }
+            },
+            { // random jumps
+                frame: Timeline.alien[i].randomJumps, 
+                callback: function() {
+                    Anarchia.randomJumping(alien, {
+                        minHeight: 0.1,
+                        maxHeight: 0.3,
+                        minPause: 2,
+                        maxPause: 4
+                    });
+                }
+            },
+            { // pogos
+                frame: Timeline.alien[i].pogoStart, 
+                callback: function() {
+                    Anarchia.stopJumping(alien);
+                    Anarchia.randomJumping(alien, {
+                        minHeight: 1,
+                        maxHeight: 1.5,
+                        minPause: 1.1,
+                        maxPause: 1.2
+                    });
+                }
+            },
+            {
+                frame: Timeline.alien[i].pogoEnd, 
+                callback: function() {
+                    Anarchia.stopJumping(alien);
+                }
+            },
             { 
                 frame: Timeline.alien[i].policePogoStart, 
                 callback: function() {
@@ -547,6 +644,15 @@ export function aliens() {
                 callback: function() {
                     Anarchia.stopJumping(alien);
                 }
+            },
+            { // jump in
+                frame: Timeline.alien[i].jumpIn, 
+                callback: function() {
+                    Anarchia.jump(alien, { 
+                        height: Anarchia.random(0.5, 1.5),
+                        end: -alien.position.y + 0.12
+                    });
+                }
             }
         ]);
         
@@ -577,7 +683,7 @@ export function punks() {
             3.2 - 1.2 - 1,
             3.2 - 1.2 - 1 - 0.5,
             3.2 - 1.2 - 1 - 0.5 - 0.3,
-            3.2 - 1.2 - 1 - 0.5 - 0.3 - 0.3,
+            3.2 - 1.2 - 1 - 0.5 - 0.3 - 0.3
         ]
     },{ // punk 1
         size: 0.6,
@@ -589,7 +695,7 @@ export function punks() {
             3.3 - 1 - 1.1,
             3.3 - 1 - 1.1 - 0.6,
             3.3 - 1 - 1.1 - 0.6 - 0.2,
-            3.3 - 1 - 1.1 - 0.6 - 0.2 - 0.05,
+            3.3 - 1 - 1.1 - 0.6 - 0.2 - 0.05
         ]
     }];
     
@@ -633,6 +739,7 @@ export function punks() {
             frame: Timeline.filmStart, 
             value: parameters[i].jumps[0]
         },
+        
         { // jump in 1
             frame: Timeline.punks[i].jumpIn[0].start,
             value: parameters[i].jumps[0]
@@ -664,26 +771,65 @@ export function punks() {
             frame: Timeline.punks[i].jumpIn[4].end,
             value: parameters[i].jumps[5]
         },
+        
+        { // jump out 1
+            frame: Timeline.punks[i].jumpOut[0].start,
+            value: parameters[i].jumps[5]
+        },{
+            frame: Timeline.punks[i].jumpOut[0].end,
+            value: parameters[i].jumps[4]
+        },{ // jump out 2
+            frame: Timeline.punks[i].jumpOut[1].start,
+            value: parameters[i].jumps[4]
+        },{
+            frame: Timeline.punks[i].jumpOut[1].end,
+            value: parameters[i].jumps[3]
+        },{ // jump out 3
+            frame: Timeline.punks[i].jumpOut[2].start,
+            value: parameters[i].jumps[3]
+        },{
+            frame: Timeline.punks[i].jumpOut[2].end,
+            value: parameters[i].jumps[2]
+        },{ // jump out 4
+            frame: Timeline.punks[i].jumpOut[3].start,
+            value: parameters[i].jumps[2]
+        },{
+            frame: Timeline.punks[i].jumpOut[3].end,
+            value: parameters[i].jumps[1]
+        },{ // jump out 5
+            frame: Timeline.punks[i].jumpOut[4].start,
+            value: parameters[i].jumps[1]
+        },{
+            frame: Timeline.punks[i].jumpOut[4].end,
+            value: parameters[i].jumps[0]
+        },        
+        
         { // last position
             frame: Anarchia.END_FRAME, 
-            value: parameters[i].jumps[parameters[i].jumps.length - 1]
-        }], false, [
-        { // jumps
+            value: parameters[i].jumps[0]
+        }], 
+        
+        false, // no ease
+        
+        [ // events
+            
+        { // jumps in
             frame: Timeline.punks[i].jumpIn[0].start - jumpStartOffset, 
             callback: function() { Anarchia.jump(punk, { height: 0.5 }); } 
-        },{  // jumps
+        },{  
             frame: Timeline.punks[i].jumpIn[1].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.5 }); }
-        },{  // jumps
+            callback: function() { Anarchia.jump(punk, { height: 0.5 }); } 
+        },{  
             frame: Timeline.punks[i].jumpIn[2].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.3 }); }
-        },{  // jumps
+            callback: function() { Anarchia.jump(punk, { height: 0.3 }); } 
+        },{  
             frame: Timeline.punks[i].jumpIn[3].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.1 }); }
-        },{  // jumps
+            callback: function() { Anarchia.jump(punk, { height: 0.1 }); } 
+        },{  
             frame: Timeline.punks[i].jumpIn[4].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.1 }); }
-        },{ 
+            callback: function() { Anarchia.jump(punk, { height: 0.1 }); } 
+        
+        },{ // pogo 
             frame: Timeline.punks[i].policePogoStart, 
             callback: function() {
                 Anarchia.stopJumping(punk);
@@ -715,7 +861,24 @@ export function punks() {
             callback: function() {
                 Anarchia.stopJumping(punk);
             }
-        }]);
+        
+        },{ // jumps out
+            frame: Timeline.punks[i].jumpOut[0].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.03 }); } 
+        },{  
+            frame: Timeline.punks[i].jumpOut[1].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.03 }); }
+        },{  
+            frame: Timeline.punks[i].jumpOut[2].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.1 }); }
+        },{  
+            frame: Timeline.punks[i].jumpOut[3].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.17 }); }
+        },{  
+            frame: Timeline.punks[i].jumpOut[4].start - jumpStartOffset, 
+            callback: function() { Anarchia.jump(punk, { height: 0.17 }); }
+        }
+    ]);
     
         punks.push(punk);
     }
@@ -845,8 +1008,10 @@ export function humans() {
             }
         ]);
         
-        // escape from police (not human 0)
+        // escape from police & return (not human 0)
         if(i != 0) {
+            let rotateAnimation = new BABYLON.AnimationGroup();
+            
             // move animation
             Anarchia.createAnimation(human,
             { // config
@@ -863,8 +1028,14 @@ export function humans() {
                     frame: Timeline.police.moveEnd,
                     value: p.xEnd
                 },{ 
-                    frame: Anarchia.END_FRAME, 
+                    frame: Timeline.humans.returnStart,
                     value: p.xEnd
+                },{ 
+                    frame: Timeline.humans.returnEnd,
+                    value: p.x
+                },{ 
+                    frame: Anarchia.END_FRAME, 
+                    value: p.x
                 }
             ],
             { // easing
@@ -872,11 +1043,11 @@ export function humans() {
                 mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
             },
             [ // events 
-                { // start rotation
+                { // start excape rotation
                     frame: Timeline.humans.escapeStart, 
                     callback: function() {
                         Anarchia.stopJitters(human);
-                        const group = new BABYLON.AnimationGroup();
+                        
                         const rotate = new BABYLON.Animation(
                                 "human_" + i + "_escape",
                                 "rotation.z",
@@ -892,14 +1063,45 @@ export function humans() {
                             value: 2 * Math.PI
                         }]);
 
-                        group.addTargetedAnimation(rotate, human);
-                        group.play(true);
+                        rotateAnimation = new BABYLON.AnimationGroup();
+                        rotateAnimation.addTargetedAnimation(rotate, human);
+                        rotateAnimation.play(true);
                     }
                 },
                 { // stop animations
                     frame: Timeline.police.moveEnd, 
                     callback: function() {
-                        Anarchia.scene.stopAnimation(human);
+                        rotateAnimation.stop();
+                    }
+                },
+                { // start return rotation
+                    frame: Timeline.humans.returnStart, 
+                    callback: function() {
+                        
+                        const rotate = new BABYLON.Animation(
+                                "human_" + i + "_return",
+                                "rotation.z",
+                                Anarchia.FRAME_RATE,
+                                BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                                BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+                        );
+                        rotate.setKeys([{
+                            frame: 0,
+                            value: 0 * Math.PI
+                        },{
+                            frame: 0.5 * Anarchia.FRAME_RATE,
+                            value: -2 * Math.PI
+                        }]);
+
+                        rotateAnimation = new BABYLON.AnimationGroup();
+                        rotateAnimation.addTargetedAnimation(rotate, human);
+                        rotateAnimation.play(true);
+                    }
+                },
+                { // stop animations
+                    frame: Timeline.humans.returnEnd, 
+                    callback: function() {
+                        rotateAnimation.stop();
                     }
                 }
             ]);
@@ -964,6 +1166,9 @@ export function police() {
             // beam
             const beam = parameters[i].xBeam + (p * distance);
             
+            // rotate animation
+            let rotateAnimation = new BABYLON.AnimationGroup();
+            
             const policeman = Anarchia.createPlane({
                 name: "police_row_" + i + "_pig_" + p,
                 texture: "textures/humans/police.png",
@@ -1014,7 +1219,6 @@ export function police() {
                 { // start rotation
                     frame: Timeline.police.moveStart, 
                     callback: function() {
-                        const group = new BABYLON.AnimationGroup();
                         const rotate = new BABYLON.Animation(
                                 "rotate_police_row_" + i + "_pig_" + p,
                                 "rotation.z",
@@ -1030,16 +1234,16 @@ export function police() {
                             value: 2 * Math.PI
                         }]);
 
-                        group.addTargetedAnimation(rotate, policeman);
-                        group.play(true);
+                        rotateAnimation = new BABYLON.AnimationGroup();
+                        rotateAnimation.addTargetedAnimation(rotate, policeman);
+                        rotateAnimation.play(true);
                     }
                 },
                 { // stop rotation, blend to up position
                     frame: Timeline.police.moveEnd, 
                     callback: function() {
-                        Anarchia.scene.stopAnimation(policeman);
+                        rotateAnimation.stop();
 
-                        const group = new BABYLON.AnimationGroup();
                         const blending = new BABYLON.Animation(
                                 "blend_police_row_" + i + "_pig_" + p,
                                 "rotation.z",
@@ -1052,8 +1256,10 @@ export function police() {
                             frame: 0,
                             value: 2 * Math.PI
                         }]);
-                        group.addTargetedAnimation(blending, policeman);
-                        group.play(true);
+                    
+                        rotateAnimation = new BABYLON.AnimationGroup();
+                        rotateAnimation.addTargetedAnimation(blending, policeman);
+                        rotateAnimation.play(true);
                     }
                 },
                 { // remove uniform
