@@ -1,23 +1,41 @@
 /* global BABYLON */
 
 import Anarchia from "./anarchia.js";
+import Timeline from "./timeline.js";
 
 /**
  * Creates the background.
  * @returns {BABYLON.Mesh}
  */
 export function background() {
-    /** background **/
-    return Anarchia.createPlane({
+    let background = [];
+    
+    /** space **/
+    const spaceHeight = 500;
+    background.push(Anarchia.createPlane({
+        name: "city",
+        texture: "textures/space.jpg",
+        alpha: false,
+        height: spaceHeight,
+        width: spaceHeight / 1257 * 1920,  
+        positionX: 3,
+        positionY: 18,
+        positionZ: 17
+    }));
+    
+    /** city **/
+    background.push(Anarchia.createPlane({
         name: "city",
         texture: "textures/city/city.png",
-        alpha: false,
+        alpha: true,
         height: 80,
         width: 80 / 1237 * 1920,  
         positionX: 3,
         positionY: 18,
         positionZ: 16
-    });
+    }));
+    
+    return background;
 }
 
 /**
@@ -142,11 +160,12 @@ export function houses() {
         { src: "house-3", size: 12.0, x:  14.7, y: 6.8, z: -1.3 }, // 14
         { src: "house-2", size: 12.0, x:  19.6, y: 6.8, z: -4.0 }, // 15
         { src: "house-1", size: 12.0, x:  29.0, y: 6.1, z: -1.3 }, // 16
-        { src: "house-7", size:  7.2, x:  15.0, y: 4.8, z: -7.2 }, // 17
-        
+        { src: "house-7", size:  7.2, x:  15.0, y: 4.8, z: -7.2 }  // 17
     ];
+    
     const houses = new BABYLON.AbstractMesh("houses");
     data.forEach(function(house, i) {
+        
         var h = Anarchia.createPlane({
                 name: "house_" + i,
                 texture: "textures/city/" + house.src + ".png",
@@ -156,8 +175,32 @@ export function houses() {
                 positionY: house.y,
                 positionZ: house.z
         });
+        
         h.setParent(houses);
     });
+    
+    // create fake Animation to change texture
+    Anarchia.createAnimation(houses, {
+        property: "x"
+    },[
+        { frame: Timeline.filmStart, value: houses.position.x },
+        { frame: Anarchia.END_FRAME, value: houses.position.x }
+    ], false, [
+        {
+            frame: Timeline.cinema.show,
+            callback: function() {                
+                houses.getChildMeshes(true).forEach(function(house, i) {
+                    const texture = new BABYLON.Texture(
+                        "textures/city/graffiti/" + data[i].src + ".png", 
+                        Anarchia.scene
+                    );
+                    texture.hasAlpha = true;
+                    house.material.diffuseTexture = texture;
+                });
+            }
+        }
+    ]);
+    
     return houses;
 }
 
@@ -175,14 +218,7 @@ export function toilet() {
         positionY: 6.7,
         positionZ: -3
     });
-    /**
-     * Image attributions:
-     * Peggy und Marco Lachmann-Anke on Pixabay
-     * cottonbro on Pexels
-     * Masha Raymers on Pexels
-     * Anna Nekrashevich on Pexels
-     * congerdesign on Pixabay
-     */
+        
     const toilet = Anarchia.createPlane({
         name: "toilet",
         texture: "textures/toilet-clean.png",
@@ -193,6 +229,35 @@ export function toilet() {
     toilet.position.y = -1.5;
     toilet.scaling.x = 7 * 1700 / 1600;
     toilet.scaling.y = 7;
+    
+    // create fake Animation to change texture
+    Anarchia.createAnimation(toilet, {
+        property: "x"
+    },[
+        { frame: Timeline.filmStart, value: toilet.position.x },
+        { frame: Anarchia.END_FRAME, value: toilet.position.x }
+    ], false, [
+        {
+            frame: Timeline.cinema.show,
+            callback: function() {                
+                // toilet
+                const textureToilet = new BABYLON.Texture(
+                        "textures/toilet-punk.png", 
+                        Anarchia.scene
+                );
+                textureToilet.hasAlpha = true;
+                toilet.material.diffuseTexture = textureToilet;
+                
+                // house
+                const textureHouse = new BABYLON.Texture(
+                        "textures/toilethouse-graffiti.png", 
+                        Anarchia.scene
+                );
+                textureHouse.hasAlpha = true;
+                house.material.diffuseTexture = textureHouse;
+            }
+        }
+    ]);
 }
 
 /**

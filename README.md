@@ -33,6 +33,20 @@ The music for the German cover »Autonomia« and the English version »Anarchia�
 
 Images and videos are taken from [Pixabay and contributors](https://pixabay.com). Video from space by [Tomislav Jakupec](https://pixabay.com/users/tommyvideo-3092371/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=6044) from [Pixabay](https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=6044).
 
+Office room and punk toilet is a collage of images from [Peggy und Marco Lachmann-Anke on Pixabay](https://pixabay.com/de/users/1553824), [cottonbro studio on Pexels](https://www.pexels.com/@cottonbro/), [congerdesign on Pixabay](https://pixabay.com/de/users/congerdesign-509903/) and Masha Raymers on Pexels.
+
+Trees
+- Bild von <a href="https://pixabay.com/de/users/openclipart-vectors-30363/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=576847">OpenClipart-Vectors</a> auf <a href="https://pixabay.com/de//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=576847">Pixabay</a>
+- Bild von <a href="https://pixabay.com/de/users/pastelila_id-20457023/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=7875007">Pastelila</a> auf <a href="https://pixabay.com/de//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=7875007">Pixabay</a>
+- Bild von <a href="https://pixabay.com/de/users/susannp4-1777190/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=1511608">Susann Mielke</a> auf <a href="https://pixabay.com/de//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=1511608">Pixabay</a>
+- Bild von <a href="https://pixabay.com/de/users/dandelion_tea-15261675/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=7081566">Agata</a> auf <a href="https://pixabay.com/de//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=7081566">Pixabay</a>
+
+Fox
+- Bild von <a href="https://pixabay.com/de/users/richardsdrawings-858383/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=6841177">Richard Duijnstee</a> auf <a href="https://pixabay.com/de//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=6841177">Pixabay</a>
+
+Space
+- Bild von <a href="https://pixabay.com/de/users/stux-12364/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=1164739">Stefan Schweihofer</a> auf <a href="https://pixabay.com/de//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=1164739">Pixabay</a>
+
 ## Funding
 
 The music and video is free under Creative Commons (see [LICENSE.md](LICENSE.md). Nevertheless I'm happy to receive some fundings via [PayPal](https://paypal.me/g4rf). You may also buy some of my stuff in the [Etsy shop of the Neustadt Art Kollektiv](https://www.etsy.com/shop/NeustadtArtKollektiv).

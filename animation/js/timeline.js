@@ -21,7 +21,7 @@ export default {
         heinrichplatz2:      94.0 * Anarchia.FRAME_RATE,
         heinrichplatzEnd:   106.0 * Anarchia.FRAME_RATE,
         toiletEnd:          141.0 * Anarchia.FRAME_RATE,
-        end:                150.0 * Anarchia.FRAME_RATE
+        cityEnd:            150.0 * Anarchia.FRAME_RATE
     },
     
     // beaming the pigs

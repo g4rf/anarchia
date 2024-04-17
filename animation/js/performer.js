@@ -33,7 +33,7 @@ export function camera() {
         charlottenburg:       new BABYLON.Vector3(19, 5.50, 0.20), // x + 20
         charlottenburgMoving: new BABYLON.Vector3(19, 5.50, 0.60),
         
-        end: new BABYLON.Vector3(0.00, 17.00, -500)
+        end: new BABYLON.Vector3(0.00, 17.00, -480.00)
     };
     
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
@@ -110,11 +110,11 @@ export function camera() {
         frame: Timeline.camera.toiletEnd, 
         value: vectors.toiletStart 
     },{
-        frame: Timeline.camera.end, 
-        value: vectors.end 
+        frame: Timeline.camera.cityEnd, 
+        value: vectors.start
     },{
         frame: Anarchia.END_FRAME, 
-        value: vectors.heinrichplatz
+        value: vectors.end
     }],
     { // easing
         type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
