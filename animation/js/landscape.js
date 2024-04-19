@@ -43,16 +43,49 @@ export function background() {
  * @returns {BABYLON.Mesh}
  */
 export function tvtower() {
-    /** tv tower **/
+    const spriteManager = new BABYLON.SpriteManager(
+            "tv-tower-sprite-manager", 
+            "textures/city/tv-tower-animation.png",
+            1, // only one tower 
+            {
+                height: 1000,
+                width: 200
+            },
+            Anarchia.scene
+    );
+    
+    const tvtower = new BABYLON.Sprite("tv-tower-sprite", spriteManager);
+    
     const height = 38;
-    return Anarchia.createPlane({
-        name: "tvtower",
-        texture: "textures/city/tvtower.png",
-        height: height,
-        width: height * 122 / 942,
-        positionX: -7,
-        positionY: height / 2
-    });
+    tvtower.height = height;
+    tvtower.width = height * 200 / 1000;
+    tvtower.position = new BABYLON.Vector3(-6, height / 2, 0);
+    tvtower.playAnimation(0, 4, true, 400);
+    
+    // create fake Animation to change texture
+    Anarchia.createAnimation(tvtower, {
+        property: "x"
+    },[
+        { frame: Timeline.filmStart, value: tvtower.position.x },
+        { frame: Anarchia.END_FRAME, value: tvtower.position.x }
+    ], false, [
+        {
+            frame: Timeline.cinema.show,
+            callback: function() {                
+                const texture = new BABYLON.Texture(
+                    "textures/city/tv-tower-anarchia-animation.png", 
+                    Anarchia.scene
+                );
+                texture.hasAlpha = true;
+                spriteManager.texture = texture;           
+                // seems to be a bug, that the new loaded texture is vertical
+                // inverted
+                tvtower.invertV = true;
+            }
+        }
+    ]);
+    
+    return tvtower;
 }
     
 /**
@@ -285,7 +318,7 @@ export function headline() {
 export function signCredentials() {
     /** sign **/
     const height = 2.5;
-    return Anarchia.createPlane({
+    const sign = Anarchia.createPlane({
         name: "signCredentials",
         texture: "textures/sign.png",
         height: height,
@@ -296,4 +329,21 @@ export function signCredentials() {
         rotationX: 0 * Math.PI,
         rotationY: -0.05 * Math.PI
     });
+    
+    // fake animation for hiding sign
+    Anarchia.createAnimation(sign, {
+        property: "x"
+    },[
+        { frame: Timeline.filmStart, value: sign.position.x },
+        { frame: Anarchia.END_FRAME, value: sign.position.x }
+    ], false, [
+        {
+            frame: Timeline.camera.toiletStart,
+            callback: function() {                
+                sign.isVisible = false;
+            }
+        }
+    ]);
+    
+    return sign;
 };

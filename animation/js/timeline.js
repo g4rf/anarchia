@@ -21,7 +21,8 @@ export default {
         heinrichplatz2:      94.0 * Anarchia.FRAME_RATE,
         heinrichplatzEnd:   106.0 * Anarchia.FRAME_RATE,
         toiletEnd:          141.0 * Anarchia.FRAME_RATE,
-        cityEnd:            150.0 * Anarchia.FRAME_RATE
+        cityEnd:            150.0 * Anarchia.FRAME_RATE,
+        space:              153.0 * Anarchia.FRAME_RATE
     },
     
     // beaming the pigs
@@ -62,6 +63,13 @@ export default {
     ufolandedTopClosed:     138 * Anarchia.FRAME_RATE,
     ufolandedLiftupStart:   138 * Anarchia.FRAME_RATE,
     ufolandedLiftupEnd:     139 * Anarchia.FRAME_RATE,
+    
+    // ufo in space
+    ufoSpace: {
+      start:    150 * Anarchia.FRAME_RATE,
+      bend:     151.5 * Anarchia.FRAME_RATE,
+      end:      153 * Anarchia.FRAME_RATE
+    },
     
     alien: [{
         // alien 0

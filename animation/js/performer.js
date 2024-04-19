@@ -113,6 +113,9 @@ export function camera() {
         frame: Timeline.camera.cityEnd, 
         value: vectors.start
     },{
+        frame: Timeline.camera.space, 
+        value: vectors.end
+    },{
         frame: Anarchia.END_FRAME, 
         value: vectors.end
     }],
@@ -291,6 +294,58 @@ export function ufoLand() {
     ], easing);
     
     return bottom;
+}
+
+/**
+ * Creates the ufo in space.
+ * @returns {BABYLON.Mesh}
+ */
+export function ufoSpace() {
+    const t = Timeline.ufoSpace;
+    const size = 30;
+    const vectors = {
+        start: new BABYLON.Vector3(0, 15, 16.5),
+        bend: new BABYLON.Vector3(-300, -20, 16.5),
+        end: new BABYLON.Vector3(-5, 17, -460)
+    };
+        
+    const ufo = Anarchia.createPlane({
+        name: "ufoSpace",
+        texture: "textures/ufo-in-space.png",
+        height: size,
+        width: size,
+        positionX: vectors.start.x,
+        positionY: vectors.start.y,
+        positionZ: vectors.start.z
+    });
+    
+    Anarchia.createAnimation(ufo, {
+        name: "moveUfoThroughSpace",
+        property: "position",
+        type: BABYLON.Animation.ANIMATIONTYPE_VECTOR3
+    },[ // keys
+        { 
+            frame: Timeline.filmStart, 
+            value: vectors.start
+        },{ 
+            frame: t.start, 
+            value: vectors.start
+        },{ 
+            frame: t.bend, 
+            value: vectors.bend
+        },{ 
+            frame: t.end, 
+            value: vectors.end
+        },{ 
+            frame: Anarchia.END_FRAME, 
+            value: vectors.end
+        }
+    ],{ // easing
+        type: new BABYLON.ExponentialEase(2),
+        mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
+    },[]);
+    
+    return ufo;
 }
 
 /**
