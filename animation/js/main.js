@@ -16,9 +16,12 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 
 
 /** settings **/
-Anarchia.scene.useOrderIndependentTransparency = true;
+// used for aplha blended textures
+Anarchia.canvas.getContext("webgl2").getExtension("EXT_float_blend");
+// this renders all alpha correctly, but hit performance
+//Anarchia.scene.useOrderIndependentTransparency = true;
 // which part to render; !!! won't work perfectly
-Anarchia.duration(147, 160);
+Anarchia.duration(0.01, 164);
 
 
 /** light **/
@@ -80,7 +83,7 @@ Events.bind();
     }
      
     let zoom = width / 1920;
-    $("#render, video").css({
+    $(".scale").css({
         "transform": "scale(" + zoom + ")"
     });
 })();

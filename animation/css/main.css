@@ -17,11 +17,40 @@ screen {
   align-content: center;
 }
 screen #render,
-screen video {
+screen video,
+screen #credits {
   grid-area: screen;
   display: block;
   width: 1920px;
   height: 1080px;
+}
+screen #credits content {
+  padding: 30px;
+  width: calc(800px - 2 * 30px);
+  margin-left: calc(1920px - 800px);
+  height: calc(1080px - 2 * 30px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: stretch;
+  gap: 10px;
+  background-color: rgba(80, 80, 120, 0.9);
+  font-family: monospace;
+  font-size: 2em;
+  line-height: 1.42;
+  color: #fff;
+}
+screen #credits content credit {
+  display: grid;
+  grid-template: "label names" / 2fr 5fr;
+  gap: 24px;
+}
+screen #credits content credit label {
+  grid-area: label;
+  font-weight: bold;
+}
+screen #credits content credit names {
+  grid-area: names;
 }
 control {
   position: fixed;

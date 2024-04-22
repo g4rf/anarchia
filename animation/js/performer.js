@@ -143,6 +143,11 @@ export function camera() {
         callback: function() {
             $("#camera-rewind").addClass("hidden");
         }
+    },{ // credits show
+        frame: Timeline.ufoSpace.end,
+        callback: function() {
+            $("#credits").removeClass("hidden");
+        }
     }]);   
     
     return camera;
@@ -303,6 +308,7 @@ export function ufoLand() {
 export function ufoSpace() {
     const t = Timeline.ufoSpace;
     const size = 30;
+    const texture = "textures/ufo-in-space.png";
     const vectors = {
         start: new BABYLON.Vector3(0, 15, 16.5),
         bend: new BABYLON.Vector3(-300, -20, 16.5),
@@ -311,13 +317,14 @@ export function ufoSpace() {
         
     const ufo = Anarchia.createPlane({
         name: "ufoSpace",
-        texture: "textures/ufo-in-space.png",
+        texture: texture,
         height: size,
         width: size,
         positionX: vectors.start.x,
         positionY: vectors.start.y,
         positionZ: vectors.start.z
     });
+    ufo.material.opacityTexture = new BABYLON.Texture(texture);
     
     Anarchia.createAnimation(ufo, {
         name: "moveUfoThroughSpace",

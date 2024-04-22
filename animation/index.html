@@ -8,12 +8,12 @@
         
     <screen>
         <!-- canvas -->
-        <canvas id="render"></canvas>
+        <canvas id="render" class="scale"></canvas>
         
         <!-- police violence -->
-        <video src="video/creepy-stone.mp4"
+        <video src="video/creepy-stone.webm"
                id="creepy-stone"
-               class="hidden"
+               class="hidden scale"
                preload="auto"
                playsinline="true"
                width="1920"
@@ -25,7 +25,7 @@
         <!-- rewind -->
         <video src="video/camera-rewind.webm"
                id="camera-rewind"
-               class="hidden"
+               class="hidden scale"
                preload="auto"
                playsinline="true"
                width="1920"
@@ -33,6 +33,59 @@
                disablepictureinpicture="true"
                disableremoteplayback="true"
         ></video>  
+        
+        <!-- credits -->
+        <div id="credits" class="hidden scale">
+            <content>
+                <credit>
+                    <label>Director & Animator</label>
+                    <names>
+                        Jan Kosyk<br />
+                    </names>
+                </credit>
+                <credit>
+                    <label>Original Song »Ufo«</label>
+                    <names>
+                        Yok Quetschenpaua<br />
+                    </names>
+                </credit>
+                <credit>
+                    <label>Drawings of City & Houses</label>
+                    <names>
+                        Alina Milkina<br />
+                    </names>
+                </credit>
+                <credit>
+                    <label>Musicians</label>
+                    <names>
+                        Atze Rudolf<br />
+                        Henk Teichmann<br />
+                        Achim Jurenz<br />
+                        Hirai Masaya<br />
+                        Jan Kosyk<br />
+                    </names>
+                </credit>
+                <credit>
+                    <label>Studios</label>
+                    <names>
+                        Virtuous Vibes Tonstudio (Germany)<br />
+                        Ryosuke Ueno / ATHALL (Japan)<br />
+                    </names>
+                </credit>        
+                <credit>
+                    <label>English Consultant</label>
+                    <names>
+                        Brad Hock<br />
+                    </names>
+                </credit>
+                <credit>
+                    <label>Animation Consultant</label>
+                    <names>
+                        Omani Frei<br />
+                    </names>
+                </credit>
+            </content>
+        </div>
     </screen>
     
     <control>
