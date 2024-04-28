@@ -4,7 +4,8 @@ import Anarchia from "./anarchia.js";
  * Holds all timeline data in frames.
  */
 export default {
-    filmStart: 0 * Anarchia.FRAME_RATE,
+    filmStart: -3 * Anarchia.FRAME_RATE,
+    filmEnd: 164 * Anarchia.FRAME_RATE,
     
     // camera
     camera: {

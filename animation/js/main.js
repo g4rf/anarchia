@@ -16,12 +16,19 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 
 
 /** settings **/
+
 // used for aplha blended textures
 Anarchia.canvas.getContext("webgl2").getExtension("EXT_float_blend");
-// this renders all alpha correctly, but hit performance
+
+// this renders all alpha correctly, but hits performance
 //Anarchia.scene.useOrderIndependentTransparency = true;
+
+// hide unmute button; we handle this on our own
+BABYLON.Engine.audioEngine.useCustomUnlockedButton = true;
+
 // which part to render; !!! won't work perfectly
-Anarchia.duration(0.01, 164);
+//Anarchia.duration(48, 164);
+Anarchia.duration(-3, 164); // whole film
 
 
 /** light **/

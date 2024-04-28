@@ -1,6 +1,7 @@
 /* global BABYLON */
 
 import * as Sounds from "./sounds.js";
+import * as Videos from "./videos.js";
 
 export default {
     /**
@@ -46,14 +47,6 @@ export default {
      * @type BABYLON.Engine
      */
     engine: null,
-    
-    /**
-     * The sound library.
-     * @type object with BABYLON.Sound objects
-     */
-    sounds: {
-        song: null
-    },
     
     /**
      * The scene, that will be looped.
@@ -139,37 +132,40 @@ export default {
         // show loading
         self.hideButtons(function() {
             self.showLoading();
-        });        
+        });
         
-        Sounds.song( // load and start music
-            function() {                
-
-                let readyVideos = function() {
-                    for (const video of document.getElementsByTagName("video")) {
-                        if(video.readyState != 4) { // HAVE_ENOUGH_DATA
-                            console.log("Waiting for video", video);
-                            window.setTimeout(readyVideos, 100);
-                            return;
-                        }
-                    }
-                    
-                    // render screen
-                    self.engine.runRenderLoop(function () {
-                        self.scene.render();
-                    });
-
-                    // animations on
-                    self.animations.forEach(function(mesh) {
-                        self.scene.beginAnimation(mesh,
-                                self.START_FRAME, self.END_FRAME);
-                    });
-
-                    // hide buttons
-                    self.hideLoading();
-                };
-                readyVideos();
+        // load Audio and Video
+        Sounds.load();
+        Videos.load();
+        
+        let waiting = function() {
+            if(! (Sounds.ready && Videos.ready)) {
+                console.log("Waiting for video and/or audio…");
+                window.setTimeout(waiting, 100);
+                return;
             }
-        );
+            
+            // start music
+            Sounds.music();
+            
+            // start citynoise
+            Sounds.cityNoise();
+                    
+            // render screen
+            self.engine.runRenderLoop(function () {
+                self.scene.render();
+            });
+
+            // animations on
+            self.animations.forEach(function(mesh) {
+                self.scene.beginAnimation(mesh,
+                        self.START_FRAME, self.END_FRAME);
+            });
+
+            // hide buttons
+            self.hideLoading();
+        };
+        waiting();
     },
     
     /**
@@ -401,7 +397,12 @@ export default {
         ],{ // easing
             type: new BABYLON.BounceEase(param.bounces, param.bounciness),
             mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
-        });
+        }, [{ // effects
+            frame: 0.9 * this.FRAME_RATE,
+            callback: function() {
+                Sounds.jump(mesh);
+            }
+        }]);
 
         const scaleX = this.createAnimation(mesh, {
             property: "scaling.x",

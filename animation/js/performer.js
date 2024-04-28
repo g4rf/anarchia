@@ -2,6 +2,7 @@
 
 import Anarchia from "./anarchia.js";
 import Timeline from "./timeline.js";
+import * as Sounds from "./sounds.js";
 
 /**
  * Creates the camera and its movements.
@@ -124,6 +125,7 @@ export function camera() {
         mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
     },
     [ // events
+    
     { // cinema: start pigs violence
         frame: Timeline.cinema.show,
         callback: function() {
@@ -179,7 +181,7 @@ export function ufoFly() {
         { frame: Timeline.ufoflyPositionStart, value: startY },
         { frame: Timeline.ufoflyPositionLanded, value: 7 },
         
-        { frame: Anarchia.END_FRAME, value: 0 }
+        { frame: Anarchia.END_FRAME, value: 7 }
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
@@ -212,7 +214,7 @@ export function ufoLand() {
         positionX: x,
         positionY: startY,
         positionZ: z
-    });    
+    });
     
     // land animation
     Anarchia.createAnimation(bottom, {
@@ -227,7 +229,12 @@ export function ufoLand() {
     ],{ // easing
         type: new BABYLON.ExponentialEase(2),
         mode: BABYLON.EasingFunction.EASINGMODE_EASEINOUT
-    });
+    }, [{
+        frame: Timeline.ufolandedPositionStart,
+        callback: function() {
+            Sounds.landingUfo(bottom);            
+        }
+    }]);
         
     // the ufo top
     const top = Anarchia.createPlane({
@@ -1278,9 +1285,10 @@ export function police() {
                 mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
             },
             [ // events 
-                { // start rotation
+                { // start rotation & police siren
                     frame: Timeline.police.moveStart, 
                     callback: function() {
+                        // rotation
                         const rotate = new BABYLON.Animation(
                                 "rotate_police_row_" + i + "_pig_" + p,
                                 "rotation.z",
@@ -1299,6 +1307,11 @@ export function police() {
                         rotateAnimation = new BABYLON.AnimationGroup();
                         rotateAnimation.addTargetedAnimation(rotate, policeman);
                         rotateAnimation.play(true);
+                        
+                        // police siren (only for first cop in first row)
+                        if(i == 1 && p == 0) {
+                            Sounds.police(policeman);
+                        }
                     }
                 },
                 { // stop rotation, blend to up position
