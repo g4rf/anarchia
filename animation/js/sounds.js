@@ -9,7 +9,8 @@ const sounds = {
     cityNoise: null,
     landingUfo: null,
     jump: null,
-    police: null
+    police: null,
+    rumble: null
 };
 
 export function load() {
@@ -84,6 +85,18 @@ export function load() {
             volume: 0.2
         }
     );
+    
+    // police rumble
+    sounds.rumble = new BABYLON.Sound("rumble", "audio/rumble.mp3",
+        Anarchia.scene, fileLoaded, {
+            //length: 15,
+            //offset: 21.0,
+            loop: false, 
+            autoplay: false,
+            spatialSound: true,
+            volume: 1.5
+        }
+    );
 }
 
 export function music() {
@@ -117,4 +130,9 @@ export function jump(mesh) {
 export function police(mesh) {
     sounds.police.attachToMesh(mesh);
     sounds.police.play();
+}
+
+export function rumble(mesh) {
+    sounds.rumble.attachToMesh(mesh);
+    sounds.rumble.play();
 }
