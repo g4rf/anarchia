@@ -37,120 +37,166 @@ export function camera() {
         end: new BABYLON.Vector3(0.00, 17.00, -480.00)
     };
     
+    // camera
     const camera = new BABYLON.UniversalCamera("camera", vectors.start);
-            
-    Anarchia.createAnimation(camera, {
-        name: "moveCamera",
-        property: "position",
-        type: BABYLON.Animation.ANIMATIONTYPE_VECTOR3
-    },
-    // key positions
-    [{ 
-        frame: Timeline.filmStart,
-        value: vectors.start
-    },{ 
-        frame: Timeline.camera.start, 
-        value: vectors.start
-    },{
-        frame: Timeline.camera.toiletStart, 
-        value: vectors.toiletStart 
-    },{ 
-        frame: Timeline.camera.heinrichplatz, 
-        value: vectors.heinrichplatz 
-    },{ 
-        frame: Timeline.camera.punksZoomStart, 
-        value: vectors.heinrichplatzMovingOut
-    },{ 
-        frame: Timeline.camera.punksZoomEnd, 
-        value: vectors.punks 
-    },{
-        frame: Timeline.camera.policeZoomStart, 
-        value: vectors.punks
-    },{
-        frame: Timeline.camera.policeZoomEnd, 
-        value: vectors.police
-    },{
-        frame: Timeline.camera.stool - 0.2 * Anarchia.FRAME_RATE, 
-        value: vectors.policeMoving
-    },{
-        frame: Timeline.camera.stool, 
-        value: vectors.stool
-    },{
-        frame: Timeline.camera.control - 0.2 * Anarchia.FRAME_RATE, 
-        value: vectors.stoolMoving
-    },{
-        frame: Timeline.camera.control, 
-        value: vectors.control
-    },{
-        frame: Timeline.camera.charlottenburg - 1, 
-        value: vectors.controlMoving
-    },{
-        frame: Timeline.camera.charlottenburg,
-        value: vectors.charlottenburg
-    },{
-        frame: Timeline.camera.heinrichplatz2 - 1, 
-        value: vectors.charlottenburgMoving
-    },{
-        frame: Timeline.camera.heinrichplatz2, 
-        value: vectors.heinrichplatz
-    },{
-        frame: Timeline.cinema.show, 
-        value: vectors.heinrichplatzMovingIn
-    },{ // during video we don't need no movement on canvas,
-        // so we save cpu time
-        frame: Timeline.cinema.rewind - 2, 
-        value: vectors.heinrichplatzMovingIn
-    },{ // for the replay effect set the camera 1 frame before the video
-        // starts to the new coordinates
-        frame: Timeline.cinema.rewind - 1, 
-        value: vectors.cinemaMoving
-    },{
-        frame: Timeline.cinema.hide, 
-        value: vectors.heinrichplatz
-    },{
-        frame: Timeline.camera.toiletEnd, 
-        value: vectors.toiletStart 
-    },{
-        frame: Timeline.camera.cityEnd, 
-        value: vectors.start
-    },{
-        frame: Timeline.camera.space, 
-        value: vectors.end
-    },{
-        frame: Anarchia.END_FRAME, 
-        value: vectors.end
-    }],
-    { // easing
-        type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
-        mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
-    },
-    [ // events
     
-    { // cinema: start pigs violence
-        frame: Timeline.cinema.show,
-        callback: function() {
-            $("#creepy-stone").removeClass("hidden").get(0).play();
-            Anarchia.stopAllJitters();
+    // key frames
+    const keys = [{ 
+            frame: Timeline.filmStart,
+            value: vectors.start
+        },{ 
+            frame: Timeline.camera.start, 
+            value: vectors.start
+        },{
+            frame: Timeline.camera.toiletStart, 
+            value: vectors.toiletStart 
+        },{ 
+            frame: Timeline.camera.heinrichplatz, 
+            value: vectors.heinrichplatz 
+        },{ 
+            frame: Timeline.camera.punksZoomStart, 
+            value: vectors.heinrichplatzMovingOut
+        },{ 
+            frame: Timeline.camera.punksZoomEnd, 
+            value: vectors.punks 
+        },{
+            frame: Timeline.camera.policeZoomStart, 
+            value: vectors.punks
+        },{
+            frame: Timeline.camera.policeZoomEnd, 
+            value: vectors.police
+        },{
+            frame: Timeline.camera.stool - 0.2 * Anarchia.FRAME_RATE, 
+            value: vectors.policeMoving
+        },{
+            frame: Timeline.camera.stool, 
+            value: vectors.stool
+        },{
+            frame: Timeline.camera.control - 0.2 * Anarchia.FRAME_RATE, 
+            value: vectors.stoolMoving
+        },{
+            frame: Timeline.camera.control, 
+            value: vectors.control
+        },{
+            frame: Timeline.camera.charlottenburg - 1, 
+            value: vectors.controlMoving
+        },{
+            frame: Timeline.camera.charlottenburg,
+            value: vectors.charlottenburg
+        },{
+            frame: Timeline.camera.heinrichplatz2 - 1, 
+            value: vectors.charlottenburgMoving
+        },{
+            frame: Timeline.camera.heinrichplatz2, 
+            value: vectors.heinrichplatz
+        },{
+            frame: Timeline.cinema.show, 
+            value: vectors.heinrichplatzMovingIn
+        },{ // during video we don't need no movement on canvas,
+            // so we save cpu time
+            frame: Timeline.cinema.rewind - 2, 
+            value: vectors.heinrichplatzMovingIn
+        },{ // for the replay effect set the camera 1 frame before the video
+            // starts to the new coordinates
+            frame: Timeline.cinema.rewind - 1, 
+            value: vectors.cinemaMoving
+        },{
+            frame: Timeline.cinema.hide, 
+            value: vectors.heinrichplatz
+        },{
+            frame: Timeline.camera.toiletEnd, 
+            value: vectors.toiletStart 
+        },{
+            frame: Timeline.camera.cityEnd, 
+            value: vectors.start
+        },{
+            frame: Timeline.camera.space, 
+            value: vectors.end
+        },{
+            frame: Anarchia.END_FRAME, 
+            value: vectors.end
         }
-    },{ // cinema: show rewind
-        frame: Timeline.cinema.rewind,
-        callback: function() {
-            Anarchia.stopAllJitters(); // TODO remove here
-                        
-            $("#creepy-stone").addClass("hidden");
-            $("#camera-rewind").removeClass("hidden").get(0).play();
+    ];
+
+    
+    // animation for shaking camera
+    const rumbleAnimation = new BABYLON.AnimationGroup();
+
+    // events
+    const events = [ // events
+        {
+            frame: Timeline.police.moveStart,
+            callback: function() {
+                const keys = [{
+                    frame: 0 * Anarchia.FRAME_RATE,
+                    value: +0.01
+                },{
+                    frame: 0.05 * Anarchia.FRAME_RATE,
+                    value: -0.01
+                },{
+                    frame: 0.1 * Anarchia.FRAME_RATE,
+                    value: +0.01
+                }];
+            
+                const rumbleX = new BABYLON.Animation(
+                        "rumble_camera",
+                        "position.x",
+                        Anarchia.FRAME_RATE,
+                        BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                        BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE_FROM_CURRENT
+                );
+                rumbleX.setKeys(keys);
+                rumbleAnimation.addTargetedAnimation(rumbleX, camera);
+                
+                rumbleAnimation.play(true);
+            }
+        },
+        {
+            frame: Timeline.police.moveEnd + 1 * Anarchia.FRAME_RATE,
+            callback: function() {
+                rumbleAnimation.stop();
+            }
+        },
+        { // cinema: start pigs violence
+            frame: Timeline.cinema.show,
+            callback: function() {
+                $("#creepy-stone").removeClass("hidden").get(0).play();
+                Anarchia.stopAllJitters();
+            }
+        },{ // cinema: show rewind
+            frame: Timeline.cinema.rewind,
+            callback: function() {
+                Anarchia.stopAllJitters(); // TODO remove here
+
+                $("#creepy-stone").addClass("hidden");
+                $("#camera-rewind").removeClass("hidden").get(0).play();
+            }
+        },{ // cinema: hide
+            frame: Timeline.cinema.hide,
+            callback: function() {
+                $("#camera-rewind").addClass("hidden");
+            }
+        },{ // credits show
+            frame: Timeline.ufoSpace.end,
+            callback: function() {
+                $("#credits").removeClass("hidden");
+            }
         }
-    },{ // cinema: hide
-        frame: Timeline.cinema.hide,
-        callback: function() {
-            $("#camera-rewind").addClass("hidden");
-        }
-    },{ // credits show
-        frame: Timeline.ufoSpace.end,
-        callback: function() {
-            $("#credits").removeClass("hidden");
-        }
-    }]);   
+    ];
+    
+    // create animation
+    Anarchia.createAnimation(camera, {
+            name: "moveCamera",
+            property: "position",
+            type: BABYLON.Animation.ANIMATIONTYPE_VECTOR3
+        },
+        keys,
+        { // easing
+            type: new BABYLON.BezierCurveEase(0, 0, 0.99, 0.99),
+            mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
+        },
+        events
+    );   
     
     return camera;
 }
@@ -1308,9 +1354,11 @@ export function police() {
                         rotateAnimation.addTargetedAnimation(rotate, policeman);
                         rotateAnimation.play(true);
                         
-                        // police siren (only for first cop in first row)
+                        // police siren & rumble sound
+                        // (only for first pig in first row)
                         if(i == 1 && p == 0) {
                             Sounds.police(policeman);
+                            Sounds.rumble(policeman);
                         }
                     }
                 },
@@ -1404,7 +1452,7 @@ export function dustclouds() {
         rotationZ: 1.5 * Math.PI
     };
     
-    const minDustClouds = 42;
+    const minDustClouds = 72;
     const maxDustClouds = 90;
     const numberOfDustClouds = Anarchia.random(minDustClouds, maxDustClouds, 0);
     
