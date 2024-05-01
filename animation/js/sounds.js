@@ -10,7 +10,10 @@ const sounds = {
     landingUfo: null,
     jump: null,
     police: null,
-    rumble: null
+    rumble: null,
+    control: null,
+    beam: null,
+    cityNature: null
 };
 
 export function load() {
@@ -97,6 +100,42 @@ export function load() {
             volume: 1.5
         }
     );
+    
+    // control pressure
+    sounds.control = new BABYLON.Sound("control", "audio/control.mp3",
+        Anarchia.scene, fileLoaded, {
+            //length: 15,
+            //offset: 21.0,
+            loop: false, 
+            autoplay: false,
+            spatialSound: true,
+            volume: 0.5
+        }
+    );
+    
+    // beam
+    sounds.beam = new BABYLON.Sound("beam", "audio/beam.mp3",
+        Anarchia.scene, fileLoaded, {
+            //length: 15,
+            //offset: 21.0,
+            loop: false, 
+            autoplay: false,
+            spatialSound: false,
+            volume: 1
+        }
+    );
+    
+    // city nature
+    sounds.cityNature = new BABYLON.Sound("city-nature", "audio/city-nature.mp3",
+        Anarchia.scene, fileLoaded, {
+            //length: 15,
+            //offset: 21.0,
+            loop: false, 
+            autoplay: false,
+            spatialSound: false,
+            volume: 0.5
+        }
+    );
 }
 
 export function music() {
@@ -135,4 +174,17 @@ export function police(mesh) {
 export function rumble(mesh) {
     sounds.rumble.attachToMesh(mesh);
     sounds.rumble.play();
+}
+
+export function control(mesh) {
+    sounds.control.attachToMesh(mesh);
+    sounds.control.play();
+}
+
+export function beam() {
+    sounds.beam.play();
+}
+
+export function cityNature() {   
+    sounds.cityNature.play();
 }

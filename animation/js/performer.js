@@ -176,6 +176,11 @@ export function camera() {
             callback: function() {
                 $("#camera-rewind").addClass("hidden");
             }
+        },{ // sound city nature
+            frame: Timeline.cinema.hide,
+            callback: function() {
+                Sounds.cityNature();
+            }            
         },{ // credits show
             frame: Timeline.ufoSpace.end,
             callback: function() {
@@ -461,7 +466,14 @@ export function control() {
             frame: Anarchia.END_FRAME, 
             value: 0
         }
-    ], ease, []);
+    ], ease, [
+        {
+            frame: t.move.start,
+            callback: function() {
+                Sounds.control(control);
+            }
+        }
+    ]);
 
     // scale width (popup)
     Anarchia.createAnimation(control, {
@@ -547,6 +559,11 @@ function beam(control) {
                     Anarchia.scene
                 );
                 light.parent = Anarchia.scene.activeCamera;
+            }
+        },{ // sound
+            frame: t.flash,
+            callback: function() {
+                Sounds.beam();
             }
         }
     ];

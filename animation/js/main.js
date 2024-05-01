@@ -27,8 +27,8 @@ Anarchia.canvas.getContext("webgl2").getExtension("EXT_float_blend");
 BABYLON.Engine.audioEngine.useCustomUnlockedButton = true;
 
 // which part to render; !!! won't work perfectly
-//Anarchia.duration(48, 164);
-Anarchia.duration(-3, 164); // whole film
+Anarchia.duration(9, 164);
+//Anarchia.duration(-3, 164); // whole film
 
 
 /** light **/
