@@ -283,6 +283,62 @@ export default {
     },
     
     /**
+     * Creates a shadow.
+     * @param {object} config Data for the shadow:
+     *      name
+     *      radius
+     *      rotation    Rotation around the x axis to make it look ellipse like
+     *      position.x
+     *      position.y
+     *      position.z
+     *      alpha
+     * @returns {BABYLON.Mesh} The shadow.
+     */
+    createShadow: function(config) {
+        if(typeof config == "undefined") config = {};
+        
+        let param = {
+            name: "",
+            radius: 0.5,
+            rotationX: 0.48,
+            rotationY: 0,
+            rotationZ: 0,
+            positionX: 0,
+            positionY: 0,
+            positionZ: 0,
+            alpha: 0.1
+        };
+        
+        for(const property in config) {
+            param[property] = config[property];
+        }
+        
+        const shadow = BABYLON.MeshBuilder.CreateDisc(param.name, {
+            radius: param.radius,
+            updatable: true,
+            sideOrientation: BABYLON.Mesh.DOUBLESIDE
+        }, this.scene);
+
+        shadow.rotation.x = param.rotationX;
+        shadow.rotation.y = param.rotationY;
+        shadow.rotation.z = param.rotationZ;
+        
+        shadow.position.x = param.positionX;
+        shadow.position.y = param.positionY;
+        shadow.position.z = param.positionZ;
+        
+        const material = new BABYLON.StandardMaterial(
+                param.name + "-material", this.scene);
+        
+        material.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        material.alpha = param.alpha;
+
+        shadow.material = material;
+        
+        return shadow;
+    },
+    
+    /**
      * Creates an animation
      * @param {object} [config]
      *          [name=""]

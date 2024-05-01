@@ -26,8 +26,9 @@ Anarchia.canvas.getContext("webgl2").getExtension("EXT_float_blend");
 // hide unmute button; we handle this on our own
 BABYLON.Engine.audioEngine.useCustomUnlockedButton = true;
 
-// which part to render; !!! won't work perfectly
-Anarchia.duration(9, 164);
+// which part to render
+// won't work perfectly as events are only triggered, when on the exact frame
+Anarchia.duration(126, 164);
 //Anarchia.duration(-3, 164); // whole film
 
 

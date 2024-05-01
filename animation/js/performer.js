@@ -267,6 +267,22 @@ export function ufoLand() {
         positionZ: z
     });
     
+    // the shadow
+    const alpha = {
+        start: 0,
+        landed: 0.5
+    };
+    const shadow = Anarchia.createShadow({
+        name: "ufoLand-shadow",
+        radius: 0.5,
+        positionX: x,
+        positionY: endY - 0.43,
+        positionZ: z,
+        rotationX: 103.6 * Math.PI / 180,
+        rotationY: 8.2  * Math.PI / 180,
+        alpha: alpha.start
+    });    
+    
     // land animation
     Anarchia.createAnimation(bottom, {
         property: "position.y"
@@ -286,6 +302,18 @@ export function ufoLand() {
             Sounds.landingUfo(bottom);            
         }
     }]);
+
+    // shadow animation
+    Anarchia.createAnimation(shadow, {
+        property: "material.alpha"
+    },[ // keys
+        { frame: Timeline.filmStart, value: alpha.start },
+        { frame: Timeline.ufolandedPositionStart, value: alpha.start },
+        { frame: Timeline.ufolandedPositionLanded, value: alpha.landed },
+        { frame: Timeline.ufolandedLiftupStart, value: alpha.landed },
+        { frame: Timeline.ufolandedLiftupEnd, value: alpha.start },
+        { frame: Anarchia.END_FRAME, value: alpha.start }
+    ]);
         
     // the ufo top
     const top = Anarchia.createPlane({
