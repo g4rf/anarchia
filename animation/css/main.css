@@ -40,6 +40,11 @@ screen #credits content {
   line-height: 1.42;
   color: #fff;
 }
+screen #credits content a {
+  color: #fff;
+  border-bottom: dotted 1px #fff;
+  text-decoration: none;
+}
 screen #credits content credit {
   display: grid;
   grid-template: "label names" / 2fr 5fr;
