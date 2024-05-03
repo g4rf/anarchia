@@ -114,10 +114,10 @@ export function camera() {
             value: vectors.end
         },{
             frame: Anarchia.END_FRAME, 
-            value: vectors.end
+            //value: vectors.end
+            value: vectors.heinrichplatz
         }
     ];
-
     
     // animation for shaking camera
     const rumbleAnimation = new BABYLON.AnimationGroup();
@@ -265,23 +265,7 @@ export function ufoLand() {
         positionX: x,
         positionY: startY,
         positionZ: z
-    });
-    
-    // the shadow
-    const alpha = {
-        start: 0,
-        landed: 0.5
-    };
-    const shadow = Anarchia.createShadow({
-        name: "ufoLand-shadow",
-        radius: 0.5,
-        positionX: x,
-        positionY: endY - 0.43,
-        positionZ: z,
-        rotationX: 103.6 * Math.PI / 180,
-        rotationY: 8.2  * Math.PI / 180,
-        alpha: alpha.start
-    });    
+    });  
     
     // land animation
     Anarchia.createAnimation(bottom, {
@@ -303,18 +287,6 @@ export function ufoLand() {
         }
     }]);
 
-    // shadow animation
-    Anarchia.createAnimation(shadow, {
-        property: "material.alpha"
-    },[ // keys
-        { frame: Timeline.filmStart, value: alpha.start },
-        { frame: Timeline.ufolandedPositionStart, value: alpha.start },
-        { frame: Timeline.ufolandedPositionLanded, value: alpha.landed },
-        { frame: Timeline.ufolandedLiftupStart, value: alpha.landed },
-        { frame: Timeline.ufolandedLiftupEnd, value: alpha.start },
-        { frame: Anarchia.END_FRAME, value: alpha.start }
-    ]);
-        
     // the ufo top
     const top = Anarchia.createPlane({
         name: "ufoLandTop",
@@ -383,6 +355,49 @@ export function ufoLand() {
         { frame: closeEnd,              value: 0    },
         { frame: Anarchia.END_FRAME,    value: 0    }
     ], easing);
+    
+    // the shadow
+    const alpha = {
+        start: 0,
+        landed: 0.3
+    };
+    const shadow = Anarchia.createShadow({
+        name: "ufoLand-shadow",
+        radius: 0.5 * height,
+        positionX: x,
+        positionY: endY - 0.43,
+        positionZ: z,
+        rotationX: 103.6 / 180 * Math.PI,
+        rotationY: 8.2 / 180 * Math.PI,
+        alpha: alpha.start
+    });  
+    
+    // shadow animation
+    Anarchia.createAnimation(shadow, {
+        property: "material.alpha"
+    },[ // keys
+        { 
+            frame: Timeline.filmStart, 
+            value: alpha.start 
+        },{
+            frame: Timeline.ufolandedPositionLanded - 2 * Anarchia.FRAME_RATE, 
+            value: alpha.start 
+        },
+        { 
+            frame: Timeline.ufolandedPositionLanded, 
+            value: alpha.landed 
+        },{
+            frame: Timeline.ufolandedLiftupStart, 
+            value: alpha.landed
+        },
+        {
+            frame: Timeline.ufolandedLiftupStart + 0.5 * Anarchia.FRAME_RATE, 
+            value: alpha.start
+        },{ 
+            frame: Anarchia.END_FRAME, 
+            value: alpha.start
+        }
+    ]);
     
     return bottom;
 }
@@ -678,6 +693,23 @@ export function aliens() {
         });
         alien.setParent(ufo);
 
+        // shadow
+        let alpha = {
+            start: 0,
+            ground: 0.1
+        };
+        const shadow = Anarchia.createShadow({
+            name: "alien_" + i + "_shadow",
+            radius: 0.3 * size,
+            alpha: alpha.start,
+            rotationX: 95 / 180 * Math.PI,
+            rotationY: 120 / 180 * Math.PI
+        });
+        shadow.setParent(ufo);
+        shadow.position.x = alien.position.x;
+        shadow.position.y = parameters[i].endY - 0.15 * size;
+        shadow.position.z = alien.position.z;
+            
         // random rotation clockwise
         Anarchia.addJitter(alien, {
             property: "rotation.z",
@@ -700,9 +732,7 @@ export function aliens() {
         });
 
         // jump animation
-        Anarchia.createAnimation(alien, {
-            property: "position.x"
-        },[ // keys
+        const moveX = [ // keys
             { 
                 frame: Timeline.filmStart, 
                 value: alien.position.x
@@ -730,14 +760,18 @@ export function aliens() {
                 frame: Anarchia.END_FRAME, 
                 value: 0
             }
-        ], false, [
+        ];
+        
+        Anarchia.createAnimation(alien, {
+            property: "position.x"
+        }, moveX , false, [
             { // jump out
                 frame: Timeline.alien[i].jumpOut, 
                 callback: function() {
                     Anarchia.jump(alien, { 
                         height: Anarchia.random(0.5, 1.5),
                         end: parameters[i].endY
-                    });
+                    }); // no shadow as we do this in an extra animation
                 }
             },
             { // random jumps
@@ -748,7 +782,7 @@ export function aliens() {
                         maxHeight: 0.3,
                         minPause: 2,
                         maxPause: 4
-                    });
+                    }, shadow);
                 }
             },
             { // pogos
@@ -760,7 +794,7 @@ export function aliens() {
                         maxHeight: 1.5,
                         minPause: 1.1,
                         maxPause: 1.2
-                    });
+                    }, shadow);
                 }
             },
             {
@@ -778,7 +812,7 @@ export function aliens() {
                         maxHeight: 1.5,
                         minPause: 1.1,
                         maxPause: 1.2
-                    });
+                    }), shadow;
                 }
             },
             { 
@@ -796,7 +830,7 @@ export function aliens() {
                         maxHeight: 1.5,
                         minPause: 1.1,
                         maxPause: 1.2
-                    });
+                    }, shadow);
                 }
             },
             { 
@@ -811,10 +845,49 @@ export function aliens() {
                     Anarchia.jump(alien, { 
                         height: Anarchia.random(0.5, 1.5),
                         end: -alien.position.y + 0.12
-                    });
+                    }); // no shadow as we do this in an extra animation
                 }
             }
         ]);
+        
+        // shadow movement in x direction
+        Anarchia.createAnimation(shadow, {
+            property: "position.x"
+        }, moveX);
+        
+        // show shadow
+        Anarchia.createAnimation(shadow, {
+            property: "material.alpha"
+        }, [
+            { 
+                frame: Timeline.filmStart, 
+                value: alpha.start
+            },
+            
+            { // jump out 
+                frame: Timeline.alien[i].jumpOut + 0.2 * Anarchia.FRAME_RATE,
+                value: alpha.start 
+            },
+            {   
+                frame: Timeline.alien[i].jumpOut + 1 * Anarchia.FRAME_RATE,
+                value: alpha.ground 
+            },
+            
+            { // jump in 
+                frame: Timeline.alien[i].jumpIn + 0.1 * Anarchia.FRAME_RATE,
+                value: alpha.ground
+            },
+            {   
+                frame: Timeline.alien[i].jumpIn + 0.5 * Anarchia.FRAME_RATE,
+                value: alpha.start
+            },
+
+            { 
+                frame: Anarchia.END_FRAME, 
+                value: alpha.start
+            }
+        ]);
+        
         
         // add to array
         aliens.push(alien);

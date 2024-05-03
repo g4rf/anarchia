@@ -417,7 +417,7 @@ export default {
      *      [bounces=1] The bounces at animation end, see BABYLON.BounceEase.
      *      [bounciness=5] The bounciness, see BABYLON.BounceEase.
      */
-    jump: function(mesh, config) {
+    jump: function(mesh, config, shadow) {
         if(typeof config == "undefined") config = {};
         
         const param = {
@@ -432,6 +432,16 @@ export default {
         }
         
         const ratio = param.height / (param.height + param.height - param.end);
+        
+        // shadow
+        let hasShadow = false;        
+        let alpha;
+        if(typeof shadow != "undefined") {
+            hasShadow = true;
+            alpha = shadow.material.alpha;
+        }
+        
+        // jump up
         const posYup = this.createAnimation(mesh, {
             property: "position.y"
         },[ // keys
@@ -444,6 +454,7 @@ export default {
             mode: BABYLON.EasingFunction.EASINGMODE_EASEOUT
         });
 
+        // go down
         const posYdown = this.createAnimation(mesh, {
             property: "position.y"
         },[ // keys
@@ -459,7 +470,25 @@ export default {
                 Sounds.jump(mesh);
             }
         }]);
+    
+        // shadow
+        let shadowAnimation;
+        if(hasShadow) {
+            shadowAnimation = this.createAnimation(shadow, {
+                property: "material.alpha"
+            },[{
+                frame: 0 * this.FRAME_RATE,
+                value: alpha
+            },{
+                frame: (0.8 * ratio) * this.FRAME_RATE,
+                value: 0.1 * alpha
+            },{
+                frame: this.FRAME_RATE,
+                value: alpha
+            }]);   
+        }
 
+        // squeeze effect
         const scaleX = this.createAnimation(mesh, {
             property: "scaling.x",
             //loop: BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE
@@ -492,8 +521,14 @@ export default {
         this.scene.beginDirectAnimation(mesh, [scaleY, scaleX],
             0, this.FRAME_RATE, false, param.speed);
         
+        // shadow
+        if(hasShadow) {
+            this.scene.beginDirectAnimation(shadow, [shadowAnimation],
+                0, this.FRAME_RATE, false, param.speed);
+        }
+        
         // jump
-        const self = this;
+        const self = this;        
         this.scene.beginDirectAnimation(mesh, [posYup],
             0, this.FRAME_RATE, false, param.speed, function() {
                 self.scene.beginDirectAnimation(mesh, [posYdown],
@@ -509,8 +544,9 @@ export default {
      *      [maxHeight=1] The max height for a jump.
      *      [minPause=0] The minimal break between two jumps.
      *      [maxPause=5] The maximal break between two jumps.
+     *  @param {Object} [shadow] The shadow of the object.
      */
-    randomJumping: function(mesh, config) {
+    randomJumping: function(mesh, config, shadow) {
         if(typeof config == "undefined") config = {};
        
         const param = {
@@ -535,7 +571,7 @@ export default {
             
             self.jump(mesh, {
                 height: self.random(param.minHeight, param.maxHeight)
-            });
+            }, shadow);
             
             mesh.randomJumpTimers.push(
                 window.setTimeout(jumpInterval, 
