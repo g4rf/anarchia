@@ -302,7 +302,8 @@ export function headline() {
     const height = 18;
     return Anarchia.createPlane({
         name: "headline",
-        texture: "textures/headline.png",
+        //texture: "textures/headline-en.png", // english
+        texture: "textures/headline-jp.png", // japanese
         height: height,
         width: height * 3500 / 1300,
         positionX: 20,

@@ -114,8 +114,8 @@ export function camera() {
             value: vectors.end
         },{
             frame: Anarchia.END_FRAME, 
-            //value: vectors.end
-            value: vectors.heinrichplatz
+            value: vectors.end
+            //value: vectors.heinrichplatz
         }
     ];
     
@@ -398,8 +398,9 @@ export function ufoLand() {
             value: alpha.start
         }
     ]);
+    //shadow.setParent(bottom);
     
-    return bottom;
+    return [bottom, shadow];
 }
 
 /**
@@ -409,7 +410,8 @@ export function ufoLand() {
 export function ufoSpace() {
     const t = Timeline.ufoSpace;
     const size = 30;
-    const texture = "textures/ufo-in-space.png";
+    //const texture = "textures/ufo-in-space-jan.png";
+    const texture = "textures/ufo-in-space-beppu-punk-cats.png";
     const vectors = {
         start: new BABYLON.Vector3(0, 15, 16.5),
         bend: new BABYLON.Vector3(-300, -20, 16.5),
@@ -603,8 +605,13 @@ function beam(control) {
                 );
                 light.parent = Anarchia.scene.activeCamera;
             }
-        },{ // sound
-            frame: t.flash,
+        },{ // beam sound to charlottenburg
+            frame: t.flash - 1 * Anarchia.FRAME_RATE,
+            callback: function() {
+                Sounds.beam();
+            }
+        },{ // beam sound to heinrichplatz
+            frame: t.flashAgain - 1 * Anarchia.FRAME_RATE,
             callback: function() {
                 Sounds.beam();
             }
@@ -938,10 +945,20 @@ export function punks() {
             name: "punk_" + i,
             texture: "textures/humans/punk_" + i + ".png",
             height: parameters[i].size,
-            width: parameters[i].size,
+            width: parameters[i].size / 1920 * 2600,
             positionX: parameters[i].x,
             positionY: parameters[i].y,
             positionZ: parameters[i].z
+        });
+        
+        const shadow = Anarchia.createShadow({
+            name: "punk_" + i + "_shadow",
+            radius: 0.2 * parameters[i].size,
+            positionX: punk.position.x,
+            positionY: punk.position.y - 0.5 * parameters[i].size,
+            positionZ: punk.position.z,
+            rotationX: 85 / 180 * Math.PI,
+            rotationY: 125 / 180 * Math.PI
         });
         
         // rotation clockwise
@@ -966,154 +983,184 @@ export function punks() {
         });
 
         // jumping in
+        const jumpKeys = [{ // keys
+                frame: Timeline.filmStart, 
+                value: parameters[i].jumps[0]
+            },
+
+            { // jump in 1
+                frame: Timeline.punks[i].jumpIn[0].start,
+                value: parameters[i].jumps[0]
+            },{
+                frame: Timeline.punks[i].jumpIn[0].end,
+                value: parameters[i].jumps[1]
+            },{ // jump in 2
+                frame: Timeline.punks[i].jumpIn[1].start,
+                value: parameters[i].jumps[1]
+            },{
+                frame: Timeline.punks[i].jumpIn[1].end,
+                value: parameters[i].jumps[2]
+            },{ // jump in 3
+                frame: Timeline.punks[i].jumpIn[2].start,
+                value: parameters[i].jumps[2]
+            },{
+                frame: Timeline.punks[i].jumpIn[2].end,
+                value: parameters[i].jumps[3]
+            },{ // jump in 4
+                frame: Timeline.punks[i].jumpIn[3].start,
+                value: parameters[i].jumps[3]
+            },{
+                frame: Timeline.punks[i].jumpIn[3].end,
+                value: parameters[i].jumps[4]
+            },{ // jump in 5
+                frame: Timeline.punks[i].jumpIn[4].start,
+                value: parameters[i].jumps[4]
+            },{
+                frame: Timeline.punks[i].jumpIn[4].end,
+                value: parameters[i].jumps[5]
+            },
+
+            { // jump out 1
+                frame: Timeline.punks[i].jumpOut[0].start,
+                value: parameters[i].jumps[5]
+            },{
+                frame: Timeline.punks[i].jumpOut[0].end,
+                value: parameters[i].jumps[4]
+            },{ // jump out 2
+                frame: Timeline.punks[i].jumpOut[1].start,
+                value: parameters[i].jumps[4]
+            },{
+                frame: Timeline.punks[i].jumpOut[1].end,
+                value: parameters[i].jumps[3]
+            },{ // jump out 3
+                frame: Timeline.punks[i].jumpOut[2].start,
+                value: parameters[i].jumps[3]
+            },{
+                frame: Timeline.punks[i].jumpOut[2].end,
+                value: parameters[i].jumps[2]
+            },{ // jump out 4
+                frame: Timeline.punks[i].jumpOut[3].start,
+                value: parameters[i].jumps[2]
+            },{
+                frame: Timeline.punks[i].jumpOut[3].end,
+                value: parameters[i].jumps[1]
+            },{ // jump out 5
+                frame: Timeline.punks[i].jumpOut[4].start,
+                value: parameters[i].jumps[1]
+            },{
+                frame: Timeline.punks[i].jumpOut[4].end,
+                value: parameters[i].jumps[0]
+            },        
+
+            { // last position
+                frame: Anarchia.END_FRAME, 
+                value: parameters[i].jumps[0]
+        }];
+    
+        // shadow
+        Anarchia.createAnimation(shadow, {
+                property: "position.x"
+            },        
+            jumpKeys
+        );
+        
+        // punk
         Anarchia.createAnimation(punk, {
-            property: "position.x"
-        },[{ // keys
-            frame: Timeline.filmStart, 
-            value: parameters[i].jumps[0]
-        },
-        
-        { // jump in 1
-            frame: Timeline.punks[i].jumpIn[0].start,
-            value: parameters[i].jumps[0]
-        },{
-            frame: Timeline.punks[i].jumpIn[0].end,
-            value: parameters[i].jumps[1]
-        },{ // jump in 2
-            frame: Timeline.punks[i].jumpIn[1].start,
-            value: parameters[i].jumps[1]
-        },{
-            frame: Timeline.punks[i].jumpIn[1].end,
-            value: parameters[i].jumps[2]
-        },{ // jump in 3
-            frame: Timeline.punks[i].jumpIn[2].start,
-            value: parameters[i].jumps[2]
-        },{
-            frame: Timeline.punks[i].jumpIn[2].end,
-            value: parameters[i].jumps[3]
-        },{ // jump in 4
-            frame: Timeline.punks[i].jumpIn[3].start,
-            value: parameters[i].jumps[3]
-        },{
-            frame: Timeline.punks[i].jumpIn[3].end,
-            value: parameters[i].jumps[4]
-        },{ // jump in 5
-            frame: Timeline.punks[i].jumpIn[4].start,
-            value: parameters[i].jumps[4]
-        },{
-            frame: Timeline.punks[i].jumpIn[4].end,
-            value: parameters[i].jumps[5]
-        },
-        
-        { // jump out 1
-            frame: Timeline.punks[i].jumpOut[0].start,
-            value: parameters[i].jumps[5]
-        },{
-            frame: Timeline.punks[i].jumpOut[0].end,
-            value: parameters[i].jumps[4]
-        },{ // jump out 2
-            frame: Timeline.punks[i].jumpOut[1].start,
-            value: parameters[i].jumps[4]
-        },{
-            frame: Timeline.punks[i].jumpOut[1].end,
-            value: parameters[i].jumps[3]
-        },{ // jump out 3
-            frame: Timeline.punks[i].jumpOut[2].start,
-            value: parameters[i].jumps[3]
-        },{
-            frame: Timeline.punks[i].jumpOut[2].end,
-            value: parameters[i].jumps[2]
-        },{ // jump out 4
-            frame: Timeline.punks[i].jumpOut[3].start,
-            value: parameters[i].jumps[2]
-        },{
-            frame: Timeline.punks[i].jumpOut[3].end,
-            value: parameters[i].jumps[1]
-        },{ // jump out 5
-            frame: Timeline.punks[i].jumpOut[4].start,
-            value: parameters[i].jumps[1]
-        },{
-            frame: Timeline.punks[i].jumpOut[4].end,
-            value: parameters[i].jumps[0]
-        },        
-        
-        { // last position
-            frame: Anarchia.END_FRAME, 
-            value: parameters[i].jumps[0]
-        }], 
-        
-        false, // no ease
-        
-        [ // events
-            
-        { // jumps in
-            frame: Timeline.punks[i].jumpIn[0].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.5 }); } 
-        },{  
-            frame: Timeline.punks[i].jumpIn[1].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.5 }); } 
-        },{  
-            frame: Timeline.punks[i].jumpIn[2].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.3 }); } 
-        },{  
-            frame: Timeline.punks[i].jumpIn[3].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.1 }); } 
-        },{  
-            frame: Timeline.punks[i].jumpIn[4].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.1 }); } 
-        
-        },{ // pogo 
-            frame: Timeline.punks[i].policePogoStart, 
-            callback: function() {
-                Anarchia.stopJumping(punk);
-                Anarchia.randomJumping(punk, {
-                    minHeight: 1,
-                    maxHeight: 1.5,
-                    minPause: 1.1,
-                    maxPause: 1.2
-                });
+                property: "position.x"
+            },        
+            jumpKeys, 
+            false, // no ease
+            [ // events
+
+            { // jumps in
+                frame: Timeline.punks[i].jumpIn[0].start - jumpStartOffset, 
+                callback: function() { 
+                    Anarchia.jump(punk, { height: 0.5 }, shadow);
+                } 
+            },{  
+                frame: Timeline.punks[i].jumpIn[1].start - jumpStartOffset, 
+                callback: function() { 
+                    Anarchia.jump(punk, { height: 0.5 }, shadow);
+                } 
+            },{  
+                frame: Timeline.punks[i].jumpIn[2].start - jumpStartOffset, 
+                callback: function() { 
+                    Anarchia.jump(punk, { height: 0.3 }, shadow);
+                } 
+            },{  
+                frame: Timeline.punks[i].jumpIn[3].start - jumpStartOffset, 
+                callback: function() { 
+                    Anarchia.jump(punk, { height: 0.1 }, shadow);
+                } 
+            },{  
+                frame: Timeline.punks[i].jumpIn[4].start - jumpStartOffset, 
+                callback: function() { 
+                    Anarchia.jump(punk, { height: 0.1 }, shadow);
+                } 
+
+            },{ // pogo 
+                frame: Timeline.punks[i].policePogoStart, 
+                callback: function() {
+                    Anarchia.stopJumping(punk);
+                    Anarchia.randomJumping(punk, {
+                        minHeight: 1,
+                        maxHeight: 1.5,
+                        minPause: 1.1,
+                        maxPause: 1.2
+                    }, shadow);
+                }
+            },{ 
+                frame: Timeline.punks[i].policePogoEnd, 
+                callback: function() {
+                    Anarchia.stopJumping(punk);
+                }
+            },{ 
+                frame: Timeline.punks[i].charlottenburgPogoStart, 
+                callback: function() {
+                    Anarchia.stopJumping(punk);
+                    Anarchia.randomJumping(punk, {
+                        minHeight: 1,
+                        maxHeight: 1.5,
+                        minPause: 1.1,
+                        maxPause: 1.2
+                    }, shadow);
+                }
+            },{ 
+                frame: Timeline.punks[i].charlottenburgPogoEnd, 
+                callback: function() {
+                    Anarchia.stopJumping(punk);
+                }
+
+            },{ // jumps out
+                frame: Timeline.punks[i].jumpOut[0].start - jumpStartOffset, 
+                callback: function() {
+                    Anarchia.jump(punk, { height: 0.03 }, shadow);
+                } 
+            },{  
+                frame: Timeline.punks[i].jumpOut[1].start - jumpStartOffset, 
+                callback: function() { 
+                    Anarchia.jump(punk, { height: 0.03 }, shadow);
+                }
+            },{  
+                frame: Timeline.punks[i].jumpOut[2].start - jumpStartOffset, 
+                callback: function() { 
+                    Anarchia.jump(punk, { height: 0.1 }, shadow); 
+                }
+            },{  
+                frame: Timeline.punks[i].jumpOut[3].start - jumpStartOffset, 
+                callback: function() { 
+                    Anarchia.jump(punk, { height: 0.17 }, shadow);
+                }
+            },{  
+                frame: Timeline.punks[i].jumpOut[4].start - jumpStartOffset, 
+                callback: function() { 
+                    Anarchia.jump(punk, { height: 0.17 }, shadow);
+                }
             }
-        },{ 
-            frame: Timeline.punks[i].policePogoEnd, 
-            callback: function() {
-                Anarchia.stopJumping(punk);
-            }
-        },{ 
-            frame: Timeline.punks[i].charlottenburgPogoStart, 
-            callback: function() {
-                Anarchia.stopJumping(punk);
-                Anarchia.randomJumping(punk, {
-                    minHeight: 1,
-                    maxHeight: 1.5,
-                    minPause: 1.1,
-                    maxPause: 1.2
-                });
-            }
-        },{ 
-            frame: Timeline.punks[i].charlottenburgPogoEnd, 
-            callback: function() {
-                Anarchia.stopJumping(punk);
-            }
-        
-        },{ // jumps out
-            frame: Timeline.punks[i].jumpOut[0].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.03 }); } 
-        },{  
-            frame: Timeline.punks[i].jumpOut[1].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.03 }); }
-        },{  
-            frame: Timeline.punks[i].jumpOut[2].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.1 }); }
-        },{  
-            frame: Timeline.punks[i].jumpOut[3].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.17 }); }
-        },{  
-            frame: Timeline.punks[i].jumpOut[4].start - jumpStartOffset, 
-            callback: function() { Anarchia.jump(punk, { height: 0.17 }); }
-        }
-    ]);
+        ]);
     
         punks.push(punk);
+        punks.push(shadow);
     }
     
     return [punks];
@@ -1134,7 +1181,11 @@ export function humans() {
             y: 4.3,
             z: 4.8, 
             rotationStart: -0.3,
-            rotationEnd:  -0.05
+            rotationEnd:  -0.05,
+            shadow: {
+                rotationX: 81.8 / 180 * Math.PI,
+                rotationY: 122.6 / 180 * Math.PI
+            }
         },{ // human 1 - back left
             size: 0.53, 
             x: -2.70, 
@@ -1142,7 +1193,11 @@ export function humans() {
             y: 4.90, 
             z: 5.9,
             rotationStart: -0.1, 
-            rotationEnd: 0.1
+            rotationEnd: 0.1,
+            shadow: {
+                rotationX: 80 / 180 * Math.PI,
+                rotationY: 0 / 180 * Math.PI
+            }
         },{ // human 2 - door left
             size: 0.48, 
             x:  0.00,
@@ -1150,7 +1205,11 @@ export function humans() {
             y: 4.7, 
             z: 5.9,
             rotationStart: -0.1,
-            rotationEnd: 0.05 
+            rotationEnd: 0.05,
+            shadow: {
+                rotationX: 84.5 / 180 * Math.PI,
+                rotationY: 46.3 / 180 * Math.PI
+            }
         },{ // human 3 - door right
             size: 0.40, 
             x:  0.25,
@@ -1158,7 +1217,11 @@ export function humans() {
             y: 4.65, 
             z: 5.89, 
             rotationStart: -0.1, 
-            rotationEnd: 0.05 
+            rotationEnd: 0.05,
+            shadow: {
+                rotationX: 87.2 / 180 * Math.PI,
+                rotationY: 84.5 / 180 * Math.PI
+            }
         }
     ];
     
@@ -1174,6 +1237,16 @@ export function humans() {
             positionX: p.x,
             positionY: p.y,
             positionZ: p.z
+        });
+        
+        const shadow = Anarchia.createShadow({
+            name: "human_" + i + "_shadow",
+            radius: 0.3 * p.size,
+            positionX: p.x,
+            positionY: p.y - 0.5 * p.size,
+            positionZ: p.z,
+            rotationX: p.shadow.rotationX,
+            rotationY: p.shadow.rotationY
         });
 
         // follow ufo
@@ -1230,7 +1303,7 @@ export function humans() {
                             maxHeight: 1.5,
                             minPause: 1.1,
                             maxPause: 1.2
-                        });
+                        }, shadow);
                     }
                 }
             },{ 
@@ -1244,13 +1317,7 @@ export function humans() {
         // escape from police & return (not human 0)
         if(i != 0) {
             let rotateAnimation = new BABYLON.AnimationGroup();
-            
-            // move animation
-            Anarchia.createAnimation(human,
-            { // config
-                property: "position.x"
-            },
-            [ // keys
+            const keys = [ // keys
                 { 
                     frame: Timeline.filmStart, 
                     value: p.x
@@ -1270,11 +1337,28 @@ export function humans() {
                     frame: Anarchia.END_FRAME, 
                     value: p.x
                 }
-            ],
-            { // easing
+            ];
+            const easing = { // easing
                 type: new BABYLON.BezierCurveEase(.53,.2,.43,.75),
                 mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
-            },
+            };
+            
+            // move animation shadow
+            Anarchia.createAnimation(shadow,
+                { // config
+                    property: "position.x"
+                }, 
+                keys,
+                easing
+            );
+            
+            // move animation human
+            Anarchia.createAnimation(human,
+            { // config
+                property: "position.x"
+            }, 
+            keys,
+            easing,
             [ // events 
                 { // start excape rotation
                     frame: Timeline.humans.escapeStart, 
@@ -1342,6 +1426,7 @@ export function humans() {
         
         // add to array
         humans.push(human);
+        humans.push(shadow);
     }
     
     return humans;
@@ -1366,7 +1451,11 @@ export function police() {
             y: 4.8, 
             z: 5.5, 
             rotationStart: -0.3, 
-            rotationEnd:  0 
+            rotationEnd:  0,
+            shadow: {
+                rotationX: 90 / 180 * Math.PI,
+                rotationY: 90 / 180 * Math.PI
+            }
         },
         // front row
         { 
@@ -1378,7 +1467,11 @@ export function police() {
             y: 4.3, 
             z: 3.8, 
             rotationStart: 0, 
-            rotationEnd:  0 
+            rotationEnd:  0,
+            shadow: {
+                rotationX: 85 / 180 * Math.PI,
+                rotationY: 0 / 180 * Math.PI
+            }
         }
     ];
     
@@ -1411,13 +1504,19 @@ export function police() {
                 positionY: parameters[i].y,
                 positionZ: parameters[i].z
             });
+            
+            const shadow = Anarchia.createShadow({
+                name: "police_row_" + i + "_pig_" + p + "_shadow",
+                radius: 0.3 * parameters[i].size,
+                positionX: start,
+                positionY: parameters[i].y - 0.5 * parameters[i].size,
+                positionZ: parameters[i].z,
+                rotationX: parameters[i].shadow.rotationX,
+                rotationY: parameters[i].shadow.rotationY
+            });
 
             // move animation
-            Anarchia.createAnimation(policeman,
-            { // config
-                property: "position.x"
-            },
-            [ // keys
+            const keys = [ // keys
                 { 
                     frame: Timeline.filmStart, 
                     value: start
@@ -1443,92 +1542,111 @@ export function police() {
                     frame: Anarchia.END_FRAME, 
                     value: end 
                 }
-            ],
-            { // easing
+            ];
+            const easing = { // easing
                 type: new BABYLON.BezierCurveEase(.53,.2,.43,.75),
                 mode: BABYLON.EasingFunction.EASINGMODE_EASEIN
-            },
-            [ // events 
-                { // start rotation & police siren
-                    frame: Timeline.police.moveStart, 
-                    callback: function() {
-                        // rotation
-                        const rotate = new BABYLON.Animation(
-                                "rotate_police_row_" + i + "_pig_" + p,
-                                "rotation.z",
-                                Anarchia.FRAME_RATE,
-                                BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-                                BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
-                        );
-                        rotate.setKeys([{
-                            frame: 0,
-                            value: 0 * Math.PI
-                        },{
-                            frame: 0.5 * Anarchia.FRAME_RATE,
-                            value: 2 * Math.PI
-                        }]);
+            };
+            
+            // shadow
+            Anarchia.createAnimation(shadow,
+                { // config
+                    property: "position.x"
+                },
+                keys,
+                easing
+            );
+            
+            // pig
+            Anarchia.createAnimation(policeman,
+                { // config
+                    property: "position.x"
+                },
+                keys,
+                easing,
+                [ // events 
+                    { // start rotation & police siren
+                        frame: Timeline.police.moveStart, 
+                        callback: function() {
+                            // rotation
+                            const rotate = new BABYLON.Animation(
+                                    "rotate_police_row_" + i + "_pig_" + p,
+                                    "rotation.z",
+                                    Anarchia.FRAME_RATE,
+                                    BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                                    BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+                            );
+                            rotate.setKeys([{
+                                frame: 0,
+                                value: 0 * Math.PI
+                            },{
+                                frame: 0.5 * Anarchia.FRAME_RATE,
+                                value: 2 * Math.PI
+                            }]);
 
-                        rotateAnimation = new BABYLON.AnimationGroup();
-                        rotateAnimation.addTargetedAnimation(rotate, policeman);
-                        rotateAnimation.play(true);
-                        
-                        // police siren & rumble sound
-                        // (only for first pig in first row)
-                        if(i == 1 && p == 0) {
-                            Sounds.police(policeman);
-                            Sounds.rumble(policeman);
+                            rotateAnimation = new BABYLON.AnimationGroup();
+                            rotateAnimation.addTargetedAnimation(rotate, policeman);
+                            rotateAnimation.play(true);
+
+                            // police siren & rumble sound
+                            // (only for first pig in first row)
+                            if(i == 1 && p == 0) {
+                                Sounds.police(policeman);
+                                Sounds.rumble(policeman);
+                            }
                         }
-                    }
-                },
-                { // stop rotation, blend to up position
-                    frame: Timeline.police.moveEnd, 
-                    callback: function() {
-                        rotateAnimation.stop();
+                    },
+                    { // stop rotation, blend to up position
+                        frame: Timeline.police.moveEnd, 
+                        callback: function() {
+                            rotateAnimation.stop();
 
-                        const blending = new BABYLON.Animation(
-                                "blend_police_row_" + i + "_pig_" + p,
-                                "rotation.z",
-                                Anarchia.FRAME_RATE,
-                                BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-                                BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE);
-                        blending.enableBlending = true;
-                        blending.blendingSpeed = 0.05;
-                        blending.setKeys([{
-                            frame: 0,
-                            value: 2 * Math.PI
-                        }]);
-                    
-                        rotateAnimation = new BABYLON.AnimationGroup();
-                        rotateAnimation.addTargetedAnimation(blending, policeman);
-                        rotateAnimation.play(true);
+                            const blending = new BABYLON.Animation(
+                                    "blend_police_row_" + i + "_pig_" + p,
+                                    "rotation.z",
+                                    Anarchia.FRAME_RATE,
+                                    BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                                    BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE);
+                            blending.enableBlending = true;
+                            blending.blendingSpeed = 0.05;
+                            blending.setKeys([{
+                                frame: 0,
+                                value: 2 * Math.PI
+                            }]);
+
+                            rotateAnimation = new BABYLON.AnimationGroup();
+                            rotateAnimation.addTargetedAnimation(blending, policeman);
+                            rotateAnimation.play(true);
+                        }
+                    },
+                    { // remove uniform
+                        frame: Timeline.camera.charlottenburg,
+                        callback: function() {
+                            const texture = new BABYLON.Texture(
+                                    "textures/humans/police-nipples.png", 
+                                    Anarchia.scene
+                            );
+                            texture.hasAlpha = true;
+                            policeman.material.diffuseTexture = texture;
+                        } 
+                    },
+                    { // change to only uniform
+                        frame: Timeline.camera.heinrichplatz2,
+                        callback: function() {
+                            const texture = new BABYLON.Texture(
+                                    "textures/humans/police-uniform.png", 
+                                    Anarchia.scene
+                            );
+                            texture.hasAlpha = true;
+                            policeman.material.diffuseTexture = texture;
+                        } 
                     }
-                },
-                { // remove uniform
-                    frame: Timeline.camera.charlottenburg,
-                    callback: function() {
-                        const texture = new BABYLON.Texture(
-                                "textures/humans/police-nipples.png", 
-                                Anarchia.scene
-                        );
-                        texture.hasAlpha = true;
-                        policeman.material.diffuseTexture = texture;
-                    } 
-                },
-                { // change to only uniform
-                    frame: Timeline.camera.heinrichplatz2,
-                    callback: function() {
-                        const texture = new BABYLON.Texture(
-                                "textures/humans/police-uniform.png", 
-                                Anarchia.scene
-                        );
-                        texture.hasAlpha = true;
-                        policeman.material.diffuseTexture = texture;
-                    } 
-                }
-            ]);
+                ]
+            );
 
             // add to array
             police.push(policeman);
+            police.push(shadow);
         }
     }
     
@@ -1703,25 +1821,28 @@ export function balloons() {
     
     const parameters = [{
         // balloon 0 aliens
-        x: -1, 
+        x: -2, 
         y: 6, 
         z: 5,
         width: 4,
-        height: 2
+        height: 2,
+        uScale: -1
     },{
         // balloon 1 punks
         x: 0, 
         y: 5.5, 
         z: 5,
         width: 2,
-        height: 1
+        height: 1,
+        uScale: 1
     },{
         // balloon 2 aliens
         x: -1.2, 
         y: 5.5, 
         z: 5,
         width: 1,
-        height: 1
+        height: 1,
+        uScale: 1
     }];
     
     const ease = {
@@ -1739,13 +1860,16 @@ export function balloons() {
 
         const balloon = Anarchia.createPlane({
             name: "balloon_" + i,
-            texture: "textures/balloon.png",
+            texture: "textures/balloons/balloon.png",
             height: 0,
             width: 0,
             positionX: p.x,
             positionY: p.y,
             positionZ: p.z
-        });        
+        });
+        
+        // flip texture
+        balloon.material.diffuseTexture.uScale = p.uScale;
         
         // scale height
         Anarchia.createAnimation(balloon, {
@@ -1809,10 +1933,10 @@ function balloonContents(i, balloon) {
         // star
         let star = Anarchia.createPlane({
             name: "balloon_0_star",
-            texture: "textures/balloon_0_star.png"
+            texture: "textures/balloons/star.png"
         });
         star.setParent(balloon);
-        star.position.x = -0.2;
+        star.position.x = -0.25;
         star.position.y = 0.05;
         star.position.z = 100;
         star.scaling.x = 0.2;
@@ -1826,10 +1950,10 @@ function balloonContents(i, balloon) {
         // anarchy
         let anarchy = Anarchia.createPlane({
             name: "balloon_0_anarchy",
-            texture: "textures/anarchy.png"
+            texture: "textures/balloons/anarchy.png"
         });
         anarchy.setParent(balloon);
-        anarchy.position.x = -0.08;
+        anarchy.position.x = -0.14;
         anarchy.position.y = 0.1;
         anarchy.position.z = 100;
         anarchy.scaling.x = 0.2;
@@ -1843,14 +1967,14 @@ function balloonContents(i, balloon) {
         // tvtower
         let tvtower = Anarchia.createPlane({
             name: "balloon_0_tvtower",
-            texture: "textures/city/tvtower.png"
+            texture: "textures/balloons/tvtower.png"
         });
         tvtower.setParent(balloon);
-        tvtower.position.x = 0.07;
+        tvtower.position.x = 0.03;
         tvtower.position.y = 0.08;
         tvtower.position.z = 100;
-        tvtower.scaling.x = 0.1;
-        tvtower.scaling.y = 0.55;
+        tvtower.scaling.x = 0.04;
+        tvtower.scaling.y = 0.5;
         Anarchia.createAnimation(tvtower, { property: "position.z" },[ // keys
             { frame: Timeline.filmStart, value: 100 },
             { frame: t.tvtower, value: -0.1 },        
@@ -1860,14 +1984,14 @@ function balloonContents(i, balloon) {
         // cat
         let cat = Anarchia.createPlane({
             name: "balloon_0_cat",
-            texture: "textures/balloon_0_cat.png"
+            texture: "textures/balloons/cat.png"
         });
         cat.setParent(balloon);
-        cat.position.x = 0.12;
+        cat.position.x = 0.07;
         cat.position.y = -0.05;
         cat.position.z = 100;
-        cat.scaling.x = 0.13;
-        cat.scaling.y = 0.4;
+        cat.scaling.x = 0.1;
+        cat.scaling.y = 0.3;
         Anarchia.createAnimation(cat, { property: "position.z" },[ // keys
             { frame: Timeline.filmStart, value: 100 },
             { frame: t.cat, value: -0.11 },
@@ -1877,14 +2001,14 @@ function balloonContents(i, balloon) {
         // flyback
         let flyback = Anarchia.createPlane({
             name: "balloon_0_flyback",
-            texture: "textures/balloon_0_flyback.png"
+            texture: "textures/balloons/flyback.png"
         });
         flyback.setParent(balloon);
-        flyback.position.x = 0.28;
-        flyback.position.y = -0.05;
+        flyback.position.x = 0.25;
+        flyback.position.y = 0.01;
         flyback.position.z = 100;
-        flyback.scaling.x = 0.25;
-        flyback.scaling.y = 0.6;
+        flyback.scaling.x = 0.22;
+        flyback.scaling.y = 0.5;
         Anarchia.createAnimation(flyback, { property: "position.z" },[ // keys
             { frame: Timeline.filmStart, value: 100 },
             { frame: t.flyback, value: -0.1 },        
@@ -1899,7 +2023,7 @@ function balloonContents(i, balloon) {
         // aliens
         let aliens = Anarchia.createPlane({
             name: "balloon_1_aliens",
-            texture: "textures/aliens/alien_0.png"
+            texture: "textures/balloons/alien.png"
         });
         aliens.setParent(balloon);
         aliens.position.x = -0.2;
@@ -1916,7 +2040,7 @@ function balloonContents(i, balloon) {
         // star
         let star = Anarchia.createPlane({
             name: "balloon_1_star",
-            texture: "textures/balloon_0_star.png"
+            texture: "textures/balloons/star.png"
         });
         star.setParent(balloon);
         star.position.x = 0;
@@ -1933,7 +2057,7 @@ function balloonContents(i, balloon) {
         // moshpit
         let moshpit = Anarchia.createPlane({
             name: "balloon_1_moshpit",
-            texture: "textures/moshpit.png"
+            texture: "textures/balloons/moshpit.png"
         });
         moshpit.setParent(balloon);
         moshpit.position.x = 0.2;
@@ -1955,7 +2079,7 @@ function balloonContents(i, balloon) {
         // moshpit
         let moshpit = Anarchia.createPlane({
             name: "balloon_2_moshpit",
-            texture: "textures/moshpit.png"
+            texture: "textures/balloons/moshpit.png"
         });
         moshpit.setParent(balloon);
         moshpit.position.x = 0;

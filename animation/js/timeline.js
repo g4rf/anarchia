@@ -252,8 +252,8 @@ export default {
         show:       21 * Anarchia.FRAME_RATE,
         star:       21 * Anarchia.FRAME_RATE,
         anarchy:    22.5 * Anarchia.FRAME_RATE,
-        tvtower:    24.5 * Anarchia.FRAME_RATE,
-        cat:        25.5 * Anarchia.FRAME_RATE,
+        tvtower:    24 * Anarchia.FRAME_RATE,
+        cat:        25 * Anarchia.FRAME_RATE,
         flyback:    30 * Anarchia.FRAME_RATE,
         hide:       32 * Anarchia.FRAME_RATE 
     },{

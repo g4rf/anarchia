@@ -28,8 +28,8 @@ BABYLON.Engine.audioEngine.useCustomUnlockedButton = true;
 
 // which part to render
 // won't work perfectly as events are only triggered, when on the exact frame
-Anarchia.duration(17, 164);
-//Anarchia.duration(-3, 164); // whole film
+//Anarchia.duration(137, 164);
+Anarchia.duration(-3, 164); // whole film
 
 
 /** light **/

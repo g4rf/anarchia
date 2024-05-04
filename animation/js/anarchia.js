@@ -287,10 +287,12 @@ export default {
      * @param {object} config Data for the shadow:
      *      name
      *      radius
-     *      rotation    Rotation around the x axis to make it look ellipse like
-     *      position.x
-     *      position.y
-     *      position.z
+     *      rotationX
+     *      rotationY
+     *      rotationZ
+     *      positionX
+     *      positionY
+     *      positionZ
      *      alpha
      * @returns {BABYLON.Mesh} The shadow.
      */
@@ -300,8 +302,8 @@ export default {
         let param = {
             name: "",
             radius: 0.5,
-            rotationX: 0.48,
-            rotationY: 0,
+            rotationX: 80 / 180 * Math.PI,
+            rotationY: 120 / 180 * Math.PI,
             rotationZ: 0,
             positionX: 0,
             positionY: 0,
@@ -477,7 +479,10 @@ export default {
             shadowAnimation = this.createAnimation(shadow, {
                 property: "material.alpha"
             },[{
-                frame: 0 * this.FRAME_RATE,
+                frame: 0,
+                value: alpha
+            },{
+                frame: ((0.8 * ratio) / 2) * this.FRAME_RATE,
                 value: alpha
             },{
                 frame: (0.8 * ratio) * this.FRAME_RATE,
