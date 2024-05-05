@@ -166,6 +166,7 @@ export default {
             // render screen
             self.engine.runRenderLoop(function () {
                 self.scene.render();
+                // REC
                 capturer.capture(self.canvas);
             });
 
