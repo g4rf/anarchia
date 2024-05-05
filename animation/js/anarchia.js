@@ -158,6 +158,7 @@ export default {
 
             // animations on
             self.animations.forEach(function(mesh) {
+                console.log(mesh);
                 self.scene.beginAnimation(mesh,
                         self.START_FRAME, self.END_FRAME);
             });

@@ -64,7 +64,7 @@ export function tvtower() {
     
     // create fake Animation to change texture
     Anarchia.createAnimation(tvtower, {
-        property: "x"
+        property: "position.x"
     },[
         { frame: Timeline.filmStart, value: tvtower.position.x },
         { frame: Anarchia.END_FRAME, value: tvtower.position.x }
@@ -214,7 +214,7 @@ export function houses() {
     
     // create fake Animation to change texture
     Anarchia.createAnimation(houses, {
-        property: "x"
+        property: "position.x"
     },[
         { frame: Timeline.filmStart, value: houses.position.x },
         { frame: Anarchia.END_FRAME, value: houses.position.x }
@@ -265,7 +265,7 @@ export function toilet() {
     
     // create fake Animation to change texture
     Anarchia.createAnimation(toilet, {
-        property: "x"
+        property: "position.x"
     },[
         { frame: Timeline.filmStart, value: toilet.position.x },
         { frame: Anarchia.END_FRAME, value: toilet.position.x }
@@ -333,7 +333,7 @@ export function signCredentials() {
     
     // fake animation for hiding sign
     Anarchia.createAnimation(sign, {
-        property: "x"
+        property: "position.x"
     },[
         { frame: Timeline.filmStart, value: sign.position.x },
         { frame: Anarchia.END_FRAME, value: sign.position.x }
