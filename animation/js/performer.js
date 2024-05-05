@@ -1690,8 +1690,8 @@ export function dustclouds() {
         rotationZ: 1.5 * Math.PI
     };
     
-    const minDustClouds = 72;
-    const maxDustClouds = 90;
+    const minDustClouds = 52;
+    const maxDustClouds = 64;
     const numberOfDustClouds = Anarchia.random(minDustClouds, maxDustClouds, 0);
     
     // loop through clouds

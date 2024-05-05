@@ -139,21 +139,34 @@ export default {
         Videos.load();
         
         let waiting = function() {
-            if(! (Sounds.ready && Videos.ready)) {
+            // REC
+            /*if(! (Sounds.ready && Videos.ready)) {
                 console.log("Waiting for video and/or audio…");
                 window.setTimeout(waiting, 100);
                 return;
-            }
+            }*/
             
             // start music
             Sounds.music();
             
             // start citynoise
             Sounds.cityNoise();
-                                
+            
+            // REC
+            const capturer = new CCapture({ 
+                name: "autonomia",
+                format: 'png',
+                framerate: 25,
+                quality: "best",
+                display: "true",
+                timeLimit: 170,
+                autoSaveTime: 10
+            });
+            
             // render screen
             self.engine.runRenderLoop(function () {
                 self.scene.render();
+                capturer.capture(self.canvas);
             });
 
             // animations on
@@ -164,6 +177,9 @@ export default {
 
             // hide buttons
             self.hideLoading();
+            
+            // REC
+            capturer.start();
         };
         waiting();
     },

@@ -17,6 +17,7 @@ const sounds = {
 };
 
 export function load() {
+    return; // REC
     const numberOfFiles = Object.keys(sounds).length;
     let loadedFiles = 0;
 
@@ -148,6 +149,7 @@ export function music() {
 }
 
 export function cityNoise() {
+    return; // REC
     // only play at the very beginning
     if(Anarchia.START_SECOND > -2) return;
     
@@ -156,35 +158,42 @@ export function cityNoise() {
 }
 
 export function landingUfo(ufo) {
+    return; // REC
     sounds.landingUfo.attachToMesh(ufo);
     sounds.landingUfo.play();
 }
 
 export function jump(mesh) {
+    return; // REC
     const jump = sounds.jump.clone();
     jump.attachToMesh(mesh);
     jump.play();
 }
 
 export function police(mesh) {
+    return; // REC
     sounds.police.attachToMesh(mesh);
     sounds.police.play();
 }
 
 export function rumble(mesh) {
+    return; // REC
     sounds.rumble.attachToMesh(mesh);
     sounds.rumble.play();
 }
 
 export function control(mesh) {
+    return; // REC
     sounds.control.attachToMesh(mesh);
     sounds.control.play();
 }
 
 export function beam() {
+    return; // REC
     sounds.beam.play();
 }
 
-export function cityNature() {   
+export function cityNature() {
+    return; // REC
     sounds.cityNature.play();
 }
