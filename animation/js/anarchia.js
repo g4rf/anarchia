@@ -150,7 +150,7 @@ export default {
             
             // start citynoise
             Sounds.cityNoise();
-                    
+                                
             // render screen
             self.engine.runRenderLoop(function () {
                 self.scene.render();
@@ -158,7 +158,6 @@ export default {
 
             // animations on
             self.animations.forEach(function(mesh) {
-                console.log(mesh);
                 self.scene.beginAnimation(mesh,
                         self.START_FRAME, self.END_FRAME);
             });
@@ -243,6 +242,11 @@ export default {
         mesh.rotation.y = param.rotationY;
         mesh.rotation.z = param.rotationZ;
         
+        // https://doc.babylonjs.com/features/featuresDeepDive/scene/optimize_your_scene#changing-mesh-culling-strategy
+        mesh.cullingStrategy = 
+                BABYLON.AbstractMesh.CULLINGSTRATEGY_OPTIMISTIC_INCLUSION_THEN_BSPHERE_ONLY;
+        
+                
         if(param.texture != false) 
         {
             const material = 
@@ -329,6 +333,10 @@ export default {
         shadow.position.x = param.positionX;
         shadow.position.y = param.positionY;
         shadow.position.z = param.positionZ;
+        
+        // https://doc.babylonjs.com/features/featuresDeepDive/scene/optimize_your_scene#changing-mesh-culling-strategy
+        shadow.cullingStrategy = 
+                BABYLON.AbstractMesh.CULLINGSTRATEGY_OPTIMISTIC_INCLUSION_THEN_BSPHERE_ONLY;
         
         const material = new BABYLON.StandardMaterial(
                 param.name + "-material", this.scene);

@@ -17,19 +17,28 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 
 /** settings **/
 
-// used for aplha blended textures
-Anarchia.canvas.getContext("webgl2").getExtension("EXT_float_blend");
-
-// this renders all alpha correctly, but hits performance
-//Anarchia.scene.useOrderIndependentTransparency = true;
+// which part to render
+// won't work perfectly as events are only triggered, when on the exact frame
+//Anarchia.duration(103, 164);
+Anarchia.duration(-3, 164); // whole film
 
 // hide unmute button; we handle this on our own
 BABYLON.Engine.audioEngine.useCustomUnlockedButton = true;
 
-// which part to render
-// won't work perfectly as events are only triggered, when on the exact frame
-//Anarchia.duration(137, 164);
-Anarchia.duration(-3, 164); // whole film
+// optimization
+Anarchia.scene.skipPointerMovePicking = true; // we have no mouse interaction
+Anarchia.scene.physicsEnabled = false; // no physics
+Anarchia.scene.collisionsEnabled = false; // no collisions
+Anarchia.scene.fogEnabled = false; // no fog
+Anarchia.scene.lensFlaresEnabled = false; // no lens flare effects
+Anarchia.scene.particlesEnabled = false; // no particles
+Anarchia.scene.shadowsEnabled = false; // no computed shadows
+Anarchia.scene.skeletonsEnabled = false; // no skeletons
+Anarchia.scene.autoClear = false; // color buffer
+Anarchia.scene.autoClearDepthAndStencil = false; // depth and stencil buffer
+
+// used for aplha blended textures
+Anarchia.canvas.getContext("webgl2").getExtension("EXT_float_blend");
 
 
 /** light **/

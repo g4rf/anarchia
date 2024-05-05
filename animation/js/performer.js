@@ -3,6 +3,7 @@
 import Anarchia from "./anarchia.js";
 import Timeline from "./timeline.js";
 import * as Sounds from "./sounds.js";
+import * as Videos from "./videos.js";
 
 /**
  * Creates the camera and its movements.
@@ -160,7 +161,7 @@ export function camera() {
         { // cinema: start pigs violence
             frame: Timeline.cinema.show,
             callback: function() {
-                $("#creepy-stone").removeClass("hidden").get(0).play();
+                Videos.playCreepyStone();
                 Anarchia.stopAllJitters();
             }
         },{ // cinema: show rewind
@@ -168,13 +169,13 @@ export function camera() {
             callback: function() {
                 Anarchia.stopAllJitters(); // TODO remove here
 
-                $("#creepy-stone").addClass("hidden");
-                $("#camera-rewind").removeClass("hidden").get(0).play();
+                Videos.stopCreepyStone();
+                Videos.playCameraRewind();
             }
         },{ // cinema: hide
             frame: Timeline.cinema.hide,
             callback: function() {
-                $("#camera-rewind").addClass("hidden");
+                Videos.stopCameraRewind();
             }
         },{ // sound city nature
             frame: Timeline.cinema.hide,
@@ -184,6 +185,7 @@ export function camera() {
         },{ // credits show
             frame: Timeline.ufoSpace.end,
             callback: function() {
+                return; // REC
                 $("#credits").removeClass("hidden");
             }
         }
@@ -410,8 +412,8 @@ export function ufoLand() {
 export function ufoSpace() {
     const t = Timeline.ufoSpace;
     const size = 30;
-    //const texture = "textures/ufo-in-space-jan.png";
-    const texture = "textures/ufo-in-space-beppu-punk-cats.png";
+    const texture = "textures/ufo-in-space-jan.png";
+    //const texture = "textures/ufo-in-space-beppu-punk-cats.png";
     const vectors = {
         start: new BABYLON.Vector3(0, 15, 16.5),
         bend: new BABYLON.Vector3(-300, -20, 16.5),

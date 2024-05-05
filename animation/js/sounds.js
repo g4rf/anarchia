@@ -139,7 +139,7 @@ export function load() {
 }
 
 export function music() {
-    //return;
+    return; // REC
     let wait = 0;
     if(Anarchia.START_SECOND < 0) {
         wait = -Anarchia.START_SECOND;

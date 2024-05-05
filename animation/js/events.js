@@ -12,15 +12,4 @@ export function bind() {
     document.getElementById("reload").addEventListener("click", function() {
         window.location.reload();
     });
-
-    // record
-    document.getElementById("record").addEventListener("click", function() {
-        const recorder = new BABYLON.VideoRecorder(Anarchia.engine);
-        recorder.startRecording(
-                "anarchia.webm",
-                Anarchia.END_SECOND - Anarchia.START_SECOND
-        );
-
-        Anarchia.play();
-    });
 }

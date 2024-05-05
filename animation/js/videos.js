@@ -14,3 +14,29 @@ export function load() {
     }
     ready = true;
 }
+
+function play(selector) {
+    return; // REC
+    $(selector).removeClass("hidden").get(0).play();
+}
+
+function stop(selector) {
+    return; // REC
+    $(selector).addClass("hidden").get(0).pause();
+}
+
+export function playCreepyStone() {
+    play("#creepy-stone");
+}
+
+export function stopCreepyStone() {
+    stop("#creepy-stone");
+}
+
+export function playCameraRewind() {
+    play("#camera-rewind");
+}
+
+export function stopCameraRewind() {
+    stop("#camera-rewind");
+}
