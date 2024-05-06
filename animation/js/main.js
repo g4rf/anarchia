@@ -23,6 +23,7 @@ Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 // BabylonJS VideoRecorder
 //Anarchia.videorecorder = true;
 
+
 /** settings **/
 
 // which part to render
