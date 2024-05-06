@@ -61,6 +61,16 @@ export default {
     animations: [],
     
     /**
+     * If true, the ccapture will capture the frames as PNGs.
+     */
+    ccapture: false,
+    
+    /**
+     * If true, the BabylonJS VideoRecorder will create a webm of low quality.
+     */
+    videorecorder: false,
+    
+    /**
      * Show loading indicator.
      */
     showLoading: function(callback) {
@@ -139,35 +149,64 @@ export default {
         Videos.load();
         
         let waiting = function() {
-            // REC
-            /*if(! (Sounds.ready && Videos.ready)) {
-                console.log("Waiting for video and/or audio…");
-                window.setTimeout(waiting, 100);
-                return;
-            }*/
+            // we need no audio and HTML video during cccapture
+            if(! self.ccapture) 
+            { 
+                if(! (Sounds.ready && Videos.ready)) {
+                    console.log("Waiting for video and/or audio…");
+                    window.setTimeout(waiting, 100);
+                    return;
+                }
+            }
+            
+            // BabylonJS VideoRecorder
+            if(self.videorecorder)
+            {
+                const audioNode = BABYLON.Engine.audioEngine.audioContext
+                        .createMediaStreamDestination();
+                BABYLON.Engine.audioEngine.masterGain.connect(audioNode);
+
+                const videorecorder = new BABYLON.VideoRecorder(self.engine, {
+                    fps: 25,
+                    //https://developer.mozilla.org/en-US/docs/Web/Media/Formats/codecs_parameter#webm
+                    //high quality: mimeType: "video/webm; codecs=av01.2.19H.12.0.000.09.16.09.1",
+                    mimeType: "video/webm",
+                    audioTracks: audioNode.stream.getAudioTracks()
+                });
+                
+                videorecorder.startRecording(
+                    "anarchia.webm",                    
+                    self.END_SECOND - self.START_SECOND
+                );
+            }
+            
+            // cccapture
+            let capturer;
+            if(self.ccapture) 
+            {
+                capturer = new CCapture({ 
+                    name: "anarchia",
+                    format: 'png',
+                    framerate: 25,
+                    display: "true",
+                    timeLimit: 170,
+                    autoSaveTime: 10
+                });
+            }
             
             // start music
-            Sounds.music();
+            //Sounds.music();
             
             // start citynoise
             Sounds.cityNoise();
             
-            // REC
-            const capturer = new CCapture({ 
-                name: "autonomia",
-                format: 'png',
-                framerate: 25,
-                quality: "best",
-                display: "true",
-                timeLimit: 170,
-                autoSaveTime: 10
-            });
-            
             // render screen
-            self.engine.runRenderLoop(function () {
+            self.engine.runRenderLoop(function () 
+            {
                 self.scene.render();
-                // REC
-                capturer.capture(self.canvas);
+                
+                // capture
+                if(self.ccapture) capturer.capture(self.canvas);
             });
 
             // animations on
@@ -179,8 +218,10 @@ export default {
             // hide buttons
             self.hideLoading();
             
-            // REC
-            capturer.start();
+            // ccapture
+            if(self.ccapture) {
+                capturer.start();
+            }
         };
         waiting();
     },

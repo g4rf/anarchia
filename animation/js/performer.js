@@ -185,7 +185,8 @@ export function camera() {
         },{ // credits show
             frame: Timeline.ufoSpace.end,
             callback: function() {
-                return; // REC
+                if(Anarchia.ccapture) return;
+                
                 $("#credits").removeClass("hidden");
             }
         }

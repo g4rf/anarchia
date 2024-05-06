@@ -17,7 +17,8 @@ const sounds = {
 };
 
 export function load() {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     const numberOfFiles = Object.keys(sounds).length;
     let loadedFiles = 0;
 
@@ -140,7 +141,8 @@ export function load() {
 }
 
 export function music() {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     let wait = 0;
     if(Anarchia.START_SECOND < 0) {
         wait = -Anarchia.START_SECOND;
@@ -149,7 +151,8 @@ export function music() {
 }
 
 export function cityNoise() {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     // only play at the very beginning
     if(Anarchia.START_SECOND > -2) return;
     
@@ -158,42 +161,49 @@ export function cityNoise() {
 }
 
 export function landingUfo(ufo) {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     sounds.landingUfo.attachToMesh(ufo);
     sounds.landingUfo.play();
 }
 
 export function jump(mesh) {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     const jump = sounds.jump.clone();
     jump.attachToMesh(mesh);
     jump.play();
 }
 
 export function police(mesh) {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     sounds.police.attachToMesh(mesh);
     sounds.police.play();
 }
 
 export function rumble(mesh) {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     sounds.rumble.attachToMesh(mesh);
     sounds.rumble.play();
 }
 
 export function control(mesh) {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     sounds.control.attachToMesh(mesh);
     sounds.control.play();
 }
 
 export function beam() {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     sounds.beam.play();
 }
 
 export function cityNature() {
-    return; // REC
+    if(Anarchia.ccapture) return;
+    
     sounds.cityNature.play();
 }

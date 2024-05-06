@@ -15,6 +15,14 @@ Anarchia.engine = new BABYLON.Engine(Anarchia.canvas, true);
 Anarchia.scene = new BABYLON.Scene(Anarchia.engine);
 
 
+/** recordings ? **/
+
+// ccapture
+//Anarchia.ccapture = true;
+
+// BabylonJS VideoRecorder
+//Anarchia.videorecorder = true;
+
 /** settings **/
 
 // which part to render
